@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | National Crime Analytics{% endblock %}
+
+{% block content %}
+
+<section class="page-title">
+    <h2>Crime Analytics Dashboard</h2>
+    <p>Interactive analysis of NCRB crime data (2019–2020)</p>
+</section>
+
+<!-- ================= FILTERS ================= -->
+<section class="filter-section">
+    <label>Year:</label>
+    <select id="yearFilter">
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+    </select>
+
+    <label>City:</label>
+    <select id="cityFilter"></select>
+
+    <label>Age Group:</label>
+    <select id="ageFilter">
+        <option value="all">All</option>
+        <option value="18-30">18–30</option>
+        <option value="30-45">30–45</option>
+        <option value="45-60">45 above and below 60</option>
+        <option value="60 years and above">60 years and above</option>
+    </select>
+
+    <!-- ✅ NEW -->
+    <label>Gender:</label>
+    <select id="genderFilter">
+        <option value="all">All</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+
+    <button id="applyBtn">Apply</button>
+</section>
+
+
+<!-- ================= CHART ================= -->
+<section class="chart-section1">
+    
+    
+<div class="charts-row">
+
+    <div class="chart-box1">
+        <h3>City-wise Persons Arrested</h3>
+        <canvas id="cityChart"></canvas>
+    </div>
+
+    <div class="chart-box2">
+        <h3>Crime Profile (Selected City)</h3>
+        <canvas id="profileChart"></canvas>
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

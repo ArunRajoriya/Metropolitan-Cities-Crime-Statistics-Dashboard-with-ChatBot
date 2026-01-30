@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Analytical Reports | National Crime Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="page-title">
+    <h2>Analytical Reports & Key Insights</h2>
+    <p>Interpretive analysis derived from NCRB datasets (2019–2020)</p>
+</section>
+
+<section class="chart-section">
+
+    <div class="chart-box">
+        <h3>1. National Crime Trend</h3>
+        <p>National crime declined by 3.42%</p>
+    </div>
+
+    <div class="chart-box">
+        <h3>2. Urban Crime Concentration</h3>
+        <p>61.76% of all arrests are concentrated in the top 10 cities, highlighting the need for targeted urban policing strategies.</p> 
+    </div>
+
+    <div class="chart-box">
+        <h3>3. Juvenile Involvement in Crime</h3>
+        <p> Juveniles account for 2.3% of arrests</p>
+    </div>
+
+    
+
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}

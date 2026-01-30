@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "ST_NM": "Madhya Pradesh"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.0, 26.5],
+            [75.5, 26.8],
+            [77.0, 26.5],
+            [79.0, 25.5],
+            [81.0, 24.0],
+            [80.0, 22.5],
+            [78.0, 21.5],
+            [76.0, 21.0],
+            [74.5, 22.5],
+            [74.0, 24.5],
+            [74.0, 26.5]
+          ]
+        ]
+      }
+    }
+  ]
+}

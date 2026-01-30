@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Government Crime Data{% endblock %}
+
+{% block content %}
+
+<section class="page-title">
+    <h1>Government Crime Investigation Data</h1>
+</section>
+
+<section class="filter-section">
+    <label>Year:</label>
+    <select id="yearFilter">
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+    </select>
+
+    <label>Crime Head:</label>
+    <select id="crimeFilter">
+        <option value="all">All</option>
+    </select>
+
+    <button id="applyBtn">Apply</button>
+</section>
+
+<section class="table-section">
+    <div class="table-container">
+        <table id="govTable"></table>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/government.js') }}"></script>
+{% endblock %}

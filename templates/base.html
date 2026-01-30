@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}State Crime Dashboard{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026">
+
+    <!-- Chart.js (used only where needed) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+
+    <!-- Leaflet (used only on dashboard) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+<!-- ================= GOVERNMENT HEADER ================= -->
+<header class="gov-header">
+    <div class="header-left">
+        <img src="{{ url_for('static', filename='images/mpsedclogo.png') }}" alt="MPSeDC Logo">
+    </div>
+
+    <div class="header-center">
+        <h1>M.P. STATE ELECTRONICS DEVELOPMENT CORPORATION LTD.</h1>
+        <h2>Department of Science & Technology</h2>
+    </div>
+
+    <div class="header-right">
+        <img src="{{ url_for('static', filename='images/mplogo.png') }}" alt="Govt of MP Logo">
+    </div>
+</header>
+
+<!-- ================= NAVIGATION ================= -->
+<nav class="gov-nav">
+    <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('reports') }}">Reports</a></li>
+        <li><a href="/juvenile">Juvenile</a></li>
+        <li><a href="/government-data">Government Data</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+</nav>
+
+<!-- ================= PAGE CONTENT ================= -->
+<main class="page-content">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="gov-footer">
+    <div class="footer-top">
+         <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
+
+        <a href="/terms">Terms & Conditions</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/copyright">Copyright Policy</a>
+        <a href="/feedback">Feedback</a>
+        <a href="{{ url_for('sitemap') }}">Site Map</a>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="footer-left">
+            © 2026 MPSeDC. All rights reserved.
+        </div>
+        <div class="footer-right">
+            Designed & Developed by MPSeDC
+        </div>
+    </div>
+</footer>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

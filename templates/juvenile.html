@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Juvenile Dashboard{% endblock %}
+
+{% block content %}
+
+<section class="page-title">
+    <h1>Juvenile Apprehended Analysis</h1>
+</section>
+
+<!-- KPIs -->
+<section class="juvenile-kpi-strip">
+    <div class="juvenile-kpi-box">
+        <span>Total Juveniles 2019</span>
+        <h2 id="total2019">--</h2>
+    </div>
+    <div class="juvenile-kpi-box">
+        <span>Boys 2019</span>
+        <h2 id="boys2019">--</h2>
+    </div>
+
+    <div class="juvenile-kpi-box">
+        <span>Girls 2019</span>
+        <h2 id="girls2019">--</h2>
+    </div>
+
+<div class="juvenile-kpi-box">
+        <span>Total Juveniles 2020</span>
+        <h2 id="total2020">--</h2>
+    </div>
+
+    <div class="juvenile-kpi-box">
+        <span>Boys 2020</span>
+        <h2 id="boys2020">--</h2>
+    </div>
+
+    <div class="juvenile-kpi-box">
+        <span>Girls 2020</span>
+        <h2 id="girls2020">--</h2>
+    </div>
+
+   
+</section>
+
+<!-- Filters -->
+<section class="filter-section">
+    <label>Year:</label>
+    <select id="yearFilter">
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+    </select>
+
+</section>
+
+<!-- Chart -->
+
+<div class="juvenile-chart-box">
+    <canvas id="citiesBarChart"></canvas>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/juvenile.js') }}"></script>
+{% endblock %}

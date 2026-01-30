@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<form class="feedback-form" method="POST" action="/submit-feedback">
+    <label>Name</label>
+    <input type="text" name="name" required placeholder="Your name">
+
+    <label>Email</label>
+    <input type="email" name="email" required placeholder="Your email">
+
+    <label>Message</label>
+    <textarea name="message" rows="5" required placeholder="Your feedback"></textarea>
+
+    <button type="submit">Submit</button>
+</form>
+
+{% if success %}
+<p style="color: green; margin-top: 10px;">Thank you for your feedback!</p>
+{% endif %}
+{% endblock %}
