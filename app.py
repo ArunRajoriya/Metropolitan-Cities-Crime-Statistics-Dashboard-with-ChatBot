@@ -38,6 +38,11 @@ gov_data = {
     "2020": pd.read_csv("data/Data by government 2020.csv")
 }
 
+foreign_data = {
+    "2019": pd.read_csv("data/foreigner_2019.csv"),
+    "2020": pd.read_csv("data/foreigner_2020.csv")
+}
+
 def get_year():
     return request.args.get("year", "2020")
 
@@ -97,6 +102,9 @@ def sitemap():
 def government_data():
     return render_template("government.html")
 
+@app.route("/foreigners")
+def foreigners():
+    return render_template("foreigner.html")
 
 
 
@@ -410,6 +418,41 @@ def submit_feedback():
     conn.close()
 
     return render_template("feedback.html", success=True)
+
+
+#=== Foreigner===
+@app.route("/api/foreigner-crimes")
+def foreigner_crimes():
+    year = request.args.get("year", "2020")
+
+    df = foreign_data[year].copy()
+    df.columns = df.columns.str.strip()   # REQUIRED
+    df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
+
+    crimes = sorted(df["Crime Head"].unique().tolist())
+    return {"crimes": crimes}
+
+
+@app.route("/api/foreigner-data")
+def foreigner_data_api():
+    year = request.args.get("year", "2020")
+    crime = request.args.get("crime", "all")
+
+    df = foreign_data[year].copy()
+
+    # IMPORTANT
+    df.columns = df.columns.str.strip()
+    df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
+
+    if crime != "all":
+        df = df[df["Crime Head"] == crime]
+
+    df = df.fillna("")
+
+    return jsonify({
+        "columns": df.columns.tolist(),
+        "rows": df.to_dict(orient="records")
+    })
 
    
 # ===================== RUN =====================

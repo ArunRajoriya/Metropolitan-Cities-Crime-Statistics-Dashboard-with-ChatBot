@@ -35,27 +35,30 @@ body {
    ============================== */
 
 .gov-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: linear-gradient(180deg, #94c3d1, #fdfdfd);
-    padding: 28px 90px;
-
-   
+    padding: 20px 120px;   /* 🔻 reduced from 28px 90px */
+    z-index: 1000;
 }
+
 
 .header-left img,
 .header-right img {
-    height: 124px;
+    height: 100px;
 }
 
 .header-center {
     text-align: center;
 }
-
 .header-center h1 {
-    margin: 10;
-    font-size: 36px;
+    margin: 0;
+    font-size: 28px;   /* 🔻 was 36px */
     font-weight: 900;
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -63,14 +66,20 @@ body {
 }
 
 .header-center h2 {
-    color: rgb(54, 51, 218);
-    margin-top: 5px;
-    font-size: 28px;
+    margin: 2px 0 0 0;
+    font-size: 20px;   /* 🔻 was 28px */
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
-    
+    color: rgb(54, 51, 218);
 }
+
+
+
+body {
+    padding-top: 150px;
+}
+
 
 
 /* ==============================
@@ -81,12 +90,15 @@ body {
 .gov-nav {
     background: rgba(5,92,18,0.9);
     backdrop-filter: blur(10px);
-
     border-radius: 18px;
-    margin: 20px 120px;
-
+    margin: 14px 20px 20px 20px;  /* ✅ tight to header */
     box-shadow: 0 12px 30px rgba(0,0,0,0.12);
 }
+
+.navbar {
+    position: relative;  /* default scrolling */
+}
+
 
 
 /* container spacing */
@@ -139,7 +151,7 @@ body {
     height: 3px;
     border-radius: 10px;
 
-    background: linear-gradient(90deg, #00c6ff, #ffcc00);
+    background: linear-gradient(90deg, #f00e30, #b6e8f5);
     transition: all 0.35s ease;
     transform: translateX(-50%);
 }
@@ -210,47 +222,23 @@ body {
     gap: 38px;
     padding: 40px 120px;
     justify-items: center;
+    margin: 14px 20px 20px 20px;
 }
-
 .home-kpi-box {
-    width: 190px;
-    height: 190px;
-    border-radius: 50%;
-    color: rgb(21, 20, 20);
+    width: 240px;
+    height: 120px;
+    border-radius: 60px;
+    background: #e1e0e0;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    text-align: center;
-     background-color: #91b7bc;
+    flex-direction: column;
+    color: #151414;
+    transition: 0.3s;
 }
 
 .home-kpi-box:hover {
-    transform: translateY(-8px) scale(1.55);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-}
-
-
-.home-kpi-box span {
-    font-size: 15px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.9;
-}
-
-.home-kpi-box h2 {
-    margin-top: 10px;
-    font-size: 26px;
-    font-weight: 900;
-}
-
-
-.home-kpi-box small {
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.85);
-    margin-top: 6px;
+    transform: translateY(-22px);
 }
 
 
@@ -261,7 +249,7 @@ body {
 /* ================== PREMIUM ANALYTICS FILTER BAR ================== */
 
 .filter-section {
-    margin: 28px auto;          /* center it */
+    margin: 2px 20px 0px 20px;         /* center it */
     padding: 16px 40px;
 
     display: flex;
@@ -356,7 +344,7 @@ cursor: pointer;
 
 .chart-section {
     padding: 10px 120px;
-    
+    margin: 2px 20px 0px 20px;
     
 }
 
@@ -391,6 +379,7 @@ cursor: pointer;
     gap: 20px;
     padding: 20px 10px;
     align-items: stretch;
+    
     
 }
 
@@ -557,8 +546,8 @@ table th {
 }
 
 .juvenile-kpi-box {
-    width: 190px;
-    height: 190px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     color: rgb(21, 20, 20);
     display: flex;
@@ -567,7 +556,7 @@ table th {
     align-items: center;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     text-align: center;
-     background-color: #e6cbcb;
+     background-color: #f3f3f3;
 }
 
 .juvenile-kpi-box:hover {
@@ -576,17 +565,17 @@ table th {
 }
 
 .juvenile-kpi-box span {
-    font-size: 16px;
-    font-weight: 1000;
+    font-size: 12px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     opacity: 0.9;
 }
 
 .juvenile-kpi-box h2 {
     margin-top: 12px;
-    font-size: 30px;
-    font-weight: 900;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .juvenile-kpi-box small {
@@ -896,5 +885,62 @@ table th {
     color: white;
     position: sticky;
     top: 0;
+}.table-container {
+    overflow-x: auto;
+    margin-top: 25px;
 }
 
+#foreignerTable {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 13px;
+}
+
+#foreignerTable th,
+#foreignerTable td {
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    white-space: nowrap;
+}
+
+#foreignerTable th {
+    background: #0b5ed7;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+
+.info-tag {
+    position: relative;
+    margin-left: 6px;
+    font-size: 12px;
+    color: #f20b0b;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 240px;
+    background: #1f2937;
+    color: #fff;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 100;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: 0.25s ease;
+    font-size: 12px;
+    line-height: 1.4;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.info-tag:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
