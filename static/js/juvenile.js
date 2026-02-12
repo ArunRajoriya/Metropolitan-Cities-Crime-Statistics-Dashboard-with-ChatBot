@@ -1,8 +1,12 @@
 Chart.register(ChartDataLabels);
-let citiesBarChart;
+
+let citiesBarChart = null;
+let juvenileTrendChart = null;
+
+
 
 /* ---------------- INIT CHART ---------------- */
-function initCharts() {
+function initChart() {
     citiesBarChart = new Chart(
         document.getElementById("citiesBarChart"),
         {
@@ -10,37 +14,46 @@ function initCharts() {
             data: {
                 labels: [],
                 datasets: [{
-                    label: "Juveniles",
                     data: [],
-                    backgroundColor: '#cc1c1c'
+                    backgroundColor: '#cc1c1c',
+                    borderRadius: 6,
+                    barThickness: 24
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-
                 plugins: {
                     legend: { display: false },
+                    tooltip: { enabled: false },
 
-                    // 👇 THIS IS THE MAGIC
+                    // labels on bars
                     datalabels: {
                         anchor: 'end',
                         align: 'end',
-                        color: '#b81414',
-                        font: {
-                            weight: 'bold',
-                            size: 16
-                        },
-                        formatter: function(value) {
-                            return value.toLocaleString();
-                        }
+                        color: '#111',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (v) => v.toLocaleString()
                     }
+                },
+                scales: {
+                    y: { beginAtZero: true }
                 }
             }
         }
     );
 }
 
+/* ---------------- LOAD KPI ---------------- */
+function loadKPIs(year) {
+    fetch(`/api/juvenile-kpis?year=${year}`)
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("kpiTotal").innerText = data.total.toLocaleString();
+            document.getElementById("kpiBoys").innerText  = data.boys.toLocaleString();
+            document.getElementById("kpiGirls").innerText = data.girls.toLocaleString();
+        });
+}
 
 /* ---------------- LOAD BAR ---------------- */
 function loadBar(year) {
@@ -53,32 +66,95 @@ function loadBar(year) {
         });
 }
 
-/* ---------------- LOAD KPIs ---------------- */
-function loadKPIs() {
-    fetch("/api/juvenile-kpis")
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("total2019").innerText = data.total2019.toLocaleString();
-            document.getElementById("boys2019").innerText = data.boys2019.toLocaleString();
-            document.getElementById("girls2019").innerText = data.girls2019.toLocaleString();
-
-            document.getElementById("total2020").innerText = data.total2020.toLocaleString();
-            document.getElementById("boys2020").innerText = data.boys2020.toLocaleString();
-            document.getElementById("girls2020").innerText = data.girls2020.toLocaleString();
-        });
-}
-
 /* ---------------- DOM READY ---------------- */
 document.addEventListener("DOMContentLoaded", () => {
 
-    initCharts();
-    loadKPIs();
+    initChart();
 
-    // Default load
-    loadBar("2019");
+    const resetBtn   = document.getElementById("resetBtn");
+    const yearFilter = document.getElementById("yearFilter");
 
-    document.getElementById("yearFilter").addEventListener("change", (e) => {
-        loadBar(e.target.value);
+    const citiesBox = document.getElementById("citiesBarChart").parentElement;
+    const trendBox  = document.getElementById("juvenileTrendSection");
+
+    /* ---------- HELPER ---------- */
+    function showTrend() {
+        citiesBox.style.display = "none";
+        trendBox.style.display  = "block";
+        loadJuvenileTrend();
+    }
+
+    function showCities(year) {
+        trendBox.style.display  = "none";
+        citiesBox.style.display = "block";
+        loadBar(year);
+    }
+
+    /* ---------- RESET ---------- */
+    resetBtn.addEventListener("click", () => {
+        yearFilter.value = "all";
+        loadKPIs("all");
+        showTrend();
+    });
+
+    /* ---------- INITIAL LOAD ---------- */
+    loadKPIs("all");
+    showTrend();
+
+    /* ---------- YEAR CHANGE ---------- */
+    yearFilter.addEventListener("change", (e) => {
+
+        const year = e.target.value;
+
+        loadKPIs(year);
+
+        if (year === "all") {
+            showTrend();
+        } else {
+            showCities(year);
+        }
     });
 
 });
+
+
+function loadJuvenileTrend() {
+
+    fetch("/api/juvenile-trend")
+        .then(res => res.json())
+        .then(data => {
+
+            if (juvenileTrendChart) juvenileTrendChart.destroy();
+
+            juvenileTrendChart = new Chart(
+                document.getElementById("juvenileTrendChart"), {
+                    type: "bar",
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            data: Object.values(data),
+                            borderRadius: 8,
+                            barThickness: 60
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false },
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top-right',
+                                font: { weight: 'bold', size: 14 },
+                                formatter: v => v.toLocaleString()
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                }
+            );
+        });
+}

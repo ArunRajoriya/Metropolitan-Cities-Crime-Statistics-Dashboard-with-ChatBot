@@ -1,126 +1,58 @@
 {% extends "base.html" %}
 
-{% block title %}Site Map | MP Crime Analytics{% endblock %}
+{% block title %}Site Map | Metropolitan Cities Crime Analytics{% endblock %}
 
 {% block content %}
 
-<section class="page-title">
-    <h2>Site Map - Complete navigation structure of the MP</h2>
-    <p> </p>
-</section>
-
 <section class="sitemap-section">
-    <h3>Dashboard – City Wise Analytics (Madhya Pradesh)</h3>
 
-    <p>
-        These cities represent diverse geographical, cultural, religious,
-        industrial, and administrative regions of Madhya Pradesh.  
-        The dashboard provides crime analytics contextualized with
-        the socio-economic identity of each city.
-    </p>
+    <h2>Website Sitemap</h2>
+    <p>Complete navigation structure of the Metropolitan Cities Crime Analytics Dashboard.</p>
 
-    <div class="sitemap-cities">
-
-    <div class="city-card">
-        <strong>Bhopal</strong>
-        <span>Capital city, Lakes, Administrative hub</span>
+    <!-- ===== MAIN MODULES ===== -->
+    <div class="sitemap-card">
+        <h3>Main Dashboard Modules</h3>
+        <ul>
+            <li><a href="/">Home Dashboard</a> — KPIs, population, crime concentration</li>
+            <li><a href="/dashboard">Crime Analytics Dashboard</a> — Filters, city analysis, trends</li>
+            <li><a href="/juvenile">Juvenile Analysis Dashboard</a> — Juvenile KPIs and city analysis</li>
+            <li><a href="/foreigner">Foreigner Crime Analysis</a> — Foreign nationals crime data</li>
+            <li><a href="/government">Government Data Insights</a> — Government statistics & tables</li>
+        </ul>
     </div>
 
-    <div class="city-card">
-        <strong>Indore</strong>
-        <span>Commercial capital, Cleanest city of India</span>
+    <!-- ===== ANALYTICS PAGES ===== -->
+    <div class="sitemap-card">
+        <h3>Analytics & Visualizations</h3>
+        <ul>
+            <li>Year-wise Crime Trend Analysis</li>
+            <li>City-wise Persons Arrested</li>
+            <li>Crime Profile of Selected City</li>
+            <li>City Comparison by Year</li>
+            <li>Age & Gender Based Arrest Analysis</li>
+            <li>Gender Ratio Analysis</li>
+        </ul>
     </div>
 
-    <div class="city-card">
-        <strong>Jabalpur</strong>
-        <span>Marble Rocks, Defense establishments</span>
+    <!-- ===== DATA TABLES ===== -->
+    <div class="sitemap-card">
+        <h3>Data Tables & Records</h3>
+        <ul>
+            <li>Government Data Table (Year-wise)</li>
+            <li>Foreigner Crime Data Table</li>
+            <li>Crime Records Table by City</li>
+        </ul>
     </div>
 
-    <div class="city-card">
-        <strong>Shivpuri</strong>
-        <span>Historical heritage, Madhav National Park</span>
+    <!-- ===== INFORMATIONAL ===== -->
+    <div class="sitemap-card">
+        <h3>Informational Pages</h3>
+        <ul>
+            <li><a href="/about">About the Project</a></li>
+            <li><a href="/feedback">Feedback Form</a></li>
+            <li><a href="/sitemap">Sitemap</a></li>
+        </ul>
     </div>
-
-
-    <div class="city-card">
-        <strong>Gwalior</strong>
-        <span>Gwalior Fort, Music heritage</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Sehore</strong>
-        <span>Agriculture belt, Near capital region</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Ujjain</strong>
-        <span>Mahakaleshwar Jyotirlinga, Religious capital</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Chhindwara</strong>
-        <span>Tribal region, Forest resources</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Sagar</strong>
-        <span>Educational institutions, Army cantonment</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Khargone</strong>
-        <span>Cotton production, Narmada region</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Ratlam</strong>
-        <span>Railway junction, Trade center</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Morena</strong>
-        <span>Chambal valley, Historical sites</span>
-    </div>
-
-<div class="city-card">
-        <strong>Rewa</strong>
-        <span>White tiger land, Vindhya region</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Vidisha</strong>
-        <span>Ancient Buddhist heritage, Sanchi nearby</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Satna</strong>
-        <span>Cement industry hub, Religious tourism</span>
-    </div>
-
-     <div class="city-card">
-        <strong>Bhind</strong>
-        <span>Chambal ravines, Agricultural land</span>
-    </div>
-
-     <div class="city-card">
-        <strong>Dewas</strong>
-        <span>Industrial area, Currency printing press</span>
-    </div>
-
-     <div class="city-card">
-        <strong>Neemuch</strong>
-        <span>CRPF base, Opium production center</span>
-    </div>
-
-    <div class="city-card">
-        <strong>Khandwa</strong>
-        <span>Narmada belt, Historical importance</span>
-    </div>
-    
-
-    <!-- Repeat same pattern for all cities -->
-
-</div>
 
 </section>
 

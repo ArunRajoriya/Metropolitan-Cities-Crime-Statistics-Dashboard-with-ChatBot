@@ -20,3 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Home KPI error:", err));
 });
+
+fetch("/api/gender-ratio?year=all")
+  .then(res => res.json())
+  .then(data => {
+      document.getElementById("kpi-gender-ratio").innerText =
+          `${data.ratio} : 1`;
+  });

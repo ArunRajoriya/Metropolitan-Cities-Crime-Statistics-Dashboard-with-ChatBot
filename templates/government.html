@@ -7,19 +7,33 @@
     <h1>Government Crime Investigation Data</h1>
 </section>
 
-<section class="filter-section">
+<section class="filter-card">
     <label>Year:</label>
     <select id="yearFilter">
+        <option value="all">All</option>
+        <option value="2016">2016</option>
         <option value="2019">2019</option>
         <option value="2020">2020</option>
     </select>
 
+    <div id="crimeFilterWrapper">
     <label>Crime Head:</label>
     <select id="crimeFilter">
         <option value="all">All</option>
     </select>
+</div>
+
 
     <button id="applyBtn">Apply</button>
+    <button id="resetBtn" class="reset-btn">Reset</button>
+</section>
+
+<!-- ✅ Trend Section -->
+<section class="chart-section4" id="trendSection" style="display:none;">
+    <div class="card">
+        <h3>Highest Crime Trend Across Years</h3>
+        <canvas id="crimeTrendChart"></canvas>
+    </div>
 </section>
 
 <section class="table-section">

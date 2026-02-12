@@ -27,11 +27,13 @@
 <!-- NAV -->
 <nav class="gov-nav">
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/dashboard">Dashboard</a></li>
-        <li><a href="/reports">Reports</a></li>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ url_for('reports') }}">Reports</a></li>
         <li><a href="/juvenile">Juvenile</a></li>
-        <li><a class="active" href="/about">About</a></li>
+        <li><a href="/government-data">Government Data</a></li>
+        <li><a href="/foreigners">Foreigners</a></li>
+        <li><a href="/about">About</a></li>
     </ul>
 </nav>
 
@@ -40,7 +42,7 @@
 
     <h2>About the Dashboard</h2>
     <p>
-        The <strong>Madhya Pradesh Crime Dashboard</strong> is a data analytics and visualization
+        The <strong>Metropolitan Cities Crime Dashboard</strong> is a data analytics and visualization
         platform designed to support evidence-based decision making for law enforcement,
         policymakers, and administrative authorities.
     </p>

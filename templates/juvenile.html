@@ -4,53 +4,47 @@
 
 {% block content %}
 
-<section class="page-title">
-    <h1>Juvenile Apprehended Analysis</h1>
+<section class="page-title-4">
+    <h4>Juvenile Apprehended Analysis</h4>
 </section>
-
-<!-- KPIs -->
-<section class="juvenile-kpi-strip">
-    <div class="juvenile-kpi-box">
-        <span>Total Juveniles Year-2019</span>
-        <h2 id="total2019">--</h2>
-    </div>
-    <div class="juvenile-kpi-box">
-        <span>Boys Year-2019</span>
-        <h2 id="boys2019">--</h2>
-    </div>
-
-    <div class="juvenile-kpi-box">
-        <span>Girls Year-2019</span>
-        <h2 id="girls2019">--</h2>
-    </div>
-
-<div class="juvenile-kpi-box">
-        <span>Total Juveniles Year-2020</span>
-        <h2 id="total2020">--</h2>
-    </div>
-
-    <div class="juvenile-kpi-box">
-        <span>Boys Year-2020</span>
-        <h2 id="boys2020">--</h2>
-    </div>
-
-    <div class="juvenile-kpi-box">
-        <span>Girls Year-2020</span>
-        <h2 id="girls2020">--</h2>
-    </div>
-
-   
-</section>
-
-<!-- Filters -->
-<section class="filter-section">
+<section class="filter-card2">
     <label>Year:</label>
     <select id="yearFilter">
+        <option value="all">All</option>
+        <option value="2016">2016</option>
         <option value="2019">2019</option>
         <option value="2020">2020</option>
     </select>
+    <button id="resetBtn" class="reset-btn">Reset</button>
 
 </section>
+
+
+<!-- KPIs -->
+<section class="juvenile-kpi-strip">
+
+    <div class="juvenile-kpi-box">
+        <span>Total Juveniles</span>
+        <h2 id="kpiTotal">--</h2>
+    </div>
+
+    <div class="juvenile-kpi-box">
+        <span>Juvenile Boys</span>
+        <h2 id="kpiBoys">--</h2>
+    </div>
+
+    <div class="juvenile-kpi-box">
+        <span>Juvenile Girls</span>
+        <h2 id="kpiGirls">--</h2>
+    </div>
+
+</section>
+
+<!-- ===== JUVENILE TREND SECTION ===== -->
+<section id="juvenileTrendSection" style="display:none;" class="juvenile-chart-box">
+    <canvas id="juvenileTrendChart"></canvas>
+</section>
+
 
 <!-- Chart -->
 
