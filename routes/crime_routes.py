@@ -498,3 +498,27 @@ def year_city_filter():
     )
 
     return jsonify(result)
+
+
+@crime_bp.route("/api/gender-ratio-trend")
+def gender_ratio_trend():
+
+    result = {}
+
+    for year, df in crime_data.items():
+        df = df.copy()
+        df.columns = df.columns.str.strip()
+
+        male_col = "Total - Male"
+        female_col = "Total - Female"
+
+        df[male_col] = pd.to_numeric(df[male_col], errors="coerce").fillna(0)
+        df[female_col] = pd.to_numeric(df[female_col], errors="coerce").fillna(0)
+
+        male = df[male_col].sum()
+        female = df[female_col].sum()
+
+        ratio = round(male / female, 2) if female else 0
+        result[year] = ratio
+
+    return jsonify(result)

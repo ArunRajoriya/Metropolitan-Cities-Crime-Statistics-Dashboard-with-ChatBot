@@ -243,13 +243,13 @@ font-size: 34px;
 .home-kpi-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 38px;
+    gap: 46px;
     padding: 40px 120px;
     justify-items: center;
-    margin: 14px 20px 20px 20px;
+    margin: 14px 10px 20px 10px;
 }
 .home-kpi-box {
-    width: 240px;
+    width: 320px;
     height: 120px;
     border-radius: 60px;
     background: #fffffffe;
@@ -259,6 +259,12 @@ font-size: 34px;
     flex-direction: column;
     color: #151414;
     transition: 0.3s;
+}
+.home-kpi-box span{
+    font-size: 20px;
+    color: #000000;
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 .home-kpi-box:hover {
@@ -568,7 +574,7 @@ table th {
 /* Professional KPI Card */
 .juvenile-kpi-box{
     background: #ffffff;
-    border-radius: 14px;
+    border-radius: 60px;
     padding: 22px 18px;
     box-shadow: 0 8px 22px rgba(0,0,0,0.08);
     text-align: center;
@@ -581,9 +587,9 @@ table th {
 }
 
 .juvenile-kpi-box span{
-    font-size: 14px;
-    color: #6b7280;
-    font-weight: 500;
+    font-size: 24px;
+    color: #000000;
+    font-weight: 600;
     letter-spacing: 0.3px;
 }
 
@@ -628,59 +634,72 @@ table th {
     
 }
 
-.about-section {
-    padding: 30px 120px;
-    background: rgba(230, 254, 252, 0);
-    backdrop-filter: blur(50px);
-    border-radius: 10px;
-    
-    transition: all 0.3s ease;
-
-
+.about-section{
+    padding:60px 120px;
+    background:linear-gradient(135deg,#f9fbff,#eef3ff);
 }
 
-.about-section h2 {
-    font-size: 42px;
-    margin-bottom: 10px;
+/* Hero section */
+.about-hero{
+    text-align:center;
+    margin-bottom:50px;
+     padding: 25px 120px 10px;
+    background: linear-gradient(135deg, #eef3ff, #f8fbff);
+    text-align: center;
 }
 
-.about-section h3 {
-    margin-top: 15px;
-    color: #0d0e0f;
-    font-size: 22px;
+.about-hero h2{
+    font-size:40px;
+    font-weight:700;
+    margin-bottom:15px;
 }
 
-.about-section p,
-.about-section li {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #374151;
+.about-hero p{
+    font-size:18px;
+    color:#4b5563;
 }
 
-.about-section ul {
-    margin-left: 20px;
-     font-size: 13px;
+/* Grid Layout */
+.about-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:30px;
 }
 
-.content-section {
-    padding: 30px 120px;
-    background: rgba(255, 255, 255, 0.96);
-    line-height: 1.8;
-    font-size: 15px;
+/* Cards */
+.about-card{
+    background:white;
+    padding:30px;
+    border-radius:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    transition:all 0.3s ease;
+    cursor:pointer;
 }
 
-.content-section {
-    padding: 30px 120px;
-    background: rgba(255, 255, 255, 0.96);
-    line-height: 1.8;
-    font-size: 15px;
+.about-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.1);
 }
 
-.content-section {
-    padding: 40px 120px;
-    background: #ffffff;
-    line-height: 1.7;
+/* Headings */
+.about-card h3{
+    margin-bottom:15px;
+    font-size:20px;
 }
+
+/* Text */
+.about-card p,
+.about-card li{
+    font-size:14px;
+    line-height:1.6;
+    color:#374151;
+}
+
+.about-card ul{
+    padding-left:18px;
+}
+
+
 
 /* FeedBack Form */
 .feedback-form {
@@ -786,32 +805,70 @@ table th {
     box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
 }
 
-/*GOV PAGE*/
+/* ===============================
+   TABLE CONTAINER (SCROLL AREA)
+=================================*/
 .table-container {
-    overflow-x: auto;
+    max-height: 520px;          /* vertical scroll */
+    overflow: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    background: #fff;
     margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
+/* ===============================
+   TABLE BASE
+=================================*/
 #govTable {
     border-collapse: collapse;
     width: 100%;
-    font-size: 13px;
+    min-width: 900px;           /* forces horizontal scroll if needed */
+    font-size: 14px;
 }
 
-#govTable th, #govTable td {
-    border: 1px solid #ddd;
-    padding: 6px 8px;
-    text-align: left;
-}
-
-#govTable th {
-    background: #0b5ed7;
-    color: white;
+/* ===============================
+   HEADER STICKY
+=================================*/
+#govTable thead th {
     position: sticky;
     top: 0;
-}.table-container {
-    overflow-x: auto;
-    margin-top: 25px;
+    background: #1e293b;
+    color: white;
+    z-index: 5;
+    padding: 10px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+/* ===============================
+   FIX FIRST COLUMN
+=================================*/
+#govTable th:first-child,
+#govTable td:first-child {
+    position: sticky;
+    left: 0;
+    background: #f8fafc;
+    z-index: 4;
+    font-weight: 600;
+    border-right: 2px solid #ddd;
+}
+
+/* ===============================
+   TABLE CELLS
+=================================*/
+#govTable th,
+#govTable td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+}
+
+/* Hover effect */
+#govTable tbody tr:hover {
+    background-color: #f1f5f9;
 }
 
 #foreignerTable {
@@ -847,9 +904,9 @@ table th {
 
 .tooltip-text {
     visibility: hidden;
-    width: 240px;
-    background: #1f2937;
-    color: #fff;
+    width: 340px;
+    background: #ffffff;
+    color: #ff2222;
     text-align: left;
     padding: 10px 12px;
     border-radius: 8px;
@@ -860,7 +917,7 @@ table th {
     transform: translateX(-50%);
     opacity: 0;
     transition: 0.25s ease;
-    font-size: 12px;
+    font-size: 10px;
     line-height: 1.4;
     box-shadow: 0 10px 25px rgba(0,0,0,0.25);
 }
@@ -1049,8 +1106,8 @@ font-size: 34px;
    margin-top: 40px;
 margin-right: 240;
 margin-bottom: 10px;
-margin-left: 380px;
-font-size: 58px;
+margin-left: 180px;
+font-size: 48px;
     font-weight: 700;
 }
 
@@ -1182,6 +1239,143 @@ font-size: 28px;
     font-size: 14.5px;
     color: #555;
     line-height: 1.7;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.page-btn {
+    padding: 6px 12px;
+    margin: 4px;
+    border: none;
+    background: #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.page-btn:hover {
+    background: #c62828;
+    color: white;
+}
+
+.page-btn.active {
+    background: #c62828;
+    color: white;
+}
+
+
+.about-section {
+    padding: 30px 120px;
+    background: rgba(230, 254, 252, 0);
+    backdrop-filter: blur(50px);
+    border-radius: 10px;
+    
+    transition: all 0.3s ease;
+
+
+}
+
+.about-section h2 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.about-section h3 {
+    margin-top: 15px;
+    color: #0d0e0f;
+    font-size: 22px;
+}
+
+.about-section p,
+.about-section li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+.about-section ul {
+    margin-left: 20px;
+     font-size: 13px;
+}
+
+.content-section {
+    padding: 30px 120px;
+    background: rgba(255, 255, 255, 0.96);
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.content-section {
+    padding: 30px 120px;
+    background: rgba(255, 255, 255, 0.96);
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.content-section {
+    padding: 40px 120px;
+    background: #ffffff;
+    line-height: 1.7;
+}
+
+
+/* HERO SECTION */
+.policy-hero {
+    padding: 15px 120px 10px;
+    background: linear-gradient(135deg, #eef3ff, #f8fbff);
+    text-align: center;
+}
+
+.policy-container {
+    padding: 15px 120px 30px;
+    gap: 18px;
+}
+
+
+
+.policy-hero h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.policy-hero p {
+    color: #6b7280;
+    font-size: 16px;
+}
+
+
+/* CARD DESIGN */
+.policy-card {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    border-left: 6px solid #1f3c88;
+}
+
+/* HOVER EFFECT */
+.policy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.1);
+}
+
+/* HEADINGS */
+.policy-card h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #1f3c88;
+}
+
+/* TEXT */
+.policy-card p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #4b5563;
 }
 
 

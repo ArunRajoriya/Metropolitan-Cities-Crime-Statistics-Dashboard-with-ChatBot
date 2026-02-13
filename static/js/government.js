@@ -20,30 +20,52 @@ function loadCrimes(year) {
 }
 
 /* ---------------- LOAD TABLE ---------------- */
-function loadTable(year, crime) {
+function loadTable(year, crime, page = 1) {
 
-    fetch(`/api/gov-data?year=${year}&crime=${crime}`)
+    currentPage = page;
+
+    fetch(`/api/gov-data?year=${year}&crime=${crime}&page=${page}&per_page=${rowsPerPage}`)
         .then(res => res.json())
         .then(data => {
 
             const table = document.getElementById("govTable");
             table.innerHTML = "";
 
-            let header = "<tr>";
-            data.columns.forEach(col => {
-                header += `<th>${col}</th>`;
-            });
-            header += "</tr>";
-            table.innerHTML += header;
+            /* ---------- HEADER ---------- */
+            let thead = "<thead><tr>";
+            data.columns.forEach((col, index) => {
 
-            data.rows.forEach(row => {
-                let tr = "<tr>";
-                data.columns.forEach(col => {
-                    tr += `<td>${row[col]}</td>`;
-                });
-                tr += "</tr>";
-                table.innerHTML += tr;
+                if (index === 0) {
+                    thead += `<th class="sticky-col">${col}</th>`;
+                } else {
+                    thead += `<th>${col}</th>`;
+                }
+
             });
+            thead += "</tr></thead>";
+
+            /* ---------- BODY ---------- */
+            let tbody = "<tbody>";
+            data.rows.forEach(row => {
+                tbody += "<tr>";
+
+                data.columns.forEach((col, index) => {
+
+                    if (index === 0) {
+                        tbody += `<td class="sticky-col">${row[col] ?? ""}</td>`;
+                    } else {
+                        tbody += `<td>${row[col] ?? ""}</td>`;
+                    }
+
+                });
+
+                tbody += "</tr>";
+            });
+            tbody += "</tbody>";
+
+            table.innerHTML = thead + tbody;
+
+            createPagination(data.total_rows, year, crime);
         });
 }
 
@@ -131,20 +153,25 @@ function applyFilters() {
 
     const trendSection = document.getElementById("trendSection");
     const tableSection = document.querySelector(".table-section");
+    const pagination   = document.getElementById("pagination");
 
-    // If both ALL → show trend only
+    // 🔥 CASE 1: Both ALL → Show Trend Only
     if (year === "all" && crime === "all") {
 
         tableSection.style.display = "none";
         trendSection.style.display = "block";
+
+        if (pagination) pagination.innerHTML = "";   // clear pagination
+
         loadTrendChart();
         return;
     }
 
-    // Otherwise → show table
+    // 🔥 CASE 2: Otherwise → Show Table + Pagination
     trendSection.style.display = "none";
     tableSection.style.display = "block";
-    loadTable(year, crime);
+
+    loadTable(year, crime, 1);   // always reset to page 1
 }
 
 
@@ -191,7 +218,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Initial state
     toggleCrimeFilter("all");
-    loadTable("all", "all");
     loadTrendChart();
 
     document.getElementById("applyBtn")
@@ -212,3 +238,24 @@ document.addEventListener("DOMContentLoaded", () => {
         
     });
 });
+
+
+let currentPage = 1;
+const rowsPerPage = 10;
+
+function createPagination(totalRows, year, crime) {
+
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+            <button class="page-btn ${i === currentPage ? 'active' : ''}"
+                onclick="loadTable('${year}', '${crime}', ${i})">
+                ${i}
+            </button>
+        `;
+    }
+}
+

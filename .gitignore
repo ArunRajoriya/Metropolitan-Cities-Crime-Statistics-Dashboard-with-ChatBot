@@ -1,6 +1,34 @@
+# Python
 __pycache__/
 *.pyc
-.env
+*.pyo
+*.pyd
+
+# Virtual Environment
 venv/
+.env
+.env.*
+
+# Database
+*.db
+*.sqlite3
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Data folders (if raw datasets stored locally)
 data/
 reports/
+
+# Flask instance folder
+instance/
+
+# Cache
+*.cache

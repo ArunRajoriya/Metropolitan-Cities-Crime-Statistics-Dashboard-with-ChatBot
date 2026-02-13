@@ -39,51 +39,53 @@
 
 <!-- CONTENT -->
 <section class="about-section">
+    <div class="about-hero">
+        <h2>About the Dashboard</h2>
+        <p>
+            A modern data intelligence platform enabling evidence-based governance
+            and strategic law enforcement decisions.
+        </p>
+    </div>
 
-    <h2>About the Dashboard</h2>
-    <p>
-        The <strong>Metropolitan Cities Crime Dashboard</strong> is a data analytics and visualization
-        platform designed to support evidence-based decision making for law enforcement,
-        policymakers, and administrative authorities.
-    </p>
+    <div class="about-grid">
 
-    <h3>Purpose</h3>
-    <p>
-        This platform consolidates multi-year crime data published by government agencies
-        and transforms it into interactive visual insights. The objective is to
-        identify patterns, trends, and concentrations of crime across cities and states.
-    </p>
+        <div class="about-card">
+            <h3>🎯 Purpose</h3>
+            <p>
+                Consolidates multi-year crime datasets into interactive visual insights,
+                enabling strategic analysis and trend monitoring.
+            </p>
+        </div>
 
-    <h3>Data Sources</h3>
-    <ul>
-        <li>National Crime Records Bureau (NCRB)</li>
-        <li>Crime in India Reports (2019–2020)</li>
-        <li>Government Administrative Crime Data</li>
-    </ul>
+        <div class="about-card">
+            <h3>📊 Data Sources</h3>
+            <ul>
+                <li>National Crime Records Bureau (NCRB)</li>
+                <li>Crime in India Reports (2016–2020)</li>
+                <li>Government Administrative Crime Data</li>
+            </ul>
+        </div>
 
-    <h3>Key Features</h3>
-    <ul>
-        <li>Year-wise and city-wise crime analysis</li>
-        <li>Age-group based offender distribution</li>
-        <li>Crime concentration indicators</li>
-    </ul>
+        <div class="about-card">
+            <h3>🚀 Key Features</h3>
+            <ul>
+                <li>City-wise crime analytics</li>
+                <li>Age & gender distribution insights</li>
+                <li>Interactive filtering & reporting</li>
+            </ul>
+        </div>
 
-    <h3>Intended Users</h3>
-    <p>
-        The dashboard is intended for use by:
-    </p>
-    <ul>
-        <li>Government departments</li>
-        <li>Police leadership and analysts</li>
-        <li>Policy planners</li>
-        <li>Academic researchers</li>
-    </ul>
+        <div class="about-card">
+            <h3>👥 Intended Users</h3>
+            <ul>
+                <li>Government Departments</li>
+                <li>Police Leadership</li>
+                <li>Policy Analysts</li>
+                <li>Academic Researchers</li>
+            </ul>
+        </div>
 
-    <h3>Development</h3>
-    <p>
-        This platform has been designed and developed using modern web technologies
-        with a focus on performance, clarity, and scalability.
-    </p>
+    </div>
 
 </section>
 
@@ -109,6 +111,25 @@
         </div>
     </div>
 </footer>
+<script>
+const cards = document.querySelectorAll('.about-card');
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting){
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+        }
+    });
+}, { threshold: 0.1 });
+
+cards.forEach(card => {
+    card.style.opacity = "0";
+    card.style.transform = "translateY(40px)";
+    card.style.transition = "all 0.6s ease";
+    observer.observe(card);
+});
+</script>
 
 </body>
 </html>

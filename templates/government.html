@@ -4,7 +4,7 @@
 {% block content %}
 
 <section class="page-title">
-    <h1>Government Crime Investigation Data</h1>
+    <h9>Government Crime Investigation Data</h9>
 </section>
 
 <section class="filter-card">
@@ -40,10 +40,13 @@
     <div class="table-container">
         <table id="govTable"></table>
     </div>
+    <div class="pagination" id="pagination"></div>
+
 </section>
 
 {% endblock %}
 
 {% block scripts %}
+
 <script src="{{ url_for('static', filename='js/government.js') }}"></script>
 {% endblock %}

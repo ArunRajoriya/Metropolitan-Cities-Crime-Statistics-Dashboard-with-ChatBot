@@ -7,22 +7,39 @@ gov_bp = Blueprint('gov_bp', __name__)
 
 @gov_bp.route("/api/gov-data")
 def gov_data_api():
-    year = request.args.get("year", "2020")
+
+    year = request.args.get("year", "all")
     crime = request.args.get("crime", "all")
 
-    df = gov_data[year].copy()
+    page = int(request.args.get("page", 1))
+    per_page = int(request.args.get("per_page", 10))
+
+    # Handle year
+    if year == "all":
+        df = pd.concat(gov_data.values(), ignore_index=True)
+    else:
+        df = gov_data[year].copy()
+
     df.columns = df.columns.str.strip()
 
     if crime != "all":
         df = df[df["Crime Head"] == crime]
 
-    # Convert NaN to empty for clean table
-    df = df.fillna("")
+    total_rows = len(df)
+
+    # Pagination slice
+    start = (page - 1) * per_page
+    end = start + per_page
+    df_page = df.iloc[start:end]
 
     return jsonify({
         "columns": df.columns.tolist(),
-        "rows": df.to_dict(orient="records")
+        "rows": df_page.fillna("").to_dict(orient="records"),
+        "total_rows": total_rows,
+        "page": page,
+        "per_page": per_page
     })
+
 # GOV CRIMES
 
 @gov_bp.route("/api/gov-crimes")
