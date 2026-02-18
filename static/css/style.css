@@ -27,7 +27,7 @@ body {
     margin: 0;
     font-family: 'Roboto', Arial, sans-serif;
     color: #1f2937;
-    
+
 }
 
 /* ==============================
@@ -43,7 +43,8 @@ body {
     align-items: center;
     justify-content: space-between;
     background: linear-gradient(180deg, #94c3d1, #fdfdfd);
-    padding: 20px 120px;   /* 🔻 reduced from 28px 90px */
+    padding: 20px 120px;
+    /* 🔻 reduced from 28px 90px */
     z-index: 1000;
 }
 
@@ -56,9 +57,11 @@ body {
 .header-center {
     text-align: center;
 }
+
 .header-center h1 {
     margin: 0;
-    font-size: 28px;   /* 🔻 was 36px */
+    font-size: 28px;
+    /* 🔻 was 36px */
     font-weight: 900;
     letter-spacing: 0.5px;
     text-transform: uppercase;
@@ -67,7 +70,8 @@ body {
 
 .header-center h2 {
     margin: 2px 0 0 0;
-    font-size: 20px;   /* 🔻 was 28px */
+    font-size: 20px;
+    /* 🔻 was 28px */
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -91,12 +95,14 @@ body {
     background: #086f54;
     backdrop-filter: blur(10px);
     border-radius: 18px;
-    margin: 14px 20px 20px 20px;  /* ✅ tight to header */
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    margin: 14px 20px 20px 20px;
+    /* ✅ tight to header */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 }
 
 .navbar {
-    position: relative;  /* default scrolling */
+    position: relative;
+    /* default scrolling */
 }
 
 
@@ -176,7 +182,7 @@ body {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    box-shadow: inset 0 1px rgba(255,255,255,0.05);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* ==============================
@@ -191,46 +197,48 @@ body {
     border-radius: 18px;
     margin: 20px 50px;
 
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 
 
 }
-.page-title h1{
-   margin-top: 0;
-margin-right: 0;
-margin-bottom: 10px;
-margin-left: 200px;
+
+.page-title h1 {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 10px;
+    margin-left: 200px;
 
 }
 
 .page-title h2 {
-   margin-top: 0;
-margin-bottom: 0;
-margin-left: 240px;
-margin-right: 240px;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 240px;
+    margin-right: 240px;
 
     font-size: 28px;
     font-weight: 400;
     color: #0e131e;
-   
+
 }
 
 .page-title p {
     margin-top: 5px;
-margin-bottom: 0;
-margin-left: 240px;
-margin-right: 240px;
+    margin-bottom: 0;
+    margin-left: 240px;
+    margin-right: 240px;
 
     color: #141820;
     font-size: 26px;
     font-weight: 400;
 }
-.page-title h3{
-   margin-top: 10px;
-margin-right: 240;
-margin-bottom: 10px;
-margin-left: 240px;
-font-size: 34px;
+
+.page-title h3 {
+    margin-top: 10px;
+    margin-right: 240;
+    margin-bottom: 10px;
+    margin-left: 240px;
+    font-size: 34px;
     font-weight: 600;
 }
 
@@ -248,6 +256,7 @@ font-size: 34px;
     justify-items: center;
     margin: 14px 10px 20px 10px;
 }
+
 .home-kpi-box {
     width: 320px;
     height: 120px;
@@ -260,7 +269,8 @@ font-size: 34px;
     color: #151414;
     transition: 0.3s;
 }
-.home-kpi-box span{
+
+.home-kpi-box span {
     font-size: 20px;
     color: #000000;
     font-weight: 500;
@@ -279,21 +289,25 @@ font-size: 34px;
 /* ================== PREMIUM ANALYTICS FILTER BAR ================== */
 
 .filter-card {
-    margin: 2px 20px 0px 20px;         /* center it */
+    margin: 2px 20px 0px 20px;
+    /* center it */
     padding: 5px 20px;
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: nowrap;          /* IMPORTANT for ellipse */
-    width: fit-content;        /* shrink to content */
+    flex-wrap: nowrap;
+    /* IMPORTANT for ellipse */
+    width: fit-content;
+    /* shrink to content */
     /* glass effect */
     backdrop-filter: blur(14px);
-    border-radius: 9999px;     /* ellipse shape */
+    border-radius: 9999px;
+    /* ellipse shape */
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
     border: 1px solid #e2e8f0;
     transition: all 0.35s ease;
 
-   }
+}
 
 
 
@@ -321,8 +335,8 @@ font-size: 34px;
     background: #c3ddfb;
     color: #1e293b;
 
-    
-cursor: pointer;
+
+    cursor: pointer;
     transition: all 0.25s ease;
     /* custom arrow */
     background-image: url("data:image/svg+xml;utf8,<svg fill='%23647569' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
@@ -359,98 +373,100 @@ cursor: pointer;
 .filter-card button:hover,
 .apply-btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0 14px 28px rgba(11,94,215,0.35);
+    box-shadow: 0 14px 28px rgba(11, 94, 215, 0.35);
 }
 
 /* ==============================
    CHART SECTION
    ============================== */
 /* ===== Executive Trend Section ===== */
-.trend-section{
-    margin:50px auto 10px auto;
-    max-width:1200px;
-    padding:0 20px;
+.trend-section {
+    margin: 50px auto 10px auto;
+    max-width: 1200px;
+    padding: 0 20px;
 }
 
-.trend-card{
-    background:#ffffff;
-    border-radius:16px;
-    padding:35px 28px 20px 28px;
-    box-shadow:0 10px 28px rgba(0,0,0,0.08);
+.trend-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 35px 28px 20px 28px;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
 }
 
-.trend-card h2{
-    font-size:16px;
-    font-weight:500;
-    margin-bottom:22px;
+.trend-card h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 22px;
 }
 
 /* Bigger, cleaner trend chart */
-.trend-card canvas{
-    width:100% !important;
-    height:460px !important;
+.trend-card canvas {
+    width: 100% !important;
+    height: 460px !important;
 }
 
 
 /* ===== Analysis Charts Section ===== */
 /* ===== Analysis Charts Section (Asymmetric Layout) ===== */
-.analysis-section{
-    width:100%;
-    margin:30px 0 60px 5px;
-    padding:0;
-    min-height:600px;
-   
+.analysis-section {
+    width: 100%;
+    margin: 30px 0 60px 5px;
+    padding: 0;
+    min-height: 600px;
+
 }
 
-.analysis-grid{
-    display:grid;
-    grid-template-columns: 1fr 1.6fr;  /* smaller | bigger */
-    gap:5px;
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    /* smaller | bigger */
+    gap: 5px;
 }
 
 /* Small chart */
 /* ===== Small chart card (compact) ===== */
-.analysis-card-small{
-    background:#ffffff;
-    border-radius:14px;
-    padding:14px 16px;
-    box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    max-width:520px;
-    margin-left: 10px;
+.analysis-card-small {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    max-width: 420px;
+    margin-left: 1px;
 }
 
-.analysis-card-small h3{
-    font-size:15px;
-    font-weight:500;
-    margin-bottom:12px;
+.analysis-card-small h3 {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
 }
 
-.analysis-card-small canvas{
-    width:100% !important;
-    height:340px !important;
+.analysis-card-small canvas {
+    width: 100% !important;
+    height: 340px !important;
 }
 
 
 /* ===== Large chart card (dominant) ===== */
-.analysis-card-large{
-    background:#ffffff;
-    border-radius:14px;
-    padding:14px 16px;   /* give breathing space */
-    box-shadow:0 8px 24px rgba(0,0,0,0.08);
-    max-width:1120px;
-    margin-right: 20px;
-    margin-left: -40px;
+.analysis-card-large {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    /* give breathing space */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    max-width: 1480px;
+    margin-right: 10px;
+    margin-left: -160px;
 }
 
-.analysis-card-large h3{
-    font-size:18px;
-    font-weight:500;
-    margin-bottom:18px;
+.analysis-card-large h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 18px;
 }
 
-.analysis-card-large canvas{
-    width:100% !important;
-    height:420px !important;
+.analysis-card-large canvas {
+    width: 100% !important;
+    height: 420px !important;
 }
 
 
@@ -472,6 +488,7 @@ cursor: pointer;
     border: 1px solid #ffffff;
     height: 320px;
 }
+
 .juvenile-chart-box canvas {
     height: 100% !important;
     width: 100% !important;
@@ -562,7 +579,7 @@ table th {
 
 /* ================= JUVENILE KPIs ================= */
 
-.juvenile-kpi-strip{
+.juvenile-kpi-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 24px;
@@ -572,28 +589,28 @@ table th {
 }
 
 /* Professional KPI Card */
-.juvenile-kpi-box{
+.juvenile-kpi-box {
     background: #ffffff;
     border-radius: 60px;
     padding: 22px 18px;
-    box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
     text-align: center;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.juvenile-kpi-box:hover{
+.juvenile-kpi-box:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
-.juvenile-kpi-box span{
+.juvenile-kpi-box span {
     font-size: 24px;
     color: #000000;
     font-weight: 600;
     letter-spacing: 0.3px;
 }
 
-.juvenile-kpi-box h2{
+.juvenile-kpi-box h2 {
     margin-top: 30px;
     font-size: 28px;
     font-weight: 700;
@@ -631,72 +648,72 @@ table th {
 
 .apply-btn:hover {
     background: #e51010;
-    
+
 }
 
-.about-section{
-    padding:60px 120px;
-    background:linear-gradient(135deg,#f9fbff,#eef3ff);
+.about-section {
+    padding: 60px 120px;
+    background: linear-gradient(135deg, #f9fbff, #eef3ff);
 }
 
 /* Hero section */
-.about-hero{
-    text-align:center;
-    margin-bottom:50px;
-     padding: 25px 120px 10px;
+.about-hero {
+    text-align: center;
+    margin-bottom: 50px;
+    padding: 25px 120px 10px;
     background: linear-gradient(135deg, #eef3ff, #f8fbff);
     text-align: center;
 }
 
-.about-hero h2{
-    font-size:40px;
-    font-weight:700;
-    margin-bottom:15px;
+.about-hero h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 15px;
 }
 
-.about-hero p{
-    font-size:18px;
-    color:#4b5563;
+.about-hero p {
+    font-size: 18px;
+    color: #4b5563;
 }
 
 /* Grid Layout */
-.about-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:30px;
+.about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 }
 
 /* Cards */
-.about-card{
-    background:white;
-    padding:30px;
-    border-radius:16px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.06);
-    transition:all 0.3s ease;
-    cursor:pointer;
+.about-card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
-.about-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 15px 35px rgba(0,0,0,0.1);
+.about-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 /* Headings */
-.about-card h3{
-    margin-bottom:15px;
-    font-size:20px;
+.about-card h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
 }
 
 /* Text */
 .about-card p,
-.about-card li{
-    font-size:14px;
-    line-height:1.6;
-    color:#374151;
+.about-card li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #374151;
 }
 
-.about-card ul{
-    padding-left:18px;
+.about-card ul {
+    padding-left: 18px;
 }
 
 
@@ -781,7 +798,7 @@ table th {
     display: flex;
     justify-content: center;
     align-items: center;
-     padding: 30px 28px 10px 28px;
+    padding: 30px 28px 10px 28px;
     max-width: 1200px;
     margin: 0 auto 30px auto;
 }
@@ -809,10 +826,11 @@ table th {
    TABLE CONTAINER (SCROLL AREA)
 =================================*/
 .table-container {
-    max-height: 520px;          /* vertical scroll */
+    max-height: 520px;
+    /* vertical scroll */
     overflow: auto;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     background: #fff;
     margin-top: 20px;
     margin-left: 10px;
@@ -825,7 +843,8 @@ table th {
 #govTable {
     border-collapse: collapse;
     width: 100%;
-    min-width: 900px;           /* forces horizontal scroll if needed */
+    min-width: 900px;
+    /* forces horizontal scroll if needed */
     font-size: 14px;
 }
 
@@ -919,14 +938,15 @@ table th {
     transition: 0.25s ease;
     font-size: 10px;
     line-height: 1.4;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .info-tag:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
-.charts-row{
+
+.charts-row {
     display: flex;
     gap: 30px;
     margin-top: 30px;
@@ -934,18 +954,20 @@ table th {
 
 /* Chart containers */
 .chart-box1,
-.chart-box2{
+.chart-box2 {
     flex: 1;
     background: #ffffff;
     padding: 20px;
     border-radius: 10px;
     position: relative;
-    height: 420px;   /* fixed height HERE */
+    height: 420px;
+    /* fixed height HERE */
 }
 
 /* Year trend full chart */
-.chart-box-full{
-    height: 420px;   /* fixed height HERE */
+.chart-box-full {
+    height: 420px;
+    /* fixed height HERE */
 }
 
 /* Canvas should ONLY fill parent */
@@ -957,16 +979,17 @@ table th {
     backdrop-filter: blur(10px);
     border-radius: 18px;
     margin: 20px 50px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 
 
 }
-.page-title-4 h4{
-   margin-top: 30px;
-margin-right: 0;
-margin-bottom: 10px;
-margin-left: 200px;
-font-size: 32px;
+
+.page-title-4 h4 {
+    margin-top: 30px;
+    margin-right: 0;
+    margin-bottom: 10px;
+    margin-left: 200px;
+    font-size: 32px;
     font-weight: 600;
     color: #0e131e;
 
@@ -975,21 +998,25 @@ font-size: 32px;
 
 
 .filter-card2 {
-    margin: 20px 50px;         /* center it */
+    margin: 20px 50px;
+    /* center it */
     padding: 5px 20px;
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: nowrap;          /* IMPORTANT for ellipse */
-    width: fit-content;        /* shrink to content */
+    flex-wrap: nowrap;
+    /* IMPORTANT for ellipse */
+    width: fit-content;
+    /* shrink to content */
     /* glass effect */
     backdrop-filter: blur(14px);
-    border-radius: 9999px;     /* ellipse shape */
+    border-radius: 9999px;
+    /* ellipse shape */
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
     border: 1px solid #e2e8f0;
     transition: all 0.35s ease;
 
-   }
+}
 
 
 
@@ -1017,8 +1044,8 @@ font-size: 32px;
     background: #c3ddfb;
     color: #1e293b;
 
-    
-cursor: pointer;
+
+    cursor: pointer;
     transition: all 0.25s ease;
     /* custom arrow */
     background-image: url("data:image/svg+xml;utf8,<svg fill='%23647569' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
@@ -1055,32 +1082,32 @@ cursor: pointer;
 .filter-card2 button:hover,
 .apply-btn:hover {
     transform: translateY(-4px);
-    box-shadow: 0 14px 28px rgba(11,94,215,0.35);
+    box-shadow: 0 14px 28px rgba(11, 94, 215, 0.35);
 }
 
 
 /* ===== UNIVERSAL CHART SECTION (Design System) ===== */
 
-.chart-section4{
+.chart-section4 {
     max-width: 1200px;
     margin: 30px auto 60px auto;
     padding: 30px 28px 20px 28px;
 
     background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
 
     transition: all 0.3s ease;
 }
 
 /* hover elevation like other cards */
-.chart-section4:hover{
+.chart-section4:hover {
     transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.14);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
 }
 
 /* chart title */
-.chart-section4 h3{
+.chart-section4 h3 {
     margin: 0 0 18px 0;
     font-size: 20px;
     font-weight: 700;
@@ -1088,98 +1115,98 @@ cursor: pointer;
 }
 
 /* canvas stability */
-.chart-section4 canvas{
+.chart-section4 canvas {
     width: 100% !important;
     height: 420px !important;
 }
 
-.page-title h6{
-   margin-top: 10px;
-margin-right: 240;
-margin-bottom: 10px;
-margin-left: 380px;
-font-size: 34px;
+.page-title h6 {
+    margin-top: 10px;
+    margin-right: 240;
+    margin-bottom: 10px;
+    margin-left: 380px;
+    font-size: 34px;
     font-weight: 600;
 }
 
-.page-title h9{
-   margin-top: 40px;
-margin-right: 240;
-margin-bottom: 10px;
-margin-left: 180px;
-font-size: 48px;
+.page-title h9 {
+    margin-top: 40px;
+    margin-right: 240;
+    margin-bottom: 10px;
+    margin-left: 180px;
+    font-size: 48px;
     font-weight: 700;
 }
 
-.page-title h7{
-   margin-top: 10px;
-margin-right: 240;
-margin-bottom: 10px;
-margin-left: 240px;
-font-size: 28px;
+.page-title h7 {
+    margin-top: 10px;
+    margin-right: 240;
+    margin-bottom: 10px;
+    margin-left: 240px;
+    font-size: 28px;
     font-weight: 400;
 }
 
 /* ===== SITEMAP DESIGN ===== */
 
-.sitemap-section{
+.sitemap-section {
     max-width: 1100px;
     margin: 40px auto 80px auto;
     padding: 30px 40px;
 }
 
-.sitemap-section h2{
+.sitemap-section h2 {
     font-size: 32px;
     margin-bottom: 10px;
     font-weight: 800;
     color: #0b5ed7;
 }
 
-.sitemap-section p{
+.sitemap-section p {
     margin-bottom: 30px;
     color: #475569;
     font-size: 16px;
 }
 
-.sitemap-card{
+.sitemap-card {
     background: #ffffff;
     border-radius: 14px;
     padding: 24px 28px;
     margin-bottom: 26px;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
 }
 
-.sitemap-card:hover{
+.sitemap-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
 }
 
-.sitemap-card h3{
+.sitemap-card h3 {
     margin-top: 0;
     font-size: 20px;
     color: #1f2937;
     margin-bottom: 14px;
 }
 
-.sitemap-card ul{
+.sitemap-card ul {
     margin: 0;
     padding-left: 18px;
 }
 
-.sitemap-card li{
+.sitemap-card li {
     margin-bottom: 8px;
     font-size: 15px;
     color: #374151;
 }
 
-.sitemap-card a{
+.sitemap-card a {
     text-decoration: none;
     color: #0b5ed7;
     font-weight: 600;
 }
 
-.sitemap-card a:hover{
+.sitemap-card a:hover {
     text-decoration: underline;
 }
 
@@ -1205,7 +1232,7 @@ font-size: 28px;
     padding: 30px;
     display: flex;
     gap: 22px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
     border-left: 6px solid #b81414;
     transition: transform 0.2s ease;
 }
@@ -1272,7 +1299,7 @@ font-size: 28px;
     background: rgba(230, 254, 252, 0);
     backdrop-filter: blur(50px);
     border-radius: 10px;
-    
+
     transition: all 0.3s ease;
 
 
@@ -1298,7 +1325,7 @@ font-size: 28px;
 
 .about-section ul {
     margin-left: 20px;
-     font-size: 13px;
+    font-size: 13px;
 }
 
 .content-section {
@@ -1353,7 +1380,7 @@ font-size: 28px;
     background: #ffffff;
     padding: 15px;
     border-radius: 16px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
     border-left: 6px solid #1f3c88;
 }
@@ -1361,7 +1388,7 @@ font-size: 28px;
 /* HOVER EFFECT */
 .policy-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
 }
 
 /* HEADINGS */
@@ -1378,9 +1405,101 @@ font-size: 28px;
     color: #4b5563;
 }
 
+.filter-warning {
+    display: none;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    margin: 1px 0 1px 0;
+    color: #ffffff;
+    background: #ff0000;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+/* 🚨 Blinking Effect */
+@keyframes warningBlink {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.filter-warning.active {
+    display: block;
+    animation: warningBlink 1s infinite;
+}
+
+.filter-warning {
+    display: none;
+
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #b30000;
+    background-color: #ffe6e6;
+
+    border: 1px solid #ff4d4d;
+    border-radius: 20px;
+
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.2);
+
+    text-align: center;
+}
+
+/* Center container */
+#filterWarning.active {
+    display: block;
+    width: fit-content;
+    margin: 15px auto;
+    /* 🔥 perfectly centered */
+}
+
+/* Smooth Pulse Animation (Better than blink) */
+@keyframes warningPulse {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+    }
+}
+
+.filter-warning.active {
+    display: inline-block;
+    animation: warningPulse 1.2s infinite;
+}
 
 
+/* 🔴 Blinking effect */
+@keyframes warningBlink {
+    0% {
+        opacity: 1;
+    }
 
+    50% {
+        opacity: 0.4;
+    }
 
+    100% {
+        opacity: 1;
+    }
+}
 
-
+.filter-warning.active {
+    display: inline-block;
+    animation: warningBlink 1.2s infinite;
+}

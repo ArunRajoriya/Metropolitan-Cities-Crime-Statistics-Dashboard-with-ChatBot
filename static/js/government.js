@@ -1,12 +1,17 @@
 let trendChart = null;
+let currentPage = 1;
+const rowsPerPage = 10;
+
 Chart.register(ChartDataLabels);
 
 /* ---------------- LOAD CRIMES ---------------- */
 function loadCrimes(year) {
 
-    if (year === "all") return;   // ❗ Don't load crimes for all
+    if (year === "all") {
+        return Promise.resolve(); // important for .then()
+    }
 
-    fetch(`/api/gov-crimes?year=${year}`)
+    return fetch(`/api/gov-crimes?year=${year}`)
         .then(res => res.json())
         .then(data => {
 
@@ -34,13 +39,11 @@ function loadTable(year, crime, page = 1) {
             /* ---------- HEADER ---------- */
             let thead = "<thead><tr>";
             data.columns.forEach((col, index) => {
-
                 if (index === 0) {
                     thead += `<th class="sticky-col">${col}</th>`;
                 } else {
                     thead += `<th>${col}</th>`;
                 }
-
             });
             thead += "</tr></thead>";
 
@@ -50,13 +53,11 @@ function loadTable(year, crime, page = 1) {
                 tbody += "<tr>";
 
                 data.columns.forEach((col, index) => {
-
                     if (index === 0) {
                         tbody += `<td class="sticky-col">${row[col] ?? ""}</td>`;
                     } else {
                         tbody += `<td>${row[col] ?? ""}</td>`;
                     }
-
                 });
 
                 tbody += "</tr>";
@@ -80,7 +81,8 @@ function loadTrendChart() {
             const values = labels.map(y => data[y].value);
             const crimes = labels.map(y => data[y].crime);
 
-            document.getElementById("trendSection").style.display = "block";
+            const trendSection = document.getElementById("trendSection");
+            trendSection.style.display = "block";
 
             if (trendChart) trendChart.destroy();
 
@@ -101,15 +103,14 @@ function loadTrendChart() {
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
-                            tooltip: { enabled: false },
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'top',
-                                font: { weight: 'bold', size: 13 },
-                                formatter: function(value, context) {
-                                    const index = context.dataIndex;
-                                    return value.toLocaleString() +
-                                           "\n(" + crimes[index] + ")";
+                            tooltip: {
+                                enabled: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        const index = context.dataIndex;
+                                        return crimes[index] + " : " + 
+                                               values[index].toLocaleString();
+                                    }
                                 }
                             }
                         },
@@ -122,131 +123,14 @@ function loadTrendChart() {
         });
 }
 
-/* ---------------- HIDE TREND ---------------- */
-function hideTrend() {
-    document.getElementById("trendSection").style.display = "none";
-    if (trendChart) {
-        trendChart.destroy();
-        trendChart = null;
-    }
-}
-
-/* ---------------- TOGGLE CRIME FILTER ---------------- */
-function toggleCrimeFilter(year) {
-
-    const crimeWrapper = document.getElementById("crimeFilterWrapper");
-    const crimeFilter  = document.getElementById("crimeFilter");
-
-    if (year === "all") {
-        crimeWrapper.style.display = "none";
-        crimeFilter.value = "all";
-    } else {
-        crimeWrapper.style.display = "block";
-    }
-}
-
-/* ---------------- APPLY ---------------- */
-function applyFilters() {
-
-    const year  = document.getElementById("yearFilter").value;
-    const crime = document.getElementById("crimeFilter").value;
-
-    const trendSection = document.getElementById("trendSection");
-    const tableSection = document.querySelector(".table-section");
-    const pagination   = document.getElementById("pagination");
-
-    // 🔥 CASE 1: Both ALL → Show Trend Only
-    if (year === "all" && crime === "all") {
-
-        tableSection.style.display = "none";
-        trendSection.style.display = "block";
-
-        if (pagination) pagination.innerHTML = "";   // clear pagination
-
-        loadTrendChart();
-        return;
-    }
-
-    // 🔥 CASE 2: Otherwise → Show Table + Pagination
-    trendSection.style.display = "none";
-    tableSection.style.display = "block";
-
-    loadTable(year, crime, 1);   // always reset to page 1
-}
-
-
-/* ---------------- RESET ---------------- */
-function resetFilters() {
-
-    const yearFilter  = document.getElementById("yearFilter");
-    const crimeFilter = document.getElementById("crimeFilter");
-
-    const trendSection = document.getElementById("trendSection");
-    const tableSection = document.querySelector(".table-section");
-
-    // 1️⃣ Reset dropdowns
-    yearFilter.value  = "all";
-    crimeFilter.value = "all";
-
-    // 2️⃣ Hide crime filter wrapper (if exists)
-    const crimeWrapper = document.getElementById("crimeFilterWrapper");
-    if (crimeWrapper) crimeWrapper.style.display = "none";
-
-    // 3️⃣ Destroy old chart
-    if (trendChart) {
-        trendChart.destroy();
-        trendChart = null;
-    }
-
-    // 4️⃣ Hide table section
-    if (tableSection) {
-        tableSection.style.display = "none";
-    }
-
-    // 5️⃣ Show trend section
-    trendSection.style.display = "block";
-
-    // 6️⃣ Reload trend chart
-    loadTrendChart();
-}
-
-
-/* ---------------- DOM READY ---------------- */
-document.addEventListener("DOMContentLoaded", () => {
-
-    const yearFilter = document.getElementById("yearFilter");
-
-    // Initial state
-    toggleCrimeFilter("all");
-    loadTrendChart();
-
-    document.getElementById("applyBtn")
-        .addEventListener("click", applyFilters);
-
-    document.getElementById("resetBtn")
-        .addEventListener("click", resetFilters);
-
-    yearFilter.addEventListener("change", (e) => {
-
-        const selectedYear = e.target.value;
-
-        toggleCrimeFilter(selectedYear);
-
-        if (selectedYear !== "all") {
-            loadCrimes(selectedYear);
-        }
-        
-    });
-});
-
-
-let currentPage = 1;
-const rowsPerPage = 10;
-
+/* ---------------- PAGINATION ---------------- */
 function createPagination(totalRows, year, crime) {
 
     const totalPages = Math.ceil(totalRows / rowsPerPage);
     const pagination = document.getElementById("pagination");
+
+    if (!pagination) return;
+
     pagination.innerHTML = "";
 
     for (let i = 1; i <= totalPages; i++) {
@@ -259,3 +143,100 @@ function createPagination(totalRows, year, crime) {
     }
 }
 
+/* ---------------- RESET ---------------- */
+function resetFilters() {
+
+    const yearFilter  = document.getElementById("yearFilter");
+    const crimeFilter = document.getElementById("crimeFilter");
+
+    const trendSection = document.getElementById("trendSection");
+    const tableSection = document.querySelector(".table-section");
+    const pagination   = document.getElementById("pagination");
+
+    yearFilter.value  = "all";
+    crimeFilter.value = "all";
+
+    const crimeWrapper = document.getElementById("crimeFilterWrapper");
+    if (crimeWrapper) crimeWrapper.style.display = "none";
+
+    if (trendChart) {
+        trendChart.destroy();
+        trendChart = null;
+    }
+
+    if (pagination) pagination.innerHTML = "";
+
+    tableSection.style.display = "none";
+    trendSection.style.display = "block";
+
+    loadTrendChart();
+}
+
+/* ---------------- TOGGLE CRIME FILTER ---------------- */
+function toggleCrimeFilter(year) {
+
+    const crimeWrapper = document.getElementById("crimeFilterWrapper");
+    if (!crimeWrapper) return;
+
+    if (year === "all") {
+        crimeWrapper.style.display = "none";
+    } else {
+        crimeWrapper.style.display = "block";
+    }
+}
+
+/* ---------------- DOM READY ---------------- */
+document.addEventListener("DOMContentLoaded", () => {
+
+    const yearFilter  = document.getElementById("yearFilter");
+    const crimeFilter = document.getElementById("crimeFilter");
+
+    const trendSection = document.getElementById("trendSection");
+    const tableSection = document.querySelector(".table-section");
+    const pagination   = document.getElementById("pagination");
+
+    // Initial State → Show Trend Only
+    toggleCrimeFilter("all");
+    trendSection.style.display = "block";
+    tableSection.style.display = "none";
+    loadTrendChart();
+
+    /* YEAR CHANGE */
+    yearFilter.addEventListener("change", (e) => {
+
+        const selectedYear = e.target.value;
+        toggleCrimeFilter(selectedYear);
+
+        if (selectedYear === "all") {
+
+            tableSection.style.display = "none";
+            trendSection.style.display = "block";
+            if (pagination) pagination.innerHTML = "";
+            loadTrendChart();
+            return;
+        }
+
+        trendSection.style.display = "none";
+        tableSection.style.display = "block";
+
+        loadCrimes(selectedYear).then(() => {
+            crimeFilter.value = "all";
+            loadTable(selectedYear, "all", 1);
+        });
+    });
+
+    /* CRIME CHANGE */
+    crimeFilter.addEventListener("change", () => {
+
+        const year  = yearFilter.value;
+        const crime = crimeFilter.value;
+
+        if (year !== "all") {
+            loadTable(year, crime, 1);
+        }
+    });
+
+    /* RESET BUTTON */
+    document.getElementById("resetBtn")
+        .addEventListener("click", resetFilters);
+});

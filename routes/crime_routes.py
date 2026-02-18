@@ -522,3 +522,4 @@ def gender_ratio_trend():
         result[year] = ratio
 
     return jsonify(result)
+
