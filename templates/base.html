@@ -50,6 +50,7 @@
         <li><a href="/government-data">Government Data</a></li>
         <li><a href="/foreigners">Foreigners</a></li>
         <li><a href="/about">About</a></li>
+        <li><a href="#" onclick="toggleAssistant(event)">🔍 Data Assistant</a></li>
     </ul>
 </nav>
 
@@ -83,6 +84,31 @@
 </footer>
 
 {% block scripts %}{% endblock %}
+<!-- ===== GLOBAL DATA ASSISTANT ===== -->
+ <div id="assistant-overlay" class="assistant-overlay" onclick="toggleAssistant()"></div>
+
+<div id="assistant-panel" class="assistant-panel">
+
+    <div class="assistant-header">
+        Metropolitan Crime Data Assistant
+        <span onclick="toggleAssistant()" class="assistant-close">✖</span>
+    </div>
+
+    <div class="assistant-body" id="assistantBody">
+        <div class="assistant-bot">
+            Welcome. You may query crime statistics (2016–2020) by city or year.
+        </div>
+    </div>
+
+    <div class="assistant-input">
+        <input type="text" id="assistantInput" placeholder="Enter your query...">
+        <button onclick="sendAssistantQuery()">Send</button>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+
 
 </body>
 </html>

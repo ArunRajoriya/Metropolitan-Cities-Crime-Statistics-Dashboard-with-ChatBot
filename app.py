@@ -17,7 +17,7 @@ app.register_blueprint(juvenile_bp)
 app.register_blueprint(gov_bp)
 app.register_blueprint(foreign_bp)
 app.register_blueprint(feedback_bp)
-
+app.secret_key = "supersecretkey"
 
 
 def init_db():
@@ -139,7 +139,8 @@ def list_routes():
     return {"routes": output}
 
 
-
+from chat.chat_routes import chat_bp
+app.register_blueprint(chat_bp)
 # ===================== CITY LIST =====================
 
    
