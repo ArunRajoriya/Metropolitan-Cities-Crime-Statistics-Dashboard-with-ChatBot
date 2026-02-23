@@ -62,7 +62,7 @@ function appendAssistantResponse(data){
     if(data.type === "error"){
         const div = document.createElement("div");
         div.className = "assistant-error";
-        div.innerText = data.message;
+        div.innerText = data.summary || data.message;
         body.appendChild(div);
         body.scrollTop = body.scrollHeight;
         return;
@@ -71,32 +71,25 @@ function appendAssistantResponse(data){
     const card = document.createElement("div");
     card.className = "assistant-card";
 
-    let metricsHTML = "";   // ✅ FIX ADDED HERE
+    let contextText = "";
 
-    if (data.type === "arrest") {
-        const orderedKeys = [
-            "Total Persons Arrested",
-            "Male Arrested",
-            "Female Arrested",
-            "Male : Female Arrest Ratio"
-        ];
+    if(data.context){
+        if(data.context.city && data.context.year){
+            contextText = `${data.context.city} | ${data.context.year}`;
+        } 
+        else if(data.context.year){
+            contextText = `${data.context.year}`;
+        }
+    }
 
-        orderedKeys.forEach(key => {
-            if (data.metrics[key]) {
-                metricsHTML += `
-                    <div class="assistant-metric">
-                        <span>${key}</span>
-                        <strong>${data.metrics[key]}</strong>
-                    </div>
-                `;
-            }
-        });
-    } else {
-        for (const key in data.metrics) {
-            metricsHTML += `
+    let dataHTML = "";
+
+    if(data.data){
+        for(const key in data.data){
+            dataHTML += `
                 <div class="assistant-metric">
                     <span>${key}</span>
-                    <strong>${data.metrics[key]}</strong>
+                    <strong>${data.data[key]}</strong>
                 </div>
             `;
         }
@@ -104,15 +97,13 @@ function appendAssistantResponse(data){
 
     card.innerHTML = `
         <div class="assistant-card-title">${data.title}</div>
-        <div class="assistant-card-sub">
-            ${data.city} | ${data.year}
-        </div>
+        <div class="assistant-card-sub">${contextText}</div>
         <div class="assistant-divider"></div>
-        ${metricsHTML}
-        <div class="assistant-source">${data.source}</div>
+        ${dataHTML}
+        <div class="assistant-summary">${data.summary || ""}</div>
+        <div class="assistant-source">${data.source || ""}</div>
     `;
 
     body.appendChild(card);
     body.scrollTop = body.scrollHeight;
 }
-
