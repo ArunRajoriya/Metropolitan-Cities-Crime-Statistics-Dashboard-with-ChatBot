@@ -1673,3 +1673,26 @@ table th {
     font-style: italic;
     margin-bottom: 10px;
 }
+.assistant-table { width:100%; border-collapse: collapse; margin:8px 0; }
+.assistant-table th, .assistant-table td { border:1px solid #e6e6e6; padding:6px 10px; text-align:left; font-size:13px; }
+.assistant-metric.nested { padding-left:12px; font-size:13px; display:flex; justify-content:space-between; gap:12px; }
+.assistant-metric-group-title { font-weight:600; margin-top:6px; }
+.city-cell { font-weight:700; }
+
+.assistant-questions {
+    list-style: none;
+    padding-left: 0;
+}
+
+.assistant-questions li {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    background: #f3f6ff;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.assistant-questions li:hover {
+    background: #dde6ff;
+}
