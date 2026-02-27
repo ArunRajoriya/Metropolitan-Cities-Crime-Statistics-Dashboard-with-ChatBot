@@ -1,406 +1,194 @@
-from flask import Blueprint, request, jsonify, current_app
-import re
+from flask import Blueprint, request, jsonify
+from services.data_loader import crime_data
+from services.dataset_router import detect_dataset
+from services.analytics_engine import calculate_city_totals
+from services.insight_generator import generate_insight
+from services.llm_extractor import llm_extract
+from chat.government_chat import handle_government_chat
+from chat.foreign_chat import handle_foreign_chat
 
 chat_bp = Blueprint("chat", __name__)
-
-# =========================================================
-# API CALL HELPER (Orchestrator Layer)
-# =========================================================
-def call_api(endpoint, params=None):
-    with current_app.test_client() as client:
-        response = client.get(endpoint, query_string=params)
-        return response.get_json()
-
-
-# =========================================================
-# INTENT DETECTION (Business Level)
-# =========================================================
-def detect_intent(message):
-
-    message = message.lower()
-
-    # Comparison
-    if any(word in message for word in ["compare", "comparison", " vs ", "versus"]):
-        return "city_comparison"
-
-    # 🔥 Gender FIRST
-    if re.search(r"\bfemale\b", message) and re.search(r"\barrest", message):
-        return "female_total"
-
-    if re.search(r"\bmale\b", message) and re.search(r"\barrest", message):
-        return "male_total"
-
-    # Highest / Lowest
-    if any(word in message for word in ["highest", "top"]):
-        return "highest"
-
-    if any(word in message for word in ["lowest", "minimum", "least"]):
-        return "lowest"
-
-    # Trend
-    if any(word in message for word in ["trend", "growth", "increase", "over time"]):
-        return "year_trend"
-
-    # Ratio
-    if "ratio" in message:
-        return "gender_ratio"
-
-    # Population
-    if "population" in message:
-        return "home_kpis"
-    
-    # Generic profile LAST
-    if any(word in message for word in ["profile", "details", "arrest", "arrests"]):
-        return "city_profile"
-    
-    if "question" in message or "help" in message:
-     return "questions"
-
-    return "unknown"
-
-# =========================================================
-# PARAMETER EXTRACTION
-# =========================================================
-
-
-from services.data_loader import crime_data
-
-def extract_parameters(message):
-
-    message = message.lower()
-
-    # -------- Extract all years --------
-    years = re.findall(r'20\d{2}', message)
-    available_years = list(crime_data.keys())
-
-    years = [y for y in years if y in available_years]
-
-    if not years:
-     years = [max(available_years)]
-
-    # -------- Extract cities properly --------
-    cities = []
-    df = crime_data[years[0]]
-
-    for c in df["City"].dropna().unique():
-
-        # Clean dataset city
-        clean_dataset_city = (
-            re.sub(r"\(.*?\)", "", str(c))
-            .strip()
-            .lower()
-        )
-
-        # Clean message
-        clean_message = message.lower()
-
-        if clean_dataset_city in clean_message:
-            cities.append(c)
-
-    cities = list(dict.fromkeys(cities))
-
-    return years, cities
-
-    print("INTENT DETECTED:", intent)
-    print("MESSAGE:", message)
+VALID_CRIMES = [
+    "murder",
+    "rape",
+    "kidnapping",
+    "theft",
+    "robbery",
+    "burglary",
+    "assault",
+    "dowry death",
+    "cyber crime"
+]
+INTENT_HANDLERS = {
+    "trend": "handle_trend",
+    "city_comparison": "handle_city_comparison",
+    "city_trend": "handle_multi_year_city",
+    "city_single": "handle_single_city"
+}
 
 @chat_bp.route("/chat", methods=["POST"])
 def chat():
 
-    message = request.json.get("message", "").lower().strip()
+    message = request.json.get("message", "").strip()
+    structured = llm_extract(message)
 
-    intent = detect_intent(message)
-    years, cities = extract_parameters(message)
+    dataset_type = detect_dataset(message, structured)
 
-    # =====================================================
-    # QUESTIONS
-    # =====================================================
-    if intent == "questions":
+    if dataset_type == "government":
+     return handle_government_chat(
+        structured.get("intent"),
+        structured.get("years"),
+        structured
+    )
 
-        suggestions = [
-            "Highest arrests 2020",
-            "Lowest arrests 2019",
-            "Compare Delhi and Mumbai 2020",
-            "Compare Delhi and Mumbai 2016 and 2019",
-            "City profile Mumbai 2020",
-            "Female arrested",
-            "Male arrested 2019",
-            "Trend of arrests",
-            "Gender ratio 2020",
-            "Population stats"
-        ]
+    if dataset_type == "foreign":
+     return handle_foreign_chat(
+        structured.get("intent"),
+        structured.get("years"),
+        structured
+    )
+    
+    
 
-        return jsonify({
-            "type": "questions",
-            "title": "You can ask questions like:",
-            "data": suggestions,
-            "summary": "Try any of the above queries to explore crime statistics.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
+# 🔥 AUTO CRIME ROUTING HERE
+    crime = structured.get("crime")
+    if crime and crime.lower() in VALID_CRIMES:
+     return handle_government_chat(
+    structured.get("intent"),
+    structured.get("years"),
+    structured
+)
+    
 
-    # =====================================================
-    # GENDER RATIO
-    # =====================================================
-    if intent == "gender_ratio":
+    # ===============================
+    # CITY / GENDER LOGIC
+    # ===============================
+    city_list = structured.get("cities", [])
+    years = structured.get("years", [])
+    gender = structured.get("gender")
 
-        year = years[0]
-        data = call_api("/api/gender-ratio", {"year": year})
+    # Convert valid years
+    years = [str(y) for y in years if str(y) in crime_data]
 
-        return jsonify({
-            "type": "gender_ratio",
-            "title": f"Gender Arrest Ratio - {year}",
-            "data": data,
-            "summary": f"Male to female arrest ratio in {year}.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
+    if not years:
+        years = [max(crime_data.keys())]
 
-    # =====================================================
-    # POPULATION
-    # =====================================================
-    if intent == "home_kpis":
+    # ======================================================
+    # 🔥 GENDER + YEAR ONLY (NO CITY)
+    # Example: "Male arrests 2020"
+    # ======================================================
+    if not city_list and gender:
 
-        data = call_api("/api/home-kpis")
-
-        return jsonify({
-            "type": "kpi",
-            "title": "Population Indicators",
-            "data": data,
-            "summary": "Latest population indicators.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-    # =====================================================
-    # MULTI-CITY MULTI-YEAR
-    # =====================================================
-    if intent == "city_comparison" and len(cities) >= 2 and len(years) > 1:
-
-        matrix = {}
-
-        for city in cities[:2]:
-            matrix[city] = {}
-
-            for year in years:
-                data = call_api("/api/city-profile", {
-                    "year": year,
-                    "city": city
-                })
-
-                total = data.get(
-                    "Total - Total Persons Arrested by age and Sex", 0
-                )
-                matrix[city][year] = total
-
-        return jsonify({
-            "type": "matrix_comparison",
-            "title": "Multi-City Multi-Year Comparison",
-            "data": matrix,
-            "summary": "Comparison across selected cities and years.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-    # =====================================================
-    # MULTI-CITY SINGLE YEAR
-    # =====================================================
-    if intent == "city_comparison" and len(cities) >= 2:
-
-        year = years[0]
         results = {}
 
-        for city in cities[:2]:
-            data = call_api("/api/city-profile", {
-                "year": year,
-                "city": city
-            })
+        for yr in years:
+            df = crime_data[yr]
+            total = 0
 
-            results[city] = data.get(
-                "Total - Total Persons Arrested by age and Sex", 0
-            )
+            for _, row in df.iterrows():
+                total += calculate_city_totals(row.to_dict(), gender)
 
-        return jsonify({
-            "type": "multi_city",
-            "title": f"City Comparison - {year}",
-            "data": results,
-            "summary": f"Comparison of selected cities in {year}.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-    # =====================================================
-    # MULTI-YEAR SINGLE CITY
-    # =====================================================
-    if intent == "city_profile" and len(cities) == 1 and len(years) > 1:
-
-        city = cities[0]
-        results = {}
-
-        for year in years:
-            data = call_api("/api/city-profile", {
-                "year": year,
-                "city": city
-            })
-
-            results[year] = data.get(
-                "Total - Total Persons Arrested by age and Sex", 0
-            )
-
-        return jsonify({
-            "type": "multi_year_city",
-            "title": f"{city} Arrest Comparison",
-            "data": results,
-            "summary": f"Comparison of total arrests in {city} across selected years.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-
-    # =====================================================
-    # SINGLE CITY PROFILE
-    # =====================================================
-    if intent == "city_profile" and len(cities) == 1:
-
-        city = cities[0]
-        year = years[0]
-
-        data = call_api("/api/city-profile", {
-            "year": year,
-            "city": city
-        })
-
-        return jsonify({
-            "type": "city_profile",
-            "title": f"{city} Crime Profile - {year}",
-            "data": data,
-            "summary": f"Detailed arrest breakdown for {city} in {year}.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-    # =====================================================
-    # MALE TOTAL
-    # =====================================================
-    if intent == "male_total":
-
-        year_match = re.search(r'20\d{2}', message)
-
-        if not year_match:
-            result = {}
-            for yr in crime_data.keys():
-                data = call_api("/api/gender-ratio", {"year": yr})
-                result[yr] = data.get("male", 0)
-
-            return jsonify({
-                "type": "trend",
-                "title": "Male Arrest Trend",
-                "data": result,
-                "summary": "Trend of male arrests across available years.",
-                "source": "NCRB Dataset (2016–2020)"
-            })
-
-        year = year_match.group()
-        data = call_api("/api/gender-ratio", {"year": year})
-
-        return jsonify({
-            "type": "male_total",
-            "title": f"Total Male Arrests - {year}",
-            "data": {"Male Arrested": data.get("male", 0)},
-            "summary": f"Total male arrests recorded in {year}.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-    # =====================================================
-    # FEMALE TOTAL
-    # =====================================================
-    if intent == "female_total":
-
-        year_match = re.search(r'20\d{2}', message)
-
-        if not year_match:
-            result = {}
-            for yr in crime_data.keys():
-                data = call_api("/api/gender-ratio", {"year": yr})
-                result[yr] = data.get("female", 0)
-
-            return jsonify({
-                "type": "trend",
-                "title": "Female Arrest Trend",
-                "data": result,
-                "summary": "Trend of female arrests across available years.",
-                "source": "NCRB Dataset (2016–2020)"
-            })
-
-        year = year_match.group()
-        data = call_api("/api/gender-ratio", {"year": year})
-
-        return jsonify({
-            "type": "female_total",
-            "title": f"Total Female Arrests - {year}",
-            "data": {"Female Arrested": data.get("female", 0)},
-            "summary": f"Total female arrests recorded in {year}.",
-            "source": "NCRB Dataset (2016–2020)"
-        })
-
-    # =====================================================
-    # YEAR TREND
-    # =====================================================
-    if intent == "year_trend":
-
-        data = call_api("/api/year-trend")
+            results[yr] = total
 
         return jsonify({
             "type": "trend",
-            "title": "Year-wise Arrest Trend",
-            "data": data,
-            "summary": "Trend of arrests across available years.",
+            "title": f"{gender.title()} Arrest Trend",
+            "data": results,
             "source": "NCRB Dataset (2016–2020)"
         })
 
-    # =====================================================
-    # HIGHEST
-    # =====================================================
-    if intent == "highest":
+    # ======================================================
+    # MULTI-CITY SINGLE-YEAR
+    # ======================================================
+    if len(city_list) >= 2 and len(years) == 1:
 
         year = years[0]
-        data = call_api("/api/city-comparison", {"year": year})
+        df = crime_data[year]
+        results = {}
 
-        sorted_cities = sorted(
-            data.items(),
-            key=lambda x: int(x[1]),
-            reverse=True
-        )
+        for city in city_list[:2]:
+            row = df[df["City"].str.contains(city, case=False, na=False)]
 
-        top_city, top_value = sorted_cities[0]
+            if not row.empty:
+                data = row.iloc[0].to_dict()
+                results[city] = calculate_city_totals(data, gender)
+
+        insight = generate_insight(message, {
+            "year": year,
+            "comparison_data": results
+        })
 
         return jsonify({
-            "type": "highest",
-            "title": f"Highest Arrest City - {year}",
-            "data": {top_city: top_value},
-            "summary": f"{top_city} recorded the highest arrests in {year}.",
+            "type": "multi_city",
+            "title": f"{gender.title() if gender else 'Total'} Arrest Comparison - {year}",
+            "data": results,
+            "insight": insight,
             "source": "NCRB Dataset (2016–2020)"
         })
 
-    # =====================================================
-    # LOWEST
-    # =====================================================
-    if intent == "lowest":
+    # ======================================================
+    # MULTI-YEAR SINGLE-CITY
+    # ======================================================
+    if len(city_list) == 1 and len(years) > 1:
 
+        city = city_list[0]
+        results = {}
+
+        for yr in years:
+            df = crime_data[yr]
+            row = df[df["City"].str.contains(city, case=False, na=False)]
+
+            if not row.empty:
+                data = row.iloc[0].to_dict()
+                results[yr] = calculate_city_totals(data, gender)
+
+        insight = generate_insight(message, {
+            "city": city,
+            "multi_year_data": results
+        })
+
+        return jsonify({
+            "type": "multi_year_city",
+            "title": f"{gender.title() if gender else 'Total'} Arrest Trend - {city}",
+            "data": results,
+            "insight": insight,
+            "source": "NCRB Dataset (2016–2020)"
+        })
+
+    # ======================================================
+    # SINGLE CITY SINGLE YEAR
+    # ======================================================
+    if len(city_list) == 1 and len(years) == 1:
+
+        city = city_list[0]
         year = years[0]
-        data = call_api("/api/city-comparison", {"year": year})
+        df = crime_data[year]
 
-        sorted_cities = sorted(
-            data.items(),
-            key=lambda x: int(x[1])
-        )
+        row = df[df["City"].str.contains(city, case=False, na=False)]
 
-        lowest_city, lowest_value = sorted_cities[0]
+        if row.empty:
+            return jsonify({
+                "type": "error",
+                "summary": "City not found"
+            })
+
+        data = row.iloc[0].to_dict()
+        total = calculate_city_totals(data, gender)
+
+        insight = generate_insight(message, {
+            "city": city,
+            "year": year,
+            "total_arrests": total
+        })
 
         return jsonify({
-            "type": "lowest",
-            "title": f"Lowest Arrest City - {year}",
-            "data": {lowest_city: lowest_value},
-            "summary": f"{lowest_city} recorded the lowest arrests in {year}.",
+            "type": "city",
+            "title": f"{gender.title() if gender else 'Total'} Arrests - {city} ({year})",
+            "data": {"Arrests": total},
+            "insight": insight,
             "source": "NCRB Dataset (2016–2020)"
         })
 
-    # =====================================================
-    # FALLBACK
-    # =====================================================
     return jsonify({
         "type": "error",
         "summary": "Unable to interpret request."

@@ -198,3 +198,12 @@ function appendAssistantResponse(payload){
 function autoFillQuestion(text) {
     document.getElementById("assistantInput").value = text;
 }
+// =======================================
+// ENTER KEY TO SEND MESSAGE
+// =======================================
+document.getElementById("assistantInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();   // Prevent newline
+        sendAssistantQuery();     // Send message
+    }
+});
