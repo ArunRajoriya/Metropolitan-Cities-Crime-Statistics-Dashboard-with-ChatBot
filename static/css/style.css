@@ -1507,8 +1507,8 @@ table th {
     position: fixed;
     top: 90px;                 /* below navbar */
     right: 20px;
-    width: 400px;
-    height: 60vh;
+    width: 600px;
+    height: 80vh;
     background: #ffffff;
     border-radius: 16px;
     box-shadow: 0 12px 35px rgba(0,0,0,0.18);
