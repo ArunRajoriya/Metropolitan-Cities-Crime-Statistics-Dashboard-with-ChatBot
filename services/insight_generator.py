@@ -6,19 +6,18 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def generate_insight(user_question, data):
-
     prompt = f"""
+You are a crime analytics assistant.
+
 User Question:
 {user_question}
 
 Data:
-{json.dumps(data, indent=2)}
+{json.dumps(data)}
 
-Provide:
-1. Clear explanation
-2. Key insight
-3. One smart follow-up suggestion
-Keep it professional.
+Return ONLY a short insight in 1–2 sentences.
+Do NOT add headings or lists.
+Keep it concise.
 """
 
     try:

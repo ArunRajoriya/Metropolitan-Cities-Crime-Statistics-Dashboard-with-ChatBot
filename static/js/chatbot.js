@@ -135,7 +135,7 @@ function appendAssistantResponse(payload){
             <div class="assistant-card-sub">${contextText}</div>
             <div class="assistant-divider"></div>
             ${tableHTML}
-            <div class="assistant-summary">${payload.summary || ""}</div>
+           <div class="assistant-summary">${payload.insight || payload.summary || ""}</div>
             <div class="assistant-source">${payload.source || ""}</div>
         `;
         body.appendChild(card);
@@ -163,14 +163,14 @@ function appendAssistantResponse(payload){
         <div class="assistant-card-sub">${contextText}</div>
         <div class="assistant-divider"></div>
         ${dataHTML}
-        <div class="assistant-summary">${payload.summary || ""}</div>
+        <div class="assistant-summary">${payload.insight || payload.summary || ""}</div>
         <div class="assistant-source">${payload.source || ""}</div>
     `;
 
     body.appendChild(card);
     body.scrollTop = body.scrollHeight;
 
-    if (data.type === "questions") {
+    if (payload.type === "questions") {
     const card = document.createElement("div");
     card.className = "assistant-card";
 

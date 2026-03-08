@@ -7,75 +7,37 @@ from services.llm_extractor import llm_extract
 from chat.government_chat import handle_government_chat
 from chat.foreign_chat import handle_foreign_chat
 from chat.advanced_features import handle_juvenile
+from services.query_normalizer import normalize_query
 
 chat_bp = Blueprint("chat", __name__)
 
 VALID_CRIMES = [
-    "murder",
-    "culpable homicide not amounting to murder",
-    "causing death by negligence",
-    "dowry deaths",
-    "abetment of suicide",
-    "attempt to commit murder",
-    "attempt to commit culpable homicide",
-    "attempt to commit suicide",
-    "hurt",
-    "grievous hurt",
-    "acid attack",
-    "attempt to acid attack",
-    "wrongful restraint/confinement",
-    "assault on women with intent to outrage her modesty",
-    "sexual harassment",
-    "assault or use of criminal force on women with intent to disrobe",
-    "voyeurism",
-    "stalking",
-    "kidnapping and abduction",
-    "kidnapping for ransom",
-    "procuration of minor girls",
-    "importation of girls from foreign country",
-    "human trafficking",
-    "rape",
-    "attempt to commit rape",
-    "unnatural offences",
-    "offences against state",
-    "sedition",
-    "unlawful assembly",
-    "riots",
-    "offences promoting enmity between different groups",
-    "affray",
-    "theft",
-    "auto/motor vehicle theft",
-    "other thefts",
-    "burglary",
-    "extortion & blackmailing",
-    "robbery",
-    "dacoity",
-    "criminal misappropriation",
-    "criminal breach of trust",
+    "murder","culpable homicide not amounting to murder","causing death by negligence",
+    "dowry deaths","abetment of suicide","attempt to commit murder",
+    "attempt to commit culpable homicide","attempt to commit suicide",
+    "hurt","grievous hurt","acid attack","attempt to acid attack",
+    "wrongful restraint/confinement","assault on women with intent to outrage her modesty",
+    "sexual harassment","assault or use of criminal force on women with intent to disrobe",
+    "voyeurism","stalking","kidnapping and abduction","kidnapping for ransom",
+    "procuration of minor girls","importation of girls from foreign country",
+    "human trafficking","rape","attempt to commit rape","unnatural offences",
+    "offences against state","sedition","unlawful assembly","riots",
+    "offences promoting enmity between different groups","affray",
+    "theft","auto/motor vehicle theft","other thefts","burglary",
+    "extortion & blackmailing","robbery","dacoity",
+    "criminal misappropriation","criminal breach of trust",
     "dishonestly receiving/dealing-in stolen property",
-    "counterfeiting",
-    "counterfeit currency & bank notes",
-    "forgery, cheating & fraud",
-    "fraud",
-    "other cheating",
-    "other forgery",
+    "counterfeiting","counterfeit currency & bank notes",
+    "forgery, cheating & fraud","fraud","other cheating","other forgery",
     "offences relating to elections",
     "disobedience to order duly promulgated by public servant",
-    "harbouring an offender",
-    "rash driving on public way",
-    "sale of obscene books/objects",
-    "obscene acts and songs at public places",
-    "offences relating to religion",
-    "cheating by impersonation",
-    "offences related to mischief",
-    "arson",
-    "criminal trespass",
-    "cruelty by husband or his relatives",
-    "circulate false/fake news/rumours",
-    "criminal intimidation",
-    "insult to the modesty of women",
-    "other ipc crimes",
-    "total cognizable ipc crimes"
+    "harbouring an offender","rash driving on public way",
+    "sale of obscene books/objects","obscene acts and songs at public places",
+    "offences relating to religion","cheating by impersonation",
+    "offences related to mischief","arson","criminal trespass",
+    "cruelty by husband or his relatives","circulate false/fake news/rumours",
+    "criminal intimidation","insult to the modesty of women",
+    "other ipc crimes","total cognizable ipc crimes"
 ]
 
 
@@ -83,8 +45,17 @@ VALID_CRIMES = [
 def chat():
 
     message = request.json.get("message", "").strip()
-    structured = llm_extract(message) or {}
     message_lower = message.lower()
+    message = normalize_query(message)
+    greetings = ["hi", "hello", "hey"]
+
+    if message_lower in greetings:
+     return jsonify({
+        "type": "greeting",
+        "summary": "Hello! Ask me about crime statistics, arrests, city comparisons, or juvenile crime."
+    })
+
+    structured = llm_extract(message) or {}
 
     # ================= DATASET ROUTING =================
     dataset_type = detect_dataset(message, structured)
@@ -105,12 +76,14 @@ def chat():
 
     # ================= CRIME ROUTING =================
     crime = structured.get("crime")
+
     if crime and crime.lower() in VALID_CRIMES:
-        return handle_government_chat(
-            structured.get("intent"),
-            structured.get("years"),
-            structured
-        )
+        return jsonify({
+            "type": "crime_query",
+            "crime": crime,
+            "message": f"Crime analysis for '{crime}' will be processed.",
+            "source": "NCRB Dataset"
+        })
 
     # ================= BASIC EXTRACTION =================
     city_list = structured.get("cities", [])
@@ -118,48 +91,70 @@ def chat():
     gender = structured.get("gender")
     intent = structured.get("intent", "")
 
-    # Validate years
-    years = [str(y) for y in years if str(y) in crime_data]
+    raw_years = years.copy()
+
+    years = [str(y) for y in years]
+    years = [y for y in years if y in crime_data]
+
+    if raw_years and not years:
+        return jsonify({
+            "type": "error",
+            "summary": "Invalid year. Data available only for 2016–2020."
+        })
+
+    # ================= DEFAULT YEAR =================
     if not years:
-        years = [max(crime_data.keys())]
+        latest_year = sorted(crime_data.keys())[-1]
+        years = [latest_year]
 
     year = years[0]
 
-    # Manual gender fallback
-    if not gender:
-        if "male" in message_lower:
-            gender = "male"
-        elif "female" in message_lower:
-            gender = "female"
+    # ================= GENDER DETECTION =================
+    gender_words = ["male", "men", "man", "female", "women", "woman"]
 
-    # Manual intent fallback
+    if not any(word in message_lower for word in gender_words):
+     gender = None
+
+    # ================= INTENT DETECTION =================
     if "top" in message_lower and ("3" in message_lower or "three" in message_lower):
-     intent = "top"
-    elif "highest" in message_lower or "maximum" in message_lower or "most" in message_lower:
-        intent = "highest"
-    elif "lowest" in message_lower or "minimum" in message_lower or "least" in message_lower:
-        intent = "lowest"
-        # Detect compare intent
-    if "compare" in message_lower or "vs" in message_lower or "between" in message_lower:
-        intent = "compare"
-    # ================= JUVENILE =================
-    if "juvenile" in message_lower:
+        intent = "top"
 
-        city = city_list[0] if city_list else None
+    elif any(word in message_lower for word in ["highest", "maximum", "most"]):
+        intent = "highest"
+
+    elif any(word in message_lower for word in ["lowest", "minimum", "least"]):
+        intent = "lowest"
+
+    if any(word in message_lower for word in ["compare", "vs", "between"]):
+        intent = "compare"
+
+    # ================= JUVENILE =================
+    juvenile_keywords = ["juvenile", "minor", "child", "under 18"]
+
+    if any(word in message_lower for word in juvenile_keywords):
+
+        city = None
+
+        if city_list:
+            possible_city = city_list[0]
+
+            df = crime_data[year]
+
+            if df["City"].str.contains(possible_city, case=False, na=False).any():
+                city = possible_city
 
         category = "total"
+
         if "boys" in message_lower:
             category = "boys"
+
         elif "girls" in message_lower:
             category = "girls"
 
         ranking = None
-        if intent == "top":
-            ranking = "top"
-        elif intent == "highest":
-            ranking = "highest"
-        elif intent == "lowest":
-            ranking = "lowest"
+
+        if intent in ["top", "highest", "lowest"]:
+            ranking = intent
 
         return handle_juvenile(
             year=year,
@@ -172,7 +167,8 @@ def chat():
     # ================= TOP 3 =================
     if intent == "top":
 
-        df = crime_data[year].copy()
+        df = crime_data[year]
+
         df = df[df["City"].notna()]
         df = df[~df["City"].str.lower().str.contains("total", na=False)]
 
@@ -182,6 +178,7 @@ def chat():
         )
 
         df_sorted = df.sort_values(by="value", ascending=False).head(3)
+
         results = dict(zip(df_sorted["City"], df_sorted["value"]))
 
         return jsonify({
@@ -191,16 +188,19 @@ def chat():
             "source": "NCRB Dataset (2016–2020)"
         })
 
-        # ================= MATRIX COMPARISON =================
+    # ================= MATRIX COMPARISON =================
     if intent == "compare" and len(city_list) >= 2 and len(years) >= 2:
 
         matrix = {}
 
         for city in city_list:
+
             matrix[city] = {}
 
             for yr in years:
+
                 df = crime_data[yr]
+
                 row = df[df["City"].str.contains(city, case=False, na=False)]
 
                 if not row.empty:
@@ -215,6 +215,7 @@ def chat():
             "data": matrix,
             "source": "NCRB Dataset (2016–2020)"
         })
+
     # ================= MULTI CITY =================
     if len(city_list) >= 2:
 
@@ -222,7 +223,9 @@ def chat():
         results = {}
 
         for city in city_list[:2]:
+
             row = df[df["City"].str.contains(city, case=False, na=False)]
+
             if not row.empty:
                 data = row.iloc[0].to_dict()
                 results[city] = calculate_city_totals(data, gender)
@@ -246,7 +249,8 @@ def chat():
     # ================= HIGHEST / LOWEST =================
     if intent in ["highest", "lowest"]:
 
-        df = crime_data[year].copy()
+        df = crime_data[year]
+
         df = df[df["City"].notna()]
         df = df[~df["City"].str.lower().str.contains("total", na=False)]
 
@@ -256,9 +260,6 @@ def chat():
             city_name = row["City"]
             total = calculate_city_totals(row.to_dict(), gender)
             city_totals[city_name] = int(total)
-
-        if not city_totals:
-            return jsonify({"type": "error", "summary": "No data available."})
 
         sorted_data = sorted(
             city_totals.items(),
@@ -279,6 +280,7 @@ def chat():
     if not city_list and gender:
 
         df = crime_data[year]
+
         total = sum(
             calculate_city_totals(row.to_dict(), gender)
             for _, row in df.iterrows()
@@ -298,10 +300,13 @@ def chat():
         results = {}
 
         for yr in years:
+
             df = crime_data[yr]
+
             row = df[df["City"].str.contains(city, case=False, na=False)]
 
             if not row.empty:
+
                 data = row.iloc[0].to_dict()
                 total = calculate_city_totals(data, gender)
                 results[yr] = total
@@ -310,7 +315,9 @@ def chat():
             return jsonify({"type": "error", "summary": "City not found"})
 
         if len(results) == 1:
+
             yr = list(results.keys())[0]
+
             return jsonify({
                 "type": "city",
                 "title": f"{gender.title() if gender else 'Total'} Arrests - {city} ({yr})",
@@ -325,29 +332,32 @@ def chat():
             "source": "NCRB Dataset (2016–2020)"
         })
 
-   # ================= YEAR TOTAL =================
-    if not city_list and not gender and years:
+    # ================= YEAR TOTAL =================
+    if not city_list and not gender and years and "arrest" in message_lower:
 
         df = crime_data[year]
+
         total = sum(
             calculate_city_totals(row.to_dict(), None)
             for _, row in df.iterrows()
         )
 
-    return jsonify({
-        "type": "year_total",
-        "title": f"Total Arrests - {year}",
-        "data": {"Total": total},
-        "source": "NCRB Dataset (2016–2020)"
-    })
+        return jsonify({
+            "type": "year_total",
+            "title": f"Total Arrests - {year}",
+            "data": {"Total": total},
+            "source": "NCRB Dataset (2016–2020)"
+        })
+
     # ================= FALLBACK =================
     return jsonify({
-    "type": "fallback",
-    "summary": "I couldn’t detect a city or year. Try asking like: 'Delhi 2019' or 'Highest arrest 2020'.",
-    "suggestions": [
-        "Total arrested 2020",
-        "Delhi 2019",
-        "Compare Delhi Mumbai 2019",
-        "Highest arrest 2019"
-    ]
-})
+        "type": "fallback",
+        "summary": "I couldn't understand the query.",
+        "suggestions": [
+            "Male arrests 2020",
+            "Female arrests Delhi 2019",
+            "Top 3 crime cities 2020",
+            "Compare Delhi Mumbai 2019",
+            "Highest arrests city 2018"
+        ]
+    })

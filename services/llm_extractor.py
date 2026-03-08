@@ -12,28 +12,28 @@ GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 def llm_extract(message):
 
     system_prompt = """
-You are a strict intent extraction engine for a crime analytics dashboard.
+                You are a strict intent extraction engine for a crime analytics dashboard.
 
-Rules:
-- Extract city names.
-- Extract year if mentioned.
-- Extract gender if mentioned.
-- If one city is mentioned → intent = city_profile.
-- If two cities → intent = city_comparison.
-- If highest/maximum/top → intent = highest.
-- If lowest/minimum/least → intent = lowest.
-- If government/national mentioned → intent = gov_crime_full_data.
-- If foreign mentioned → intent = foreign_data.
+                Rules:
+                - Extract city names.
+                - Extract year if mentioned.
+                - Extract gender if mentioned.
+                - If one city is mentioned → intent = city_profile.
+                - If two cities → intent = city_comparison.
+                - If highest/maximum/top → intent = highest.
+                - If lowest/minimum/least → intent = lowest.
+                - If government/national mentioned → intent = gov_crime_full_data.
+                - If foreign mentioned → intent = foreign_data.
 
-Return JSON only:
-{
-  "intent": "",
-  "cities": [],
-  "years": [],
-  "gender": "",
-  "crime": ""
-}
-"""
+                Return JSON only:
+                {
+                "intent": "",
+                "cities": [],
+                "years": [],
+                "gender": "",
+                "crime": ""
+                }
+                """
 
     try:
         response = requests.post(
