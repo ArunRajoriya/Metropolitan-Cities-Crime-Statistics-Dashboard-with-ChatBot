@@ -1,49 +1,130 @@
 {% extends "base.html" %}
-{% block title %}Foreigners Crime Dashboard{% endblock %}
+{% block title %}Foreign Crime Analytics | NCRB Dashboard{% endblock %}
 
 {% block content %}
 
-<section class="page-title">
-    <h9>Foreigners Crime Analysis</h9>
+<!-- ===== HERO SECTION ===== -->
+<section class="foreign-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-icon">🌍</span>
+            <span>International Crime Data</span>
+        </div>
+        <h1>Foreign Nationals Crime Analysis</h1>
+        <p>Comprehensive analysis of crime statistics involving foreign nationals in India</p>
+        
 </section>
 
-<section class="filter-card">
+<!-- ===== ANALYTICS DASHBOARD ===== -->
+<section class="foreign-dashboard">
+    <div class="dashboard-header">
+        <h2>International Crime Analytics</h2>
+        <p>Cross-border crime patterns and foreign national involvement analysis</p>
+    </div>
+    
+    <!-- Filter Controls -->
+    <div class="filter-panel">
+        <div class="filter-group">
+            <label class="filter-label">
+                <span class="label-icon">📅</span>
+                <span>Year</span>
+            </label>
+            <select id="yearFilter" class="filter-select">
+                <option value="all">All Years</option>
+                <option value="2016">2016</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
 
-    <label>Year:</label>
-    <select id="yearFilter">
-        <option value="all">All</option>
-        <option value="2016">2016</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-    </select>
+        <div class="filter-group" id="crimeFilterWrapper">
+            <label class="filter-label">
+                <span class="label-icon">🔍</span>
+                <span>Crime Type</span>
+            </label>
+            <select id="crimeFilter" class="filter-select">
+                <option value="all">All Crime Types</option>
+            </select>
+        </div>
 
-    <!-- 🔥 Wrap this -->
-    <div id="crimeFilterWrapper">
-        <label>Crime Head:</label>
-        <select id="crimeFilter">
-            <option value="all">All</option>
-        </select>
+        <button id="resetBtn" class="reset-btn">
+            <span class="btn-icon">🔄</span>
+            <span>Reset Filters</span>
+        </button>
     </div>
 
-    <button id="resetBtn" class="reset-btn">Reset</button>
+    <!-- Trend Analysis -->
+    <div class="trend-section" id="trendSection" style="display:none;">
+        <div class="trend-card">
+            <div class="trend-header">
+                <h3>Foreign Crime Trend Analysis</h3>
+                <p>Multi-year progression of foreign national involvement in crime</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="foreignerTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
 
-</section>
-
-<!-- 🔥 TREND SECTION -->
-<section class="chart-section4" id="trendSection" style="display:none;">
-    <div class="card">
-        <h3>Highest Foreigner Crime Trend Across Years</h3>
-        <canvas id="foreignerTrendChart"></canvas>
+    <!-- Data Table -->
+    <div class="data-section">
+        <div class="data-header">
+            <h3>Detailed Foreign Crime Data</h3>
+            <div class="data-controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search foreign cases...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <button class="export-btn">
+                    <span class="btn-icon">📥</span>
+                    <span>Export Data</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="table-wrapper">
+            <div class="table-container">
+                <table id="foreignerTable" class="data-table"></table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
     </div>
 </section>
 
-<section class="table-section">
-    <div class="table-container">
-        <table id="foreignerTable"></table>
+<!-- ===== INSIGHTS SECTION ===== -->
+<section class="insights-section">
+    <div class="insights-header">
+        <h2>International Crime Insights</h2>
+        <p>Strategic analysis of cross-border crime patterns and foreign national involvement</p>
+    </div>
+    
+    <div class="insights-grid">
+        <div class="insight-card">
+            <div class="insight-icon">🌍</div>
+            <h3>Cross-Border Patterns</h3>
+            <p>Analyze crime patterns involving foreign nationals to identify international security threats and trends.</p>
+        </div>
+        
+        <div class="insight-card">
+            <div class="insight-icon">🛡️</div>
+            <h3>Security Intelligence</h3>
+            <p>Monitor foreign involvement in domestic crimes to support national security and border control strategies.</p>
+        </div>
+        
+        <div class="insight-card">
+            <div class="insight-icon">📍</div>
+            <h3>Geographic Hotspots</h3>
+            <p>Identify cities and regions with highest foreign crime activity for targeted law enforcement deployment.</p>
+        </div>
+        
+        <div class="insight-card">
+            <div class="insight-icon">🔗</div>
+            <h3>International Cooperation</h3>
+            <p>Support diplomatic and law enforcement cooperation through comprehensive foreign crime data analysis.</p>
+        </div>
     </div>
 </section>
-
-
 
 {% endblock %}
 

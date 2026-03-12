@@ -146,6 +146,10 @@ def year_trend():
     for year, df in crime_data.items():
         df = df.copy()
         df.columns = df.columns.str.strip()
+        
+        # Filter out "Total" rows to avoid double counting
+        df = df[df["City"].notna()]
+        df = df[~df["City"].str.lower().str.contains("total", na=False)]
 
         total_col = find_column(df, ["Total", "Arrested"])
         df[total_col] = pd.to_numeric(df[total_col], errors="coerce").fillna(0)
@@ -163,6 +167,10 @@ def all_year_kpis():
     for year, df in crime_data.items():
         df = df.copy()
         df.columns = df.columns.str.strip()
+        
+        # Filter out "Total" rows to avoid double counting
+        df = df[df["City"].notna()]
+        df = df[~df["City"].str.lower().str.contains("total", na=False)]
 
         total_col = find_column(df, ["Total", "Arrested"])
         df[total_col] = pd.to_numeric(df[total_col], errors="coerce").fillna(0)
@@ -201,18 +209,27 @@ def home_kpis():
     male_population   = int(str(last_row[pop_male_col]).replace(",", "").strip())
     female_population = int(str(last_row[pop_female_col]).replace(",", "").strip())
 
-    # ---- Crime concentration ----
-    total_col = find_column(df, ["Total", "Arrested"])
-    df[total_col] = pd.to_numeric(df[total_col], errors="coerce").fillna(0)
-
-    total_arrests = int(df[total_col].sum())
-    crime_concentration = round((total_arrests / total_population) * 100, 2)
+    # ---- Total arrests across all years ----
+    total_arrests = 0
+    for year, year_df in crime_data.items():
+        year_df = year_df.copy()
+        year_df.columns = year_df.columns.str.strip()
+        
+        # Filter out "Total" rows to avoid double counting
+        filtered_df = year_df[year_df["City"].notna()]
+        filtered_df = filtered_df[~filtered_df["City"].str.lower().str.contains("total", na=False)]
+        
+        total_col = find_column(year_df, ["Total", "Arrested"])
+        if total_col:
+            year_df[total_col] = pd.to_numeric(year_df[total_col], errors="coerce").fillna(0)
+            year_total = int(filtered_df[total_col].sum())
+            total_arrests += year_total
 
     return jsonify({
         "total_population": total_population,
         "male_population": male_population,
         "female_population": female_population,
-       
+        "total_arrests": total_arrests
     })
 
 
@@ -413,6 +430,9 @@ def reports_summary():
     for df in crime_data.values():
         d = df.copy()
         d.columns = d.columns.str.strip()
+        # Filter out "Total" rows to avoid double counting
+        d = d[d["City"].notna()]
+        d = d[~d["City"].str.lower().str.contains("total", na=False)]
         dfs.append(d)
 
     df = pd.concat(dfs, ignore_index=True)

@@ -1,56 +1,237 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home | State Crime Dashboard
+Home | National Crime Records Bureau Analytics Dashboard
 {% endblock %}
 
 {% block content %}
 
-<!-- ===== PAGE TITLE ===== -->
-<section class="page-title">
-    <h1>Metropolitan Cities Crime Statistics – Executive Summary</h1>
-    <h2>High-level indicators derived from NCRB data (2016–2020)</h2>
+<!-- ===== HERO SECTION ===== -->
+<section class="home-hero">
+    <!-- Floating Menu Button (appears on scroll) -->
+    <div id="floating-menu" class="floating-menu">
+        <button onclick="toggleFloatingNav()" class="menu-toggle">
+            <span class="menu-icon">☰</span>
+            <span class="menu-text">Menu</span>
+        </button>
+        <div id="floating-nav" class="floating-nav">
+            <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+            <a href="{{ url_for('reports') }}">📋 Reports</a>
+            <a href="/juvenile">👶 Juvenile</a>
+            <a href="/government-data">🏛️ Government Data</a>
+            <a href="/foreigners">🌍 Foreigners</a>
+            <a href="/about">ℹ️ About</a>
+            <a href="#" onclick="toggleAssistant(event)">🔍 Chat Buddy</a>
+        </div>
+    </div>
+    
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-icon">🏛️</span>
+            <span>Government of India</span>
+        </div>
+        <h1 class="hero-title">National Crime Records Bureau</h1>
+        <h2 class="hero-subtitle">Crime Analytics & Intelligence Dashboard</h2>
+        <p class="hero-description">
+            Comprehensive crime statistics and analytical insights for metropolitan cities across India. 
+            Powered by official NCRB data spanning 2016-2020, providing evidence-based intelligence 
+            for policy makers, researchers, and law enforcement agencies.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Metropolitan Cities</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Years of Data</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number">139</span>
+                <span class="stat-label">Crime Categories</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="data-visualization">
+            <div class="viz-circle primary"></div>
+            <div class="viz-circle secondary"></div>
+            <div class="viz-circle tertiary"></div>
+            <div class="viz-lines"></div>
+        </div>
+    </div>
 </section>
 
-<!-- ===== KPI GRID ===== -->
-<section class="home-kpi-strip">
-
-    <div class="home-kpi-box">
-        <span>Total Population</span>
-        <h2 id="kpi-total">--</h2>
+<!-- ===== KEY METRICS SECTION ===== -->
+<section class="home-metrics">
+    <div class="section-header">
+        <h2>National Crime Statistics Overview</h2>
+        <p>Real-time insights from the latest available NCRB data</p>
     </div>
-
-    <div class="home-kpi-box">
-        <span>Male Population</span>
-        <h2 id="kpi-male-pop">--</h2>
+    
+    <div class="metrics-grid">
+        <div class="metric-card primary">
+            <div class="metric-icon">👥</div>
+            <div class="metric-content">
+                <h3 id="kpi-total">--</h3>
+                <p>Total Population Covered</p>
+                <span class="metric-trend">Across all metropolitan cities</span>
+            </div>
+        </div>
+        
+        <div class="metric-card secondary">
+            <div class="metric-icon">👨</div>
+            <div class="metric-content">
+                <h3 id="kpi-male-pop">--</h3>
+                <p>Male Population</p>
+                <span class="metric-trend">Metropolitan cities coverage</span>
+            </div>
+        </div>
+        
+        <div class="metric-card tertiary">
+            <div class="metric-icon">👩</div>
+            <div class="metric-content">
+                <h3 id="kpi-female-pop">--</h3>
+                <p>Female Population</p>
+                <span class="metric-trend">Metropolitan cities coverage</span>
+            </div>
+        </div>
+        
+        <div class="metric-card quaternary">
+            <div class="metric-icon">⚖️</div>
+            <div class="metric-content">
+                <h3 id="kpi-total-arrests">--</h3>
+                <p>Total Arrests Recorded</p>
+                <span class="metric-trend" id="arrest-trend">Latest year data</span>
+            </div>
+        </div>
+        
+        <div class="metric-card primary">
+            <div class="metric-icon">📊</div>
+            <div class="metric-content">
+                <h3 id="kpi-gender-ratio">--</h3>
+                <p>Male : Female Arrest Ratio</p>
+                <span class="metric-trend">National average</span>
+            </div>
+        </div>
+        
+        <div class="metric-card secondary">
+            <div class="metric-icon">🔍</div>
+            <div class="metric-content">
+                <h3 id="kpi-crime-rate">--</h3>
+                <p>Crime Rate per 100K</p>
+                <span class="metric-trend">Population adjusted</span>
+            </div>
+        </div>
     </div>
-
-    <div class="home-kpi-box">
-        <span>Female Population</span>
-        <h2 id="kpi-female-pop">--</h2>
-    </div>
-
-    <div class="home-kpi-box">
-        <span>
-            Male : Female Arrest Ratio
-            <span class="info-tag">ⓘ
-                <span class="tooltip-text">
-                    Male : Female = Total Male Arrested / Total Female Arrested
-                </span>
-            </span>
-        </span>
-        <h2 id="kpi-gender-ratio">--</h2>
-    </div>
-
 </section>
 
-<!-- ===== NEXT SECTIONS WILL GO BELOW AS CARDS (charts later) ===== -->
-<!-- Example future usage:
-<div class="card">
-    <h2>Crime Trend (2019–2020)</h2>
-    <canvas id="crimeTrendChart"></canvas>
-</div>
--->
+<!-- ===== FEATURES SHOWCASE ===== -->
+<section class="home-features">
+    <div class="section-header">
+        <h2>Advanced Analytics Capabilities</h2>
+        <p>Comprehensive tools for crime data analysis and insights</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🗺️</div>
+            <h3>City-wise Analysis</h3>
+            <p>Detailed crime statistics for major metropolitan cities with comparative analysis and trend identification.</p>
+            <a href="/dashboard" class="feature-link">Explore Dashboard →</a>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>AI-Powered Chatbot</h3>
+            <p>Natural language queries for instant insights. Ask questions like "Compare Delhi and Mumbai crime rates".</p>
+            <a href="#" onclick="toggleAssistant(event)" class="feature-link">Try Chatbot →</a>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3>Trend Analysis</h3>
+            <p>Multi-year trend analysis with predictive insights and pattern recognition across different crime categories.</p>
+            <a href="/reports" class="feature-link">View Reports →</a>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">👨‍👩‍👧‍👦</div>
+            <h3>Demographic Insights</h3>
+            <p>Gender-based analysis, juvenile crime statistics, and demographic breakdowns for targeted interventions.</p>
+            <a href="/juvenile" class="feature-link">Juvenile Data →</a>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🏛️</div>
+            <h3>Government Data</h3>
+            <p>Official NCRB datasets with detailed crime categorization and government-verified statistics.</p>
+            <a href="/government-data" class="feature-link">Government Data →</a>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🌍</div>
+            <h3>Foreign Crime Data</h3>
+            <p>International crime statistics and cross-border crime analysis for comprehensive security insights.</p>
+            <a href="/foreigners" class="feature-link">Foreign Data →</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== DATA SOURCES SECTION ===== -->
+<section class="home-sources">
+    <div class="section-header">
+        <h2>Authoritative Data Sources</h2>
+        <p>Built on official government datasets and verified crime records</p>
+    </div>
+    
+    <div class="sources-grid">
+        <div class="source-card">
+            <div class="source-logo">🏛️</div>
+            <h3>National Crime Records Bureau</h3>
+            <p>Official crime statistics from NCRB, Ministry of Home Affairs, Government of India</p>
+            <div class="source-stats">
+                <span>2016-2020 Data</span>
+                <span>139 Crime Types</span>
+                <span>Metropolitan Cities</span>
+            </div>
+        </div>
+        
+        <div class="source-card">
+            <div class="source-logo">📊</div>
+            <h3>Census Data Integration</h3>
+            <p>Population demographics and socio-economic indicators for contextual analysis</p>
+            <div class="source-stats">
+                <span>Population Data</span>
+                <span>Demographic Breakdown</span>
+                <span>Urban Statistics</span>
+            </div>
+        </div>
+        
+        <div class="source-card">
+            <div class="source-logo">🔒</div>
+            <h3>Data Security & Privacy</h3>
+            <p>Anonymized datasets with privacy protection and secure data handling protocols</p>
+            <div class="source-stats">
+                <span>Privacy Compliant</span>
+                <span>Secure Processing</span>
+                <span>Ethical Use</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER CTA ===== -->
+<section class="home-cta">
+    <div class="cta-content">
+        <h2>Ready to Explore Crime Analytics?</h2>
+        <p>Start your analysis with our AI-powered dashboard and discover insights that matter.</p>
+        <div class="cta-buttons">
+            <a href="/dashboard" class="btn-primary">Start Analysis</a>
+            <a href="#" onclick="toggleAssistant(event)" class="btn-secondary">Try AI Chat</a>
+        </div>
+    </div>
+</section>
 
 {% endblock %}
 

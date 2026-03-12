@@ -1,0 +1,417 @@
+{% extends "base.html" %}
+{% block title %}FAQ | NCRB Analytics{% endblock %}
+
+{% block content %}
+<div class="faq-container">
+    <div class="faq-header">
+        <h1>❓ Frequently Asked Questions</h1>
+        <p>Find answers to common questions about the NCRB Crime Analytics Dashboard</p>
+    </div>
+    
+    <div class="faq-search">
+        <input type="text" id="faqSearch" placeholder="Search FAQs..." onkeyup="searchFAQ()">
+        <span class="search-icon">🔍</span>
+    </div>
+    
+    <div class="faq-categories">
+        <button class="faq-category-btn active" onclick="filterCategory('all')">All</button>
+        <button class="faq-category-btn" onclick="filterCategory('data')">Data</button>
+        <button class="faq-category-btn" onclick="filterCategory('features')">Features</button>
+        <button class="faq-category-btn" onclick="filterCategory('technical')">Technical</button>
+    </div>
+    
+    <div class="faq-list">
+        <!-- Data Questions -->
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📊 What years of crime data are available?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The dashboard currently provides crime data for three years: 2016, 2019, and 2020. This data is sourced from the National Crime Records Bureau (NCRB) and covers metropolitan cities across India.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🏙️ Which cities are covered in the dataset?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The dashboard covers 15+ major metropolitan cities including Delhi, Mumbai, Bangalore, Chennai, Kolkata, Hyderabad, Pune, Ahmedabad, Jaipur, Lucknow, Kanpur, Nagpur, Indore, and others.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📈 How is the data updated?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The data is sourced from official NCRB publications. Updates are made when new annual reports are released by NCRB, typically once a year.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🔢 What does "Indian number format" mean?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Indian number format uses commas differently than international format. For example: 2,90,53,133 (Indian) vs 29,053,133 (International). We use Indian format throughout the dashboard for better local readability.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📚 Where does the data come from?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>All data is sourced from the National Crime Records Bureau (NCRB), Ministry of Home Affairs, Government of India. NCRB is the official repository of crime statistics in India.</p>
+            </div>
+        </div>
+        
+        <!-- Features Questions -->
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🤖 How do I use the Chat Buddy?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Click the "🔍 Chat Buddy" button in the navigation menu. You can ask natural language questions like:</p>
+                <ul>
+                    <li>"Compare Delhi and Mumbai arrests in 2020"</li>
+                    <li>"Show me the trend for Bangalore from 2016 to 2020"</li>
+                    <li>"Top 10 cities by arrests in 2019"</li>
+                    <li>"Gender gap analysis for Chennai"</li>
+                    <li>"Male arrest trend all years"</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📊 What types of analysis are available?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The dashboard offers multiple analysis types:</p>
+                <ul>
+                    <li><strong>Dashboard:</strong> Interactive filters for year, city, age group, and gender with multiple chart types</li>
+                    <li><strong>City Comparison:</strong> Compare crime statistics across cities</li>
+                    <li><strong>Trend Analysis:</strong> View year-over-year changes</li>
+                    <li><strong>Gender Analysis:</strong> Male vs female arrest statistics</li>
+                    <li><strong>Age Group Analysis:</strong> Crime data by age demographics</li>
+                    <li><strong>Juvenile Data:</strong> Dedicated section for juvenile crimes</li>
+                    <li><strong>Government Data:</strong> Investigation and disposal rates</li>
+                    <li><strong>Foreign Crime:</strong> Crimes involving foreign nationals</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>💾 Can I export the data?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! The Government Data and Foreign Crime pages have an "Export Data" button that allows you to download the filtered data as CSV files for further analysis in Excel or other tools.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📈 How do I use the Dashboard filters?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>On the Dashboard page, you can filter data by:</p>
+                <ul>
+                    <li><strong>Year:</strong> Select 2016, 2019, 2020, or All</li>
+                    <li><strong>City:</strong> Choose specific cities or All</li>
+                    <li><strong>Age Group:</strong> Filter by age ranges (18-30, 30-45, 45-60, 60+)</li>
+                    <li><strong>Gender:</strong> Select Male, Female, or All</li>
+                </ul>
+                <p>The charts update automatically based on your selections. Use the "Reset" button to clear all filters.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🏛️ What is Government Data section?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The Government Data section shows crime investigation statistics including:</p>
+                <ul>
+                    <li>Cases registered by crime category</li>
+                    <li>Investigation status and disposal rates</li>
+                    <li>Trend analysis across years</li>
+                    <li>139 different crime categories</li>
+                </ul>
+                <p>You can filter by year and crime type to see detailed statistics.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🌍 What is Foreign Crime Data?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The Foreign Crime section analyzes crimes involving foreign nationals in India, including:</p>
+                <ul>
+                    <li>Cases against foreign tourists</li>
+                    <li>Cases against other foreigners</li>
+                    <li>Total foreign crime cases</li>
+                    <li>Crime type breakdown</li>
+                    <li>Year-over-year trends</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>👦 What is Juvenile Analytics?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The Juvenile section provides statistics on juveniles (under 18 years) apprehended, including:</p>
+                <ul>
+                    <li>Total juvenile apprehensions</li>
+                    <li>Boys vs girls breakdown</li>
+                    <li>City-wise analysis</li>
+                    <li>Year-over-year trends</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📄 What reports are available?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The Reports section provides downloadable crime summaries including:</p>
+                <ul>
+                    <li>PDF reports for 2019 and 2020</li>
+                    <li>Word documents for detailed analysis</li>
+                    <li>Crime infographics (JPG images)</li>
+                    <li>Pre-generated statistical summaries</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Technical Questions -->
+        <div class="faq-item" data-category="technical">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>💻 Which browsers are supported?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The dashboard works best on modern browsers including Chrome, Firefox, Safari, and Edge (latest versions). Internet Explorer is not supported.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="technical">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📱 Is the dashboard mobile-friendly?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! The dashboard is fully responsive and works on tablets and smartphones. However, for the best experience with complex charts and data tables, we recommend using a desktop or laptop.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="technical">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🐛 What should I do if I encounter an error?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Try these steps:</p>
+                <ol>
+                    <li>Refresh the page (Ctrl+F5 or Cmd+Shift+R)</li>
+                    <li>Clear your browser cache</li>
+                    <li>Try a different browser</li>
+                    <li>If the issue persists, use the Feedback form to report it</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="technical">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>⚡ Why are charts not loading?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>If charts don't load:</p>
+                <ul>
+                    <li>Check your internet connection</li>
+                    <li>Ensure JavaScript is enabled in your browser</li>
+                    <li>Disable browser extensions that might block scripts</li>
+                    <li>Try refreshing the page</li>
+                    <li>Clear browser cache and reload</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="technical">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🔍 How do I search within data tables?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>On the Government Data and Foreign Crime pages, you'll find a search box above the data tables. Simply type your search term, and the table will filter in real-time to show matching rows.</p>
+            </div>
+        </div>
+        
+        <!-- General Questions -->
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🎯 Who is this dashboard for?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The dashboard is designed for:</p>
+                <ul>
+                    <li>Researchers and academics studying crime patterns</li>
+                    <li>Policy makers and government officials</li>
+                    <li>Law enforcement agencies</li>
+                    <li>Journalists and media professionals</li>
+                    <li>Students and educators</li>
+                    <li>General public interested in crime statistics</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📊 What crime categories are included?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>The dashboard includes 139 crime categories from NCRB data, including:</p>
+                <ul>
+                    <li>Murder and culpable homicide</li>
+                    <li>Kidnapping and abduction</li>
+                    <li>Rape and sexual offences</li>
+                    <li>Theft, burglary, and robbery</li>
+                    <li>Assault and hurt</li>
+                    <li>Fraud and cheating</li>
+                    <li>Dowry deaths</li>
+                    <li>And many more...</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🔄 How do I reset filters?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Each page with filters has a "Reset" or "Reset Filters" button. Click it to clear all selections and return to the default view showing all available data.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="technical">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>🚀 Is the dashboard free to use?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! The NCRB Crime Analytics Dashboard is completely free to use. No registration or login is required. All features are accessible to everyone.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="data">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>📉 Why is data for some years missing?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>We currently have data for 2016, 2019, and 2020 based on available NCRB publications. Data for other years will be added as NCRB releases new reports. The gap between years is due to NCRB's publication schedule.</p>
+            </div>
+        </div>
+        
+        <div class="faq-item" data-category="features">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>💬 Can I provide feedback?</span>
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! We welcome your feedback. Click the "Feedback" link in the footer to access the feedback form. You can report issues, suggest improvements, or share your experience using the dashboard.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="faq-footer">
+        <h3>Still have questions?</h3>
+        <p>Can't find what you're looking for? <a href="{{ url_for('feedback') }}">Contact us</a> and we'll be happy to help!</p>
+    </div>
+</div>
+
+<script>
+function toggleFAQ(element) {
+    const item = element.parentElement;
+    const answer = item.querySelector('.faq-answer');
+    const toggle = element.querySelector('.faq-toggle');
+    
+    // Close all other FAQs
+    document.querySelectorAll('.faq-item').forEach(faq => {
+        if (faq !== item && faq.classList.contains('active')) {
+            faq.classList.remove('active');
+            faq.querySelector('.faq-answer').style.maxHeight = null;
+            faq.querySelector('.faq-toggle').textContent = '+';
+        }
+    });
+    
+    // Toggle current FAQ
+    item.classList.toggle('active');
+    
+    if (item.classList.contains('active')) {
+        answer.style.maxHeight = answer.scrollHeight + 'px';
+        toggle.textContent = '−';
+    } else {
+        answer.style.maxHeight = null;
+        toggle.textContent = '+';
+    }
+}
+
+function searchFAQ() {
+    const searchTerm = document.getElementById('faqSearch').value.toLowerCase();
+    const items = document.querySelectorAll('.faq-item');
+    
+    items.forEach(item => {
+        const question = item.querySelector('.faq-question').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+function filterCategory(category) {
+    const items = document.querySelectorAll('.faq-item');
+    const buttons = document.querySelectorAll('.faq-category-btn');
+    
+    // Update active button
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Filter items
+    items.forEach(item => {
+        if (category === 'all' || item.dataset.category === category) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

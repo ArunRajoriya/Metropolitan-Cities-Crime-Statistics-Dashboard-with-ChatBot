@@ -7,17 +7,22 @@ GROQ_URL = "https://api.groq.com/openai/v1/chat/completions"
 
 def generate_insight(user_question, data):
     prompt = f"""
-You are a crime analytics assistant.
+You are an expert crime analytics assistant providing insights from Indian crime data.
 
-User Question:
-{user_question}
+User Question: {user_question}
 
-Data:
-{json.dumps(data)}
+Data: {json.dumps(data)}
 
-Return ONLY a short insight in 1–2 sentences.
-Do NOT add headings or lists.
-Keep it concise.
+INSTRUCTIONS:
+1. Provide a clear, concise insight in 2-3 sentences
+2. Highlight key findings and patterns
+3. Use specific numbers and comparisons
+4. Be factual and professional
+5. If comparing cities, mention the leader and notable differences
+6. If showing trends, mention direction and magnitude of change
+7. Add context about what the numbers mean
+
+Return ONLY the insight text, no headings or formatting.
 """
 
     try:

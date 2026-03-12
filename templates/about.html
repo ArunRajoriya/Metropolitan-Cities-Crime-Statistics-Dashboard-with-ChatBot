@@ -1,137 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About | National Crime Dashboard</title>
+{% extends "base.html" %}
+{% block title %}About - NCRB Crime Analytics{% endblock %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
+{% block content %}
 
-<body>
-
-<!-- HEADER -->
-<header class="gov-header">
-    <div class="header-left">
-        <img src="{{ url_for('static', filename='images/mpsedclogo.png') }}">
-    </div>
-    <div class="header-center">
-        <h1>M.P. STATE ELECTRONICS DEVELOPMENT CORPORATION LTD.</h1>
-        <h2>Department of Science & Technology</h2>
-    </div>
-    <div class="header-right">
-        <img src="{{ url_for('static', filename='images/mplogo.png') }}">
-    </div>
-</header>
-
-<!-- NAV -->
-<nav class="gov-nav">
-    <ul>
-        <li><a href="{{ url_for('home') }}">Home</a></li>
-        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-        <li><a href="{{ url_for('reports') }}">Reports</a></li>
-        <li><a href="/juvenile">Juvenile</a></li>
-        <li><a href="/government-data">Government Data</a></li>
-        <li><a href="/foreigners">Foreigners</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="#" onclick="toggleAssistant(event)">🔍 Chat Buddy</a></li>
-    </ul>
-</nav>
-
-<!-- CONTENT -->
-<section class="about-section">
-    <div class="about-hero">
-        <h2>About the Dashboard</h2>
-        <p>
-            A modern data intelligence platform enabling evidence-based governance
-            and strategic law enforcement decisions.
-        </p>
-    </div>
-
-    <div class="about-grid">
-
-        <div class="about-card">
-            <h3>🎯 Purpose</h3>
-            <p>
-                Consolidates multi-year crime datasets into interactive visual insights,
-                enabling strategic analysis and trend monitoring.
-            </p>
+<div class="about-page-container">
+    <div class="about-hero-modern">
+        <div class="about-hero-content">
+            <div class="about-icon">🏛️</div>
+            <h1>About the Crime Analytics Dashboard</h1>
+            <p class="about-subtitle">Empowering data-driven decisions for safer communities through advanced crime analytics and intelligent insights</p>
         </div>
-
-        <div class="about-card">
-            <h3>📊 Data Sources</h3>
-            <ul>
-                <li>National Crime Records Bureau (NCRB)</li>
-                <li>Crime in India Reports (2016–2020)</li>
-                <li>Government Administrative Crime Data</li>
-            </ul>
-        </div>
-
-        <div class="about-card">
-            <h3>🚀 Key Features</h3>
-            <ul>
-                <li>City-wise crime analytics</li>
-                <li>Age & gender distribution insights</li>
-                <li>Interactive filtering & reporting</li>
-                <li>Chat Assistant</li>
-            </ul>
-        </div>
-
-        <div class="about-card">
-            <h3>👥 Intended Users</h3>
-            <ul>
-                <li>Government Departments</li>
-                <li>Police Leadership</li>
-                <li>Policy Analysts</li>
-                <li>Academic Researchers</li>
-            </ul>
-        </div>
-
-    </div>
-
-</section>
-
-<!-- FOOTER -->
-<footer class="gov-footer">
-    <div class="footer-top">
-         <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
-
-        <a href="/terms">Terms & Conditions</a>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/copyright">Copyright Policy</a>
-        <a href="/feedback">Feedback</a>
-         <a href="{{ url_for('sitemap') }}">Site Map</a>
-        
-    </div>
-
-    <div class="footer-bottom">
-        <div class="footer-left">
-            © 2026 MPSeDC. All rights reserved.
-        </div>
-        <div class="footer-right">
-            Designed & Developed by MPSeDC
+        <div class="about-stats">
+            <div class="stat-item">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Years of Data</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">15+</span>
+                <span class="stat-label">Metropolitan Cities</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100+</span>
+                <span class="stat-label">Crime Categories</span>
+            </div>
         </div>
     </div>
-</footer>
+
+    <div class="about-content-modern">
+        <section class="about-mission">
+            <div class="mission-content">
+                <h2>🎯 Our Mission</h2>
+                <p>To transform complex crime data into actionable insights that empower law enforcement agencies, policymakers, and researchers to make evidence-based decisions for creating safer communities across India.</p>
+            </div>
+        </section>
+
+        <section class="about-features-grid">
+            <div class="feature-card-modern">
+                <div class="feature-icon">📊</div>
+                <h3>Advanced Analytics</h3>
+                <p>Comprehensive statistical analysis with trend identification, pattern recognition, and predictive insights across multiple crime categories and demographics.</p>
+                <ul class="feature-list">
+                    <li>Year-over-year trend analysis</li>
+                    <li>City-wise comparative studies</li>
+                    <li>Gender and age distribution insights</li>
+                    <li>Crime hotspot identification</li>
+                </ul>
+            </div>
+
+            <div class="feature-card-modern">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-Powered Assistant</h3>
+                <p>Intelligent chatbot that understands natural language queries and provides instant access to crime statistics with contextual insights and recommendations.</p>
+                <ul class="feature-list">
+                    <li>Natural language processing</li>
+                    <li>Instant data retrieval</li>
+                    <li>Contextual insights generation</li>
+                    <li>Query suggestions and guidance</li>
+                </ul>
+            </div>
+
+            <div class="feature-card-modern">
+                <div class="feature-icon">📈</div>
+                <h3>Interactive Visualizations</h3>
+                <p>Dynamic charts, graphs, and maps that make complex crime data easily understandable and actionable for decision-makers at all levels.</p>
+                <ul class="feature-list">
+                    <li>Real-time chart generation</li>
+                    <li>Interactive filtering options</li>
+                    <li>Exportable reports</li>
+                    <li>Mobile-responsive design</li>
+                </ul>
+            </div>
+
+            <div class="feature-card-modern">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure & Reliable</h3>
+                <p>Built with enterprise-grade security and reliability standards, ensuring data integrity and user privacy while maintaining high performance.</p>
+                <ul class="feature-list">
+                    <li>Data encryption and security</li>
+                    <li>Privacy-compliant design</li>
+                    <li>High availability architecture</li>
+                    <li>Regular security audits</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="about-data-sources">
+            <h2>📚 Data Sources & Methodology</h2>
+            <div class="data-source-grid">
+                <div class="data-source-card">
+                    <div class="source-icon">🏛️</div>
+                    <h4>National Crime Records Bureau (NCRB)</h4>
+                    <p>Official crime statistics from the Ministry of Home Affairs, Government of India, covering comprehensive crime data across metropolitan cities.</p>
+                </div>
+                <div class="data-source-card">
+                    <div class="source-icon">📋</div>
+                    <h4>Crime in India Reports</h4>
+                    <p>Annual publications providing detailed crime statistics, trends, and analysis for the years 2016-2020 across various crime categories.</p>
+                </div>
+                <div class="data-source-card">
+                    <div class="source-icon">⚖️</div>
+                    <h4>Government Administrative Data</h4>
+                    <p>Official administrative records including case disposal statistics, investigation data, and judicial proceedings information.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-users">
+            <h2>👥 Who Benefits from This Platform</h2>
+            <div class="users-grid">
+                <div class="user-card">
+                    <div class="user-icon">👮</div>
+                    <h4>Law Enforcement</h4>
+                    <p>Police departments and security agencies use our analytics for resource allocation, patrol planning, and crime prevention strategies.</p>
+                </div>
+                <div class="user-card">
+                    <div class="user-icon">🏛️</div>
+                    <h4>Government Officials</h4>
+                    <p>Policymakers and administrators leverage insights for evidence-based policy formulation and budget allocation decisions.</p>
+                </div>
+                <div class="user-card">
+                    <div class="user-icon">🎓</div>
+                    <h4>Researchers & Academics</h4>
+                    <p>Criminologists, social scientists, and students access comprehensive data for research, analysis, and academic studies.</p>
+                </div>
+                <div class="user-card">
+                    <div class="user-icon">📰</div>
+                    <h4>Media & Journalists</h4>
+                    <p>News organizations and journalists use verified crime statistics for accurate reporting and investigative journalism.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-technology">
+            <h2>⚙️ Technology & Innovation</h2>
+            <div class="tech-content">
+                <p>Built using modern web technologies and data science methodologies, our platform represents the cutting edge of crime analytics and data visualization.</p>
+                <div class="tech-highlights">
+                    <div class="tech-item">
+                        <span class="tech-label">Frontend</span>
+                        <span class="tech-value">Modern HTML5, CSS3, JavaScript</span>
+                    </div>
+                    <div class="tech-item">
+                        <span class="tech-label">Backend</span>
+                        <span class="tech-value">Python Flask, Advanced Analytics</span>
+                    </div>
+                    <div class="tech-item">
+                        <span class="tech-label">AI/ML</span>
+                        <span class="tech-value">Natural Language Processing, Pattern Recognition</span>
+                    </div>
+                    <div class="tech-item">
+                        <span class="tech-label">Visualization</span>
+                        <span class="tech-value">Chart.js, Interactive Dashboards</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-contact">
+            <div class="contact-card">
+                <h2>📞 Get in Touch</h2>
+                <p>Have questions, suggestions, or need support? We're here to help you make the most of our crime analytics platform.</p>
+                <div class="contact-actions">
+                    <a href="/feedback" class="contact-btn primary">Send Feedback</a>
+                    <a href="/sitemap" class="contact-btn secondary">Explore Platform</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
 <script>
-const cards = document.querySelectorAll('.about-card');
+// Intersection Observer for animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
 
-const observer = new IntersectionObserver(entries => {
+const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if(entry.isIntersecting){
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0)";
+        if (entry.isIntersecting) {
+            entry.target.classList.add('animate-in');
         }
     });
-}, { threshold: 0.1 });
+}, observerOptions);
 
-cards.forEach(card => {
-    card.style.opacity = "0";
-    card.style.transform = "translateY(40px)";
-    card.style.transition = "all 0.6s ease";
-    observer.observe(card);
+// Observe all animatable elements
+document.addEventListener('DOMContentLoaded', () => {
+    const animatableElements = document.querySelectorAll('.feature-card-modern, .data-source-card, .user-card, .stat-item');
+    animatableElements.forEach(el => {
+        observer.observe(el);
+    });
 });
 </script>
-
-</body>
-</html>
+{% endblock %}

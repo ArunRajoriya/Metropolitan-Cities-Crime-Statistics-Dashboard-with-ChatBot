@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Access Forbidden - NCRB Crime Analytics{% endblock %}
+
+{% block content %}
+<div class="error-page-container">
+    <div class="error-hero">
+        <div class="error-icon">🚫</div>
+        <h1>Access Forbidden</h1>
+        <p class="error-subtitle">You don't have permission to access this resource.</p>
+    </div>
+
+    <div class="error-content">
+        <div class="error-suggestions">
+            <h3>What you can do:</h3>
+            <ul>
+                <li><a href="/">Go to Homepage</a></li>
+                <li><a href="/dashboard">View Public Dashboard</a></li>
+                <li>Check if you have the correct permissions</li>
+                <li><a href="/feedback">Contact Support</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

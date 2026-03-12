@@ -1,8 +1,47 @@
 let trendChart = null;
 let currentPage = 1;
-const rowsPerPage = 10;
+const rowsPerPage = 100;
 
 Chart.register(ChartDataLabels);
+
+/* ---------------- INDIAN NUMBER FORMATTING ---------------- */
+function formatIndianNumber(num) {
+    if (num === 0) return '0';
+    
+    const numStr = Math.abs(num).toString();
+    const isNegative = num < 0;
+    
+    // For numbers less than 1000, no formatting needed
+    if (numStr.length <= 3) {
+        return isNegative ? '-' + numStr : numStr;
+    }
+    
+    // Split the number into groups: first 3 digits, then groups of 2
+    let result = '';
+    let remaining = numStr;
+    
+    // Handle the rightmost 3 digits
+    if (remaining.length > 3) {
+        result = ',' + remaining.slice(-3) + result;
+        remaining = remaining.slice(0, -3);
+    } else {
+        result = remaining + result;
+        remaining = '';
+    }
+    
+    // Handle groups of 2 digits from right to left
+    while (remaining.length > 0) {
+        if (remaining.length <= 2) {
+            result = remaining + result;
+            break;
+        } else {
+            result = ',' + remaining.slice(-2) + result;
+            remaining = remaining.slice(0, -2);
+        }
+    }
+    
+    return isNegative ? '-' + result : result;
+}
 
 /* ---------------- LOAD CRIMES ---------------- */
 function loadCrimes(year) {
@@ -16,7 +55,7 @@ function loadCrimes(year) {
         .then(data => {
 
             const crimeSelect = document.getElementById("crimeFilter");
-            crimeSelect.innerHTML = `<option value="all">All</option>`;
+            crimeSelect.innerHTML = `<option value="all">All Categories</option>`;
 
             data.crimes.forEach(c => {
                 crimeSelect.innerHTML += `<option value="${c}">${c}</option>`;
@@ -94,6 +133,11 @@ function loadTrendChart() {
                         labels: labels,
                         datasets: [{
                             data: values,
+                            backgroundColor: [
+                                '#3b82f6',
+                                '#10b981', 
+                                '#f59e0b'
+                            ],
                             borderRadius: 8,
                             barThickness: 60
                         }]
@@ -109,13 +153,23 @@ function loadTrendChart() {
                                     label: function(context) {
                                         const index = context.dataIndex;
                                         return crimes[index] + " : " + 
-                                               values[index].toLocaleString();
+                                               formatIndianNumber(values[index]);
                                     }
                                 }
                             }
                         },
                         scales: {
-                            y: { beginAtZero: true }
+                            y: { 
+                                beginAtZero: true,
+                                grid: {
+                                    color: '#f1f5f9'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
                         }
                     }
                 }
@@ -133,13 +187,78 @@ function createPagination(totalRows, year, crime) {
 
     pagination.innerHTML = "";
 
-    for (let i = 1; i <= totalPages; i++) {
+    // Add previous button
+    if (currentPage > 1) {
+        pagination.innerHTML += `
+            <button class="page-btn" onclick="loadTable('${year}', '${crime}', ${currentPage - 1})">
+                ← Previous
+            </button>
+        `;
+    }
+
+    // Add page numbers (show max 5 pages)
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, startPage + 4);
+
+    for (let i = startPage; i <= endPage; i++) {
         pagination.innerHTML += `
             <button class="page-btn ${i === currentPage ? 'active' : ''}"
                 onclick="loadTable('${year}', '${crime}', ${i})">
                 ${i}
             </button>
         `;
+    }
+
+    // Add next button
+    if (currentPage < totalPages) {
+        pagination.innerHTML += `
+            <button class="page-btn" onclick="loadTable('${year}', '${crime}', ${currentPage + 1})">
+                Next →
+            </button>
+        `;
+    }
+}
+
+/* ---------------- SEARCH FUNCTIONALITY ---------------- */
+function initializeSearch() {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const tableRows = document.querySelectorAll('#govTable tbody tr');
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    }
+}
+
+/* ---------------- EXPORT FUNCTIONALITY ---------------- */
+function initializeExport() {
+    const exportBtn = document.querySelector('.export-btn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            const year = document.getElementById('yearFilter').value;
+            const crime = document.getElementById('crimeFilter').value;
+            
+            // Create CSV export
+            const table = document.getElementById('govTable');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            const csv = rows.map(row => {
+                const cells = Array.from(row.querySelectorAll('th, td'));
+                return cells.map(cell => `"${cell.textContent}"`).join(',');
+            }).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `government_crime_data_${year}_${crime}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
     }
 }
 
@@ -150,7 +269,7 @@ function resetFilters() {
     const crimeFilter = document.getElementById("crimeFilter");
 
     const trendSection = document.getElementById("trendSection");
-    const tableSection = document.querySelector(".table-section");
+    const dataSection = document.querySelector(".data-section");
     const pagination   = document.getElementById("pagination");
 
     yearFilter.value  = "all";
@@ -166,7 +285,7 @@ function resetFilters() {
 
     if (pagination) pagination.innerHTML = "";
 
-    tableSection.style.display = "none";
+    dataSection.style.display = "none";
     trendSection.style.display = "block";
 
     loadTrendChart();
@@ -192,13 +311,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const crimeFilter = document.getElementById("crimeFilter");
 
     const trendSection = document.getElementById("trendSection");
-    const tableSection = document.querySelector(".table-section");
+    const dataSection = document.querySelector(".data-section");
     const pagination   = document.getElementById("pagination");
+
+    // Initialize additional features
+    initializeSearch();
+    initializeExport();
 
     // Initial State → Show Trend Only
     toggleCrimeFilter("all");
     trendSection.style.display = "block";
-    tableSection.style.display = "none";
+    dataSection.style.display = "none";
     loadTrendChart();
 
     /* YEAR CHANGE */
@@ -209,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (selectedYear === "all") {
 
-            tableSection.style.display = "none";
+            dataSection.style.display = "none";
             trendSection.style.display = "block";
             if (pagination) pagination.innerHTML = "";
             loadTrendChart();
@@ -217,7 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         trendSection.style.display = "none";
-        tableSection.style.display = "block";
+        dataSection.style.display = "block";
 
         loadCrimes(selectedYear).then(() => {
             crimeFilter.value = "all";

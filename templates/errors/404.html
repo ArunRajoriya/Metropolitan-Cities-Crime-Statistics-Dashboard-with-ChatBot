@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found - NCRB Crime Analytics{% endblock %}
+
+{% block content %}
+<div class="error-page-container">
+    <div class="error-hero">
+        <div class="error-icon">🔍</div>
+        <h1>Page Not Found</h1>
+        <p class="error-subtitle">The page you're looking for doesn't exist or has been moved.</p>
+    </div>
+
+    <div class="error-content">
+        <div class="error-suggestions">
+            <h3>What you can do:</h3>
+            <ul>
+                <li><a href="/">Go to Homepage</a></li>
+                <li><a href="/dashboard">View Dashboard</a></li>
+                <li><a href="/reports">Browse Reports</a></li>
+                <li><a href="/about">Learn About the Platform</a></li>
+            </ul>
+        </div>
+        
+        <div class="error-help">
+            <p>If you believe this is an error, please <a href="/feedback">contact us</a>.</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+}
+
+.error-hero {
+    margin-bottom: 2rem;
+}
+
+.error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.error-hero h1 {
+    font-size: 2rem;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.error-subtitle {
+    color: var(--gray-600);
+    font-size: 1.125rem;
+}
+
+.error-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-suggestions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.error-suggestions li {
+    margin: 0.5rem 0;
+}
+
+.error-suggestions a, .error-help a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.error-suggestions a:hover, .error-help a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}

@@ -1,61 +1,157 @@
 {% extends "base.html" %}
-{% block title %}Disclaimer{% endblock %}
+{% block title %}Disclaimer - NCRB Crime Analytics{% endblock %}
 
 {% block content %}
 
-<section class="policy-hero">
-    <h1>⚖️ Disclaimer</h1>
-    <p>Transparency • Accuracy • Responsible Use</p>
-</section>
-
-<section class="policy-container">
-
-    <div class="policy-card">
-        <h3>1️⃣ Purpose of This Dashboard</h3>
-        <p>
-            This dashboard has been developed strictly for educational,
-            analytical, and demonstration purposes using publicly available
-            datasets published by the National Crime Records Bureau (NCRB),
-            Government of India.
-        </p>
+<div class="legal-page-container">
+    <div class="legal-hero">
+        <div class="legal-icon">⚠️</div>
+        <h1>Disclaimer</h1>
+        <p class="legal-subtitle">Important Notice | Please Read Carefully</p>
     </div>
 
-    <div class="policy-card">
-        <h3>2️⃣ Data Interpretation</h3>
-        <p>
-            The data presented has been processed, visualized, and interpreted
-            to demonstrate data analytics and dashboard development capabilities.
-            It does not constitute official NCRB publications or government records.
-        </p>
-    </div>
+    <div class="legal-content">
+        <div class="legal-intro">
+            <p>This disclaimer outlines important information about the use, interpretation, and limitations of the Metropolitan Cities Crime Analytics Dashboard. By accessing this platform, you acknowledge and accept these terms.</p>
+        </div>
 
-    <div class="policy-card">
-        <h3>3️⃣ Accuracy & Verification</h3>
-        <p>
-            While reasonable efforts have been made to ensure accuracy,
-            users are advised to consult official NCRB reports and
-            government publications for authenticated and legally valid information.
-        </p>
-    </div>
+        <div class="legal-section">
+            <h2>1. Purpose and Scope</h2>
+            <p>This dashboard has been developed exclusively for:</p>
+            <ul>
+                <li>Educational and academic purposes</li>
+                <li>Data analytics demonstration and visualization</li>
+                <li>Research and analytical studies</li>
+                <li>Public awareness of crime statistics</li>
+            </ul>
+            <div class="legal-disclaimer">
+                <strong>Critical Notice:</strong> This is NOT an official government application. It is an independent analytical platform created for educational purposes using publicly available data.
+            </div>
+        </div>
 
-    <div class="policy-card">
-        <h3>4️⃣ Limitation of Liability</h3>
-        <p>
-            The developers and associated organization shall not be responsible
-            for any decisions, interpretations, or actions taken based on
-            the visualizations or analytical outputs presented on this platform.
-        </p>
-    </div>
+        <div class="legal-section">
+            <h2>2. Data Sources and Attribution</h2>
+            <p>All crime statistics and data displayed on this platform are sourced from:</p>
+            <ul>
+                <li><strong>National Crime Records Bureau (NCRB)</strong> - Ministry of Home Affairs, Government of India</li>
+                <li>Publicly available NCRB annual reports and publications</li>
+                <li>Official government statistical datasets</li>
+            </ul>
+            <p>The data has been processed, analyzed, and visualized for presentation purposes. Original datasets remain the intellectual property of their respective government authorities.</p>
+        </div>
 
-    <div class="policy-card">
-        <h3>5️⃣ Intellectual Property</h3>
-        <p>
-            All logos, references, and datasets remain the property of their
-            respective government authorities and are used here solely for
-            academic and analytical purposes.
-        </p>
-    </div>
+        <div class="legal-section">
+            <h2>3. Accuracy and Verification</h2>
+            <p class="legal-note"><strong>Important:</strong> While we have made reasonable efforts to ensure data accuracy, this platform does not guarantee completeness, accuracy, or currency of information.</p>
+            <p>Users should:</p>
+            <ul>
+                <li>Verify critical information through official NCRB publications</li>
+                <li>Consult authenticated government sources for legal or official purposes</li>
+                <li>Cross-reference data before making important decisions</li>
+                <li>Understand that visualizations are interpretations of raw data</li>
+            </ul>
+            <div class="legal-disclaimer">
+                <strong>Disclaimer:</strong> For legally valid, authenticated, and official crime statistics, please refer directly to NCRB official publications at <a href="https://ncrb.gov.in" target="_blank" rel="noopener">ncrb.gov.in</a>
+            </div>
+        </div>
 
-</section>
+        <div class="legal-section">
+            <h2>4. Data Interpretation</h2>
+            <p>The analytical outputs, visualizations, and insights presented on this dashboard are:</p>
+            <ul>
+                <li>Based on statistical analysis and data processing techniques</li>
+                <li>Subject to interpretation and analytical methodologies</li>
+                <li>Not official government interpretations or conclusions</li>
+                <li>Intended for informational and educational purposes only</li>
+            </ul>
+            <p class="legal-note"><strong>Note:</strong> Crime statistics are complex and multifaceted. Simple numerical comparisons may not reflect the complete picture of crime trends or law enforcement effectiveness.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>5. Limitation of Liability</h2>
+            <p>The developers, contributors, hosting organization, and associated entities shall NOT be held liable for:</p>
+            <ul>
+                <li>Any decisions, actions, or policies based on dashboard data</li>
+                <li>Errors, omissions, inaccuracies, or outdated information</li>
+                <li>Misinterpretation or misuse of presented data</li>
+                <li>Technical issues, downtime, or data unavailability</li>
+                <li>Direct, indirect, consequential, or incidental damages</li>
+                <li>Loss of data, revenue, or opportunities</li>
+            </ul>
+            <div class="legal-disclaimer">
+                <strong>Use at Your Own Risk:</strong> This dashboard is provided "as is" without warranties of any kind, express or implied, including but not limited to warranties of accuracy, completeness, or fitness for a particular purpose.
+            </div>
+        </div>
+
+        <div class="legal-section">
+            <h2>6. No Official Endorsement</h2>
+            <p>This platform is not endorsed, sponsored, or affiliated with:</p>
+            <ul>
+                <li>National Crime Records Bureau (NCRB)</li>
+                <li>Ministry of Home Affairs, Government of India</li>
+                <li>Any state or central government department</li>
+                <li>Any law enforcement agency</li>
+            </ul>
+            <p>The use of government logos, emblems, and references is solely for identification and attribution purposes.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>7. Intellectual Property Rights</h2>
+            <p>All government data, logos, emblems, and official materials remain the exclusive property of their respective authorities. We do not claim ownership of:</p>
+            <ul>
+                <li>NCRB datasets and publications</li>
+                <li>Government logos and official seals</li>
+                <li>State or central government materials</li>
+            </ul>
+            <p>The dashboard design, code, visualizations, and analytical methodologies are protected by applicable intellectual property laws.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>8. User Responsibilities</h2>
+            <p>Users of this dashboard are responsible for:</p>
+            <ul>
+                <li>Understanding the limitations of the presented data</li>
+                <li>Verifying information through official sources when necessary</li>
+                <li>Using data ethically and responsibly</li>
+                <li>Not misrepresenting data or creating misleading interpretations</li>
+                <li>Complying with applicable laws and regulations</li>
+                <li>Proper attribution when referencing dashboard insights</li>
+            </ul>
+        </div>
+
+        <div class="legal-section">
+            <h2>9. External Links</h2>
+            <p>This dashboard may contain links to external websites and resources. We are not responsible for:</p>
+            <ul>
+                <li>Content, accuracy, or availability of external sites</li>
+                <li>Privacy practices of third-party websites</li>
+                <li>Products, services, or information offered by external sites</li>
+            </ul>
+            <p>Links are provided for convenience and do not constitute endorsement.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>10. Changes and Updates</h2>
+            <p>We reserve the right to:</p>
+            <ul>
+                <li>Modify, update, or discontinue any aspect of this dashboard</li>
+                <li>Change data sources, methodologies, or visualizations</li>
+                <li>Update this disclaimer without prior notice</li>
+            </ul>
+            <p>Continued use after changes constitutes acceptance of the modified disclaimer.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>11. Contact and Feedback</h2>
+            <p>For questions, concerns, or to report issues regarding this disclaimer or the dashboard, please contact us through the <a href="/feedback">Feedback</a> page.</p>
+            <p>We welcome constructive feedback and suggestions for improvement.</p>
+        </div>
+
+        <div class="legal-footer">
+            <p><strong>Last Updated:</strong> March 10, 2026</p>
+            <p>By using this dashboard, you acknowledge that you have read, understood, and agree to be bound by this disclaimer.</p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -1,60 +1,113 @@
 {% extends "base.html" %}
-
-{% block title %}Site Map | Metropolitan Cities Crime Analytics{% endblock %}
+{% block title %}Site Map - NCRB Crime Analytics{% endblock %}
 
 {% block content %}
 
-<section class="sitemap-section">
-
-    <h2>Website Sitemap</h2>
-    <p>Complete navigation structure of the Metropolitan Cities Crime Analytics Dashboard.</p>
-
-    <!-- ===== MAIN MODULES ===== -->
-    <div class="sitemap-card">
-        <h3>Main Dashboard Modules</h3>
-        <ul>
-            <li><a href="/">Home Dashboard</a> — KPIs, population, crime concentration</li>
-            <li><a href="/dashboard">Crime Analytics Dashboard</a> — Filters, city analysis, trends</li>
-            <li><a href="/juvenile">Juvenile Analysis Dashboard</a> — Juvenile KPIs and city analysis</li>
-            <li><a href="/foreigner">Foreigner Crime Analysis</a> — Foreign nationals crime data</li>
-            <li><a href="/government">Government Data Insights</a> — Government statistics & tables</li>
-            <li><a href="#" onclick="toggleAssistant(event)">🔍 Chat Buddy</a></li>
-        </ul>
+<div class="legal-page-container">
+    <div class="legal-hero">
+        <div class="legal-icon">🗺️</div>
+        <h1>Site Map</h1>
+        <p class="legal-subtitle">Complete Navigation Guide | Find What You Need</p>
     </div>
 
-    <!-- ===== ANALYTICS PAGES ===== -->
-    <div class="sitemap-card">
-        <h3>Analytics & Visualizations</h3>
-        <ul>
-            <li>Year-wise Crime Trend Analysis</li>
-            <li>City-wise Persons Arrested</li>
-            <li>Crime Profile of Selected City</li>
-            <li>City Comparison by Year</li>
-            <li>Age & Gender Based Arrest Analysis</li>
-            <li>Gender Ratio Analysis</li>
-        </ul>
-    </div>
+    <div class="sitemap-container">
+        <div class="sitemap-intro">
+            <p>Navigate through all sections of the Metropolitan Cities Crime Analytics Dashboard. Use this comprehensive guide to quickly find the information you need.</p>
+        </div>
 
-    <!-- ===== DATA TABLES ===== -->
-    <div class="sitemap-card">
-        <h3>Data Tables & Records</h3>
-        <ul>
-            <li>Government Data Table (Year-wise)</li>
-            <li>Foreigner Crime Data Table</li>
-            <li>Crime Records Table by City</li>
-        </ul>
-    </div>
+        <div class="sitemap-grid">
+            <div class="sitemap-section">
+                <div class="sitemap-header">
+                    <span class="sitemap-icon">🏠</span>
+                    <h2>Main Pages</h2>
+                </div>
+                <ul class="sitemap-list">
+                    <li><a href="/">Home Dashboard</a><span class="page-desc">Overview, KPIs, and key statistics</span></li>
+                    <li><a href="/dashboard">Crime Analytics</a><span class="page-desc">Interactive charts and city analysis</span></li>
+                    <li><a href="/about">About</a><span class="page-desc">Project information and objectives</span></li>
+                </ul>
+            </div>
 
-    <!-- ===== INFORMATIONAL ===== -->
-    <div class="sitemap-card">
-        <h3>Informational Pages</h3>
-        <ul>
-            <li><a href="/about">About the Project</a></li>
-            <li><a href="/feedback">Feedback Form</a></li>
-            <li><a href="/sitemap">Sitemap</a></li>
-        </ul>
-    </div>
+            <div class="sitemap-section">
+                <div class="sitemap-header">
+                    <span class="sitemap-icon">📊</span>
+                    <h2>Data Analysis</h2>
+                </div>
+                <ul class="sitemap-list">
+                    <li><a href="/juvenile">Juvenile Analysis</a><span class="page-desc">Youth crime statistics and trends</span></li>
+                    <li><a href="/government">Government Data</a><span class="page-desc">Official NCRB datasets and tables</span></li>
+                    <li><a href="/foreigners">Foreigner Analysis</a><span class="page-desc">Foreign nationals crime data</span></li>
+                    <li><a href="/reports">Reports</a><span class="page-desc">Downloadable reports and documents</span></li>
+                </ul>
+            </div>
 
-</section>
+            <div class="sitemap-section">
+                <div class="sitemap-header">
+                    <span class="sitemap-icon">🤖</span>
+                    <h2>Interactive Tools</h2>
+                </div>
+                <ul class="sitemap-list">
+                    <li><a href="#" onclick="toggleAssistant(event)">Chat Assistant</a><span class="page-desc">AI-powered crime data queries</span></li>
+                    <li><span class="page-desc-only">Interactive Charts - Available on dashboard pages</span></li>
+                    <li><span class="page-desc-only">Data Filters - Year, city, and category selection</span></li>
+                </ul>
+            </div>
+
+            <div class="sitemap-section">
+                <div class="sitemap-header">
+                    <span class="sitemap-icon">📄</span>
+                    <h2>Legal & Information</h2>
+                </div>
+                <ul class="sitemap-list">
+                    <li><a href="/terms">Terms & Conditions</a><span class="page-desc">Usage terms and guidelines</span></li>
+                    <li><a href="/privacy">Privacy Policy</a><span class="page-desc">Data protection and privacy</span></li>
+                    <li><a href="/copyright">Copyright Policy</a><span class="page-desc">Intellectual property rights</span></li>
+                    <li><a href="/disclaimer">Disclaimer</a><span class="page-desc">Important notices and limitations</span></li>
+                </ul>
+            </div>
+
+            <div class="sitemap-section">
+                <div class="sitemap-header">
+                    <span class="sitemap-icon">💬</span>
+                    <h2>Support & Contact</h2>
+                </div>
+                <ul class="sitemap-list">
+                    <li><a href="/feedback">Feedback Form</a><span class="page-desc">Share your thoughts and suggestions</span></li>
+                    <li><a href="/sitemap">Site Map</a><span class="page-desc">This page - complete navigation</span></li>
+                </ul>
+            </div>
+
+            <div class="sitemap-section">
+                <div class="sitemap-header">
+                    <span class="sitemap-icon">📈</span>
+                    <h2>Key Features</h2>
+                </div>
+                <ul class="sitemap-list">
+                    <li><span class="page-desc-only">Year-wise Crime Trends (2016-2020)</span></li>
+                    <li><span class="page-desc-only">City-wise Arrest Statistics</span></li>
+                    <li><span class="page-desc-only">Gender & Age Analysis</span></li>
+                    <li><span class="page-desc-only">Comparative City Analysis</span></li>
+                    <li><span class="page-desc-only">Crime Category Breakdown</span></li>
+                    <li><span class="page-desc-only">Interactive Data Visualization</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sitemap-footer-info">
+            <h3>Quick Navigation Tips</h3>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <span class="tip-icon">🔍</span>
+                    <p>Use the <strong>Chat Assistant</strong> for quick data queries</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-icon">📊</span>
+                    <p>Access <strong>Dashboard</strong> for interactive visualizations</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

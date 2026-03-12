@@ -1,50 +1,147 @@
 {% extends "base.html" %}
-{% block title %}Government Crime Data{% endblock %}
+{% block title %}Government Crime Data | NCRB Analytics{% endblock %}
 
 {% block content %}
 
-<section class="page-title">
-    <h9>Government Crime Investigation Data</h9>
-</section>
-
-<section class="filter-card">
-    <label>Year:</label>
-    <select id="yearFilter">
-        <option value="all">All</option>
-        <option value="2016">2016</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-    </select>
-
-    <div id="crimeFilterWrapper">
-    <label>Crime Head:</label>
-    <select id="crimeFilter">
-        <option value="all">All</option>
-    </select>
-</div>
-
-    <button id="resetBtn" class="reset-btn">Reset</button>
-</section>
-
-<!-- ✅ Trend Section -->
-<section class="chart-section4" id="trendSection" style="display:none;">
-    <div class="card">
-        <h3>Highest Crime Trend Across Years</h3>
-        <canvas id="crimeTrendChart"></canvas>
+<!-- ===== HERO SECTION ===== -->
+<section class="gov-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-icon">🏛️</span>
+            <span>Official NCRB Data</span>
+        </div>
+        <h1>Government Crime Investigation Data</h1>
+        <p>Comprehensive analysis of crime investigation statistics, case disposal rates, and law enforcement performance metrics across India</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="stat-number">139</span>
+                <span class="stat-label">Crime Categories</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number">3</span>
+                <span class="stat-label">Years of Data</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number">All India</span>
+                <span class="stat-label">Coverage</span>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="table-section">
-    <div class="table-container">
-        <table id="govTable"></table>
+<!-- ===== ANALYTICS DASHBOARD ===== -->
+<section class="gov-dashboard">
+    <div class="dashboard-header">
+        <h2>Crime Investigation Analytics</h2>
+        <p>Interactive data exploration and trend analysis</p>
     </div>
-    <div class="pagination" id="pagination"></div>
+    
+    <!-- Filter Controls -->
+    <div class="filter-panel">
+        <div class="filter-group">
+            <label class="filter-label">
+                <span class="label-icon">📅</span>
+                <span>Year</span>
+            </label>
+            <select id="yearFilter" class="filter-select">
+                <option value="all">All Years</option>
+                <option value="2016">2016</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
 
+        <div class="filter-group" id="crimeFilterWrapper">
+            <label class="filter-label">
+                <span class="label-icon">🔍</span>
+                <span>Crime Category</span>
+            </label>
+            <select id="crimeFilter" class="filter-select">
+                <option value="all">All Categories</option>
+            </select>
+        </div>
+
+        <button id="resetBtn" class="reset-btn">
+            <span class="btn-icon">🔄</span>
+            <span>Reset Filters</span>
+        </button>
+    </div>
+
+    <!-- Trend Analysis -->
+    <div class="trend-section" id="trendSection" style="display:none;">
+        <div class="trend-card">
+            <div class="trend-header">
+                <h3>Crime Trend Analysis</h3>
+                <p>Multi-year progression of selected crime category</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="crimeTrendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="data-section">
+        <div class="data-header">
+            <h3>Detailed Investigation Data</h3>
+            <div class="data-controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search cases...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <button class="export-btn">
+                    <span class="btn-icon">📥</span>
+                    <span>Export Data</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="table-wrapper">
+            <div class="table-container">
+                <table id="govTable" class="data-table"></table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== INSIGHTS SECTION ===== -->
+<section class="insights-section">
+    <div class="insights-header">
+        <h2>Key Insights & Analysis</h2>
+        <p>Data-driven insights from government crime investigation records</p>
+    </div>
+    
+    <div class="insights-grid">
+        <div class="insight-card">
+            <div class="insight-icon">📈</div>
+            <h3>Investigation Efficiency</h3>
+            <p>Track case disposal rates and investigation timelines across different crime categories and jurisdictions.</p>
+        </div>
+        
+        <div class="insight-card">
+            <div class="insight-icon">🎯</div>
+            <h3>Conviction Analytics</h3>
+            <p>Analyze conviction rates and judicial outcomes to identify patterns in successful prosecutions.</p>
+        </div>
+        
+        <div class="insight-card">
+            <div class="insight-icon">⚡</div>
+            <h3>Performance Metrics</h3>
+            <p>Evaluate law enforcement performance through comprehensive statistical analysis and benchmarking.</p>
+        </div>
+        
+        <div class="insight-card">
+            <div class="insight-icon">🔍</div>
+            <h3>Trend Identification</h3>
+            <p>Identify emerging crime patterns and seasonal trends to support proactive policing strategies.</p>
+        </div>
+    </div>
 </section>
 
 {% endblock %}
 
 {% block scripts %}
-
 <script src="{{ url_for('static', filename='js/government.js') }}"></script>
 {% endblock %}

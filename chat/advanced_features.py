@@ -35,8 +35,11 @@ def handle_juvenile(year, city=None, category="total", ranking=None, top_n=3):
 
     # ================= CITY QUERY =================
     if city and not ranking:
-
-        row = df[df["City"].str.contains(city, case=False, na=False)]
+        
+        import re
+        # Escape regex special characters
+        city_escaped = re.escape(city)
+        row = df[df["City"].str.contains(city_escaped, case=False, na=False, regex=True)]
 
         if row.empty:
             return jsonify({
@@ -76,10 +79,17 @@ def handle_juvenile(year, city=None, category="total", ranking=None, top_n=3):
 
     # ================= TOTAL =================
     total = int(df[column].sum())
+    
+    # Map category to display name
+    category_display = {
+        "boys": "Boys",
+        "girls": "Girls",
+        "total": "Total"
+    }
 
     return jsonify({
         "type": "juvenile_total",
-        "title": f"Juvenile {category.title()} Arrest Total - {year}",
+        "title": f"Juvenile {category_display.get(category, category.title())} Arrest Total - {year}",
         "data": {"Total": total},
         "source": "NCRB Dataset (2016–2020)"
     })

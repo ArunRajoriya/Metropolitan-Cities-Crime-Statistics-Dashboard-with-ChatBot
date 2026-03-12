@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Server Error - NCRB Crime Analytics{% endblock %}
+
+{% block content %}
+<div class="error-page-container">
+    <div class="error-hero">
+        <div class="error-icon">⚠️</div>
+        <h1>Server Error</h1>
+        <p class="error-subtitle">We're experiencing technical difficulties. Please try again later.</p>
+    </div>
+
+    <div class="error-content">
+        <div class="error-suggestions">
+            <h3>What you can do:</h3>
+            <ul>
+                <li><a href="/">Return to Homepage</a></li>
+                <li><a href="/dashboard">Try the Dashboard</a></li>
+                <li>Refresh the page in a few minutes</li>
+                <li><a href="/feedback">Report this issue</a></li>
+            </ul>
+        </div>
+        
+        <div class="error-help">
+            <p>If the problem persists, please <a href="/feedback">contact our support team</a>.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

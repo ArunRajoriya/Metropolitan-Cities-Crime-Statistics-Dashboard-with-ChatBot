@@ -1,3 +1,42 @@
+/* ---------------- INDIAN NUMBER FORMATTING ---------------- */
+function formatIndianNumber(num) {
+    if (num === 0) return '0';
+    
+    const numStr = Math.abs(num).toString();
+    const isNegative = num < 0;
+    
+    // For numbers less than 1000, no formatting needed
+    if (numStr.length <= 3) {
+        return isNegative ? '-' + numStr : numStr;
+    }
+    
+    // Split the number into groups: first 3 digits, then groups of 2
+    let result = '';
+    let remaining = numStr;
+    
+    // Handle the rightmost 3 digits
+    if (remaining.length > 3) {
+        result = ',' + remaining.slice(-3) + result;
+        remaining = remaining.slice(0, -3);
+    } else {
+        result = remaining + result;
+        remaining = '';
+    }
+    
+    // Handle groups of 2 digits from right to left
+    while (remaining.length > 0) {
+        if (remaining.length <= 2) {
+            result = remaining + result;
+            break;
+        } else {
+            result = ',' + remaining.slice(-2) + result;
+            remaining = remaining.slice(0, -2);
+        }
+    }
+    
+    return isNegative ? '-' + result : result;
+}
+
 Chart.register(ChartDataLabels);
 
 let citiesBarChart = null;
@@ -33,7 +72,7 @@ function initChart() {
                         align: 'end',
                         color: '#111',
                         font: { weight: 'bold', size: 14 },
-                        formatter: (v) => v.toLocaleString()
+                        formatter: (v) => formatIndianNumber(v)
                     }
                 },
                 scales: {
@@ -49,9 +88,9 @@ function loadKPIs(year) {
     fetch(`/api/juvenile-kpis?year=${year}`)
         .then(res => res.json())
         .then(data => {
-            document.getElementById("kpiTotal").innerText = data.total.toLocaleString();
-            document.getElementById("kpiBoys").innerText  = data.boys.toLocaleString();
-            document.getElementById("kpiGirls").innerText = data.girls.toLocaleString();
+            document.getElementById("kpiTotal").innerText = formatIndianNumber(data.total);
+            document.getElementById("kpiBoys").innerText  = formatIndianNumber(data.boys);
+            document.getElementById("kpiGirls").innerText = formatIndianNumber(data.girls);
         });
 }
 
@@ -147,7 +186,7 @@ function loadJuvenileTrend() {
                                 anchor: 'end',
                                 align: 'top-right',
                                 font: { weight: 'bold', size: 14 },
-                                formatter: v => v.toLocaleString()
+                                formatter: v => formatIndianNumber(v)
                             }
                         },
                         scales: {

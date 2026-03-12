@@ -7,8 +7,11 @@
 <!-- -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026">
+    <!-- Global CSS - IMPROVED VERSION -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_improved.css') }}?v=2028">
+    
+    <!-- Fallback to original if needed -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026"> -->
 
     <!-- Chart.js (used only where needed) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -40,7 +43,8 @@
     </div>
 </header>
 
-<!-- ================= NAVIGATION ================= -->
+<!-- ================= NAVIGATION (Hidden on Home Page) ================= -->
+{% if request.endpoint != 'home' %}
 <nav class="gov-nav">
     <ul>
         <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -53,6 +57,7 @@
         <li><a href="#" onclick="toggleAssistant(event)">🔍 Chat Buddy</a></li>
     </ul>
 </nav>
+{% endif %}
 
 <!-- ================= PAGE CONTENT ================= -->
 <main class="app-container">
@@ -65,10 +70,10 @@
 <footer class="gov-footer">
     <div class="footer-top">
          <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
-
         <a href="/terms">Terms & Conditions</a>
         <a href="/privacy">Privacy Policy</a>
         <a href="/copyright">Copyright Policy</a>
+        <a href="/faq">FAQ</a>
         <a href="/feedback">Feedback</a>
         <a href="{{ url_for('sitemap') }}">Site Map</a>
     </div>
@@ -108,7 +113,6 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
-
 
 </body>
 </html>

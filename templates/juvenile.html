@@ -5,52 +5,73 @@
 {% block content %}
 
 <section class="page-title">
-    <h9>Juvenile Apprehended Analysis</h9>
+    <h1>👦 Juvenile Apprehended Analysis</h1>
+    <p>Statistical analysis of juvenile crime data across metropolitan cities</p>
 </section>
-<section class="filter-card2">
-    <label>Year:</label>
+
+<!-- Modern Filter Card -->
+<div class="filter-card">
+    <label>Year</label>
     <select id="yearFilter">
-        <option value="all">All</option>
+        <option value="all">All Years</option>
         <option value="2016">2016</option>
         <option value="2019">2019</option>
         <option value="2020">2020</option>
     </select>
-    <button id="resetBtn" class="reset-btn">Reset</button>
-
-</section>
-
-
-<!-- KPIs -->
-<section class="juvenile-kpi-strip">
-
-    <div class="juvenile-kpi-box">
-        <span>Total Juveniles</span>
-        <h2 id="kpiTotal">--</h2>
-    </div>
-
-    <div class="juvenile-kpi-box">
-        <span>Juvenile Boys</span>
-        <h2 id="kpiBoys">--</h2>
-    </div>
-
-    <div class="juvenile-kpi-box">
-        <span>Juvenile Girls</span>
-        <h2 id="kpiGirls">--</h2>
-    </div>
-
-</section>
-
-<!-- ===== JUVENILE TREND SECTION ===== -->
-<section id="juvenileTrendSection" style="display:none;" class="juvenile-chart-box">
-    <canvas id="juvenileTrendChart"></canvas>
-</section>
-
-
-<!-- Chart -->
-
-<div class="juvenile-chart-box">
-    <canvas id="citiesBarChart"></canvas>
+    <button id="resetBtn" class="reset-btn">Reset Filters</button>
 </div>
+
+<!-- Modern KPI Cards -->
+<section class="kpi-strip-modern">
+    <div class="kpi-card-modern kpi-primary">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-content">
+            <span class="kpi-label">Total Juveniles</span>
+            <h2 class="kpi-value" id="kpiTotal">--</h2>
+        </div>
+    </div>
+
+    <div class="kpi-card-modern kpi-blue">
+        <div class="kpi-icon">👦</div>
+        <div class="kpi-content">
+            <span class="kpi-label">Juvenile Boys</span>
+            <h2 class="kpi-value" id="kpiBoys">--</h2>
+        </div>
+    </div>
+
+    <div class="kpi-card-modern kpi-pink">
+        <div class="kpi-icon">👧</div>
+        <div class="kpi-content">
+            <span class="kpi-label">Juvenile Girls</span>
+            <h2 class="kpi-value" id="kpiGirls">--</h2>
+        </div>
+    </div>
+</section>
+
+<!-- Trend Chart Section -->
+<section id="juvenileTrendSection" style="display:none;" class="chart-section-modern">
+    <div class="chart-card-modern">
+        <h3>📈 Juvenile Crime Trend Analysis</h3>
+        <canvas id="juvenileTrendChart"></canvas>
+    </div>
+</section>
+
+<!-- City Bar Chart -->
+<section class="chart-section-modern">
+    <div class="chart-card-modern">
+        <h3>🏙️ City-wise Juvenile Apprehensions</h3>
+        <canvas id="citiesBarChart"></canvas>
+    </div>
+</section>
+
+<!-- Info Banner -->
+<section class="info-banner-modern">
+    <div class="info-banner-icon">ℹ️</div>
+    <div class="info-banner-text">
+        <h4>About Juvenile Crime Data</h4>
+        <p>This dashboard presents statistical analysis of juveniles (under 18 years) apprehended across metropolitan cities. The data helps identify trends and supports the development of youth intervention programs and preventive measures.</p>
+    </div>
+</section>
 
 {% endblock %}
 
