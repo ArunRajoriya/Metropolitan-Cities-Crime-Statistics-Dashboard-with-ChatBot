@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Layout Test</title>
+    <link rel="stylesheet" href="static/css/style_improved.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="home-page">
+    <div class="hero-layout-container">
+        <!-- Left Side: Statistics Counter -->
+        <div class="hero-stats-section">
+            <div class="hero-stats-premium">
+                <div class="stat-item-premium">
+                    <div class="stat-icon">🏙️</div>
+                    <div class="stat-number" data-target="19">19</div>
+                    <div class="stat-label">Metro Cities</div>
+                </div>
+                <div class="stat-item-premium">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-number" data-target="3">3</div>
+                    <div class="stat-label">Years Data</div>
+                </div>
+                <div class="stat-item-premium">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-number" data-target="139">139</div>
+                    <div class="stat-label">Crime Categories</div>
+                </div>
+                <div class="stat-item-premium">
+                    <div class="stat-icon">🔍</div>
+                    <div class="stat-number" data-target="2500000">2.5M</div>
+                    <div class="stat-label">Records Analyzed</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side: Analytics Overview -->
+        <div class="analytics-overview-section">
+            <div class="analytics-header">
+                <h3 class="analytics-title">📊 Analytics Overview</h3>
+                <p class="analytics-subtitle">Live insights from India's comprehensive crime database</p>
+            </div>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card large-card">
+                    <div class="card-header">
+                        <div class="card-icon">👥</div>
+                        <div class="card-trend up">↗</div>
+                    </div>
+                    <div class="card-value">8,30,93,411</div>
+                    <div class="card-label">Total Population Covered</div>
+                    <div class="card-chart">
+                        <canvas id="population-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="analytics-card large-card">
+                    <div class="card-header">
+                        <div class="card-icon">⚖️</div>
+                        <div class="card-trend down">↘</div>
+                    </div>
+                    <div class="card-value">5,60,257</div>
+                    <div class="card-label">Total Arrests Recorded</div>
+                    <div class="card-chart">
+                        <canvas id="arrests-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="analytics-card small-card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-value">1,878</div>
+                    <div class="card-label">Crime Rate per 100K</div>
+                    <div class="card-mini-chart">
+                        <canvas id="rate-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="analytics-card small-card">
+                    <div class="card-icon">🔍</div>
+                    <div class="card-value">15.86:1</div>
+                    <div class="card-label">Male:Female Ratio</div>
+                    <div class="card-mini-chart">
+                        <canvas id="gender-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/js/home.js"></script>
+</body>
+</html>

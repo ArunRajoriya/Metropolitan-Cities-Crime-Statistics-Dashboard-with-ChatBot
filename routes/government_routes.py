@@ -7,48 +7,82 @@ gov_bp = Blueprint('gov_bp', __name__)
 
 @gov_bp.route("/api/gov-data")
 def gov_data_api():
-
     year = request.args.get("year", "all")
     crime = request.args.get("crime", "all")
-
     page = int(request.args.get("page", 1))
-    per_page = int(request.args.get("per_page", 10))
+    per_page = int(request.args.get("per_page", 100))
 
-    # Handle year
-    if year == "all":
-        df = pd.concat(gov_data.values(), ignore_index=True)
-    else:
-        df = gov_data[year].copy()
+    try:
+        # Handle year selection
+        if year == "all":
+            # Combine all years
+            df_list = []
+            for y, data in gov_data.items():
+                temp_df = data.copy()
+                temp_df['Year'] = y
+                df_list.append(temp_df)
+            df = pd.concat(df_list, ignore_index=True)
+        else:
+            if year not in gov_data:
+                year = "2020"  # fallback
+            df = gov_data[year].copy()
 
-    df.columns = df.columns.str.strip()
+        # Clean column names
+        df.columns = df.columns.str.strip()
 
-    if crime != "all":
-        df = df[df["Crime Head"] == crime]
+        # Filter by crime if specified
+        if crime != "all" and "Crime Head" in df.columns:
+            df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
+            df = df[df["Crime Head"] == crime]
 
-    total_rows = len(df)
+        total_rows = len(df)
 
-    # Pagination slice
-    start = (page - 1) * per_page
-    end = start + per_page
-    df_page = df.iloc[start:end]
+        # Pagination
+        start = (page - 1) * per_page
+        end = start + per_page
+        df_page = df.iloc[start:end]
 
-    return jsonify({
-        "columns": df.columns.tolist(),
-        "rows": df_page.fillna("").to_dict(orient="records"),
-        "total_rows": total_rows,
-        "page": page,
-        "per_page": per_page
-    })
+        # Fill NaN values
+        df_page = df_page.fillna("")
+
+        return jsonify({
+            "columns": df.columns.tolist(),
+            "rows": df_page.to_dict(orient="records"),
+            "total_rows": total_rows,
+            "page": page,
+            "per_page": per_page
+        })
+    
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "columns": [],
+            "rows": [],
+            "total_rows": 0,
+            "page": page,
+            "per_page": per_page
+        }), 500
 
 # GOV CRIMES
 
 @gov_bp.route("/api/gov-crimes")
 def gov_crimes():
     year = request.args.get("year", "2020")
-    df = gov_data[year]
-
-    crimes = sorted(df["Crime Head"].dropna().unique().tolist())
-    return {"crimes": crimes}
+    
+    if year not in gov_data:
+        year = "2020"  # fallback
+    
+    df = gov_data[year].copy()
+    df.columns = df.columns.str.strip()
+    
+    if "Crime Head" in df.columns:
+        df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
+        crimes = sorted(df["Crime Head"].dropna().unique().tolist())
+        crimes = [c for c in crimes if c != 'nan' and c != '']
+    else:
+        crimes = []
+    
+    return jsonify({"crimes": crimes})
 
 
 @gov_bp.route("/api/highest-crime-trend")

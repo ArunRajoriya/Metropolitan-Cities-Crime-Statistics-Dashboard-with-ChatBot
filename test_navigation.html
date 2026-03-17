@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Test</title>
+    <link rel="stylesheet" href="static/css/style_improved.css">
+</head>
+<body>
+    <!-- Government Header -->
+    <header class="gov-header">
+        <div class="header-left">
+            <img src="static/images/mpsedclogo.png" alt="MPSeDC Logo">
+        </div>
+        <div class="header-center">
+            <h1>M.P. STATE ELECTRONICS DEVELOPMENT CORPORATION LTD.</h1>
+            <h2>Department of Science & Technology</h2>
+        </div>
+        <div class="header-right">
+            <img src="static/images/mplogo.png" alt="Govt of MP Logo">
+        </div>
+    </header>
+
+    <!-- Navigation (Should be visible on all pages except home) -->
+    <nav class="gov-nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/reports">Reports</a></li>
+            <li><a href="/juvenile">Juvenile</a></li>
+            <li><a href="/government-data">Government Data</a></li>
+            <li><a href="/foreigners">Foreigners</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="#" onclick="toggleAssistant(event)">🔍 Chat Buddy</a></li>
+        </ul>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="app-container">
+        <section class="page-title">
+            <h1>Navigation Test Page</h1>
+            <p>This page demonstrates the navigation bar that appears on all pages except the home page.</p>
+        </section>
+        
+        <div style="padding: 2rem; background: white; border-radius: 1rem; margin: 2rem 0;">
+            <h2>Navigation Features:</h2>
+            <ul>
+                <li>✅ Fixed position navigation bar</li>
+                <li>✅ Responsive design for mobile devices</li>
+                <li>✅ Hover effects and active states</li>
+                <li>✅ Chat Buddy integration</li>
+                <li>✅ Proper spacing from header</li>
+                <li>✅ Hidden on home page only</li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

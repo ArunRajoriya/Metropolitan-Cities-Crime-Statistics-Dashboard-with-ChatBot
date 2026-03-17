@@ -7,39 +7,57 @@ foreign_bp = Blueprint('foreign_bp', __name__)
 
 @foreign_bp.route("/api/foreigner-crimes")
 def foreigner_crimes():
-    year = get_year(foreign_data)
-    df = foreign_data[year]
-
-
+    year = request.args.get("year", "2020")
+    
+    if year not in foreign_data:
+        year = "2020"  # fallback
+    
     df = foreign_data[year].copy()
-    df.columns = df.columns.str.strip()   # REQUIRED
-    df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
-
-    crimes = sorted(df["Crime Head"].unique().tolist())
-    return {"crimes": crimes}
+    df.columns = df.columns.str.strip()
+    
+    if "Crime Head" in df.columns:
+        df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
+        crimes = sorted(df["Crime Head"].dropna().unique().tolist())
+        crimes = [c for c in crimes if c != 'nan' and c != '']
+    else:
+        crimes = []
+    
+    return jsonify({"crimes": crimes})
 
 
 @foreign_bp.route("/api/foreigner-data")
 def foreigner_data_api():
-    year = get_year(foreign_data)
-    df = foreign_data[year]
-
+    year = request.args.get("year", "2020")
     crime = request.args.get("crime", "all")
+    
+    if year == "all":
+        # Combine all years
+        df_list = []
+        for y, data in foreign_data.items():
+            temp_df = data.copy()
+            temp_df['Year'] = y
+            df_list.append(temp_df)
+        df = pd.concat(df_list, ignore_index=True)
+    else:
+        if year not in foreign_data:
+            year = "2020"  # fallback
+        df = foreign_data[year].copy()
 
-    df = foreign_data[year].copy()
-
-    # IMPORTANT
+    # Clean column names
     df.columns = df.columns.str.strip()
-    df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
-
-    if crime != "all":
+    
+    # Filter by crime if specified
+    if crime != "all" and "Crime Head" in df.columns:
+        df["Crime Head"] = df["Crime Head"].astype(str).str.strip()
         df = df[df["Crime Head"] == crime]
 
+    # Fill NaN values
     df = df.fillna("")
 
     return jsonify({
         "columns": df.columns.tolist(),
-        "rows": df.to_dict(orient="records")
+        "rows": df.to_dict(orient="records"),
+        "total_rows": len(df)
     })
 
 @foreign_bp.route("/api/foreigner-trend")

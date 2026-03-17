@@ -28,26 +28,46 @@ def detect_query_type(message, structured):
 
 
 def extract_time_range(message):
-    """Extract time range from query"""
+    """Extract time range from query and filter to available years"""
+    from services.data_loader import crime_data
+    
     msg = message.lower()
+    available_years = sorted([int(y) for y in crime_data.keys()])
     
     # Pattern: "from 2016 to 2020"
     pattern1 = r"from\s+(\d{4})\s+to\s+(\d{4})"
     match = re.search(pattern1, msg)
     if match:
-        return list(range(int(match.group(1)), int(match.group(2)) + 1))
+        start_year = int(match.group(1))
+        end_year = int(match.group(2))
+        # Filter to only available years in the range
+        return [y for y in available_years if start_year <= y <= end_year]
     
     # Pattern: "between 2016 and 2020"
     pattern2 = r"between\s+(\d{4})\s+and\s+(\d{4})"
     match = re.search(pattern2, msg)
     if match:
-        return list(range(int(match.group(1)), int(match.group(2)) + 1))
+        start_year = int(match.group(1))
+        end_year = int(match.group(2))
+        # Filter to only available years in the range
+        return [y for y in available_years if start_year <= y <= end_year]
     
     # Pattern: "2016-2020" or "2016 to 2020"
     pattern3 = r"(\d{4})\s*[-–to]\s*(\d{4})"
     match = re.search(pattern3, msg)
     if match:
-        return list(range(int(match.group(1)), int(match.group(2)) + 1))
+        start_year = int(match.group(1))
+        end_year = int(match.group(2))
+        # Filter to only available years in the range
+        return [y for y in available_years if start_year <= y <= end_year]
+    
+    # Pattern: "from 2016" (open-ended)
+    pattern4 = r"from\s+(\d{4})"
+    match = re.search(pattern4, msg)
+    if match:
+        start_year = int(match.group(1))
+        # Get all available years from start_year onwards
+        return [y for y in available_years if y >= start_year]
     
     return None
 
@@ -150,9 +170,24 @@ def needs_clarification(structured, message):
     if structured.get("intent") == "city_comparison" and len(structured.get("cities", [])) < 2:
         return True, "You mentioned comparison but I only detected one city. Which cities would you like to compare?"
     
-    # Check if missing critical info
-    if "trend" in msg and len(structured.get("years", [])) < 2:
-        return True, "For trend analysis, please specify a time range (e.g., 'from 2016 to 2020')."
+    # Enhanced trend handling - be smarter about generic trend queries
+    if "trend" in msg:
+        cities = structured.get("cities", [])
+        years = structured.get("years", [])
+        
+        # If no cities and no years specified, allow it to proceed with smart defaults
+        if not cities and not years:
+            # Generic trend query like "Show me the trend analysis" - let it proceed
+            return False, None
+        
+        # If cities specified but no years, use all available years as default
+        if cities and not years:
+            # City-specific trend query without years - let it proceed with smart defaults
+            return False, None
+        
+        # If cities specified but insufficient years, still ask for clarification only if user specified years
+        if cities and len(years) < 2 and any(word in msg for word in ["from", "to", "between", "in"]):
+            return True, "For trend analysis, please specify a time range (e.g., 'from 2016 to 2020')."
     
     return False, None
 

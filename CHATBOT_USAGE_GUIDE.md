@@ -83,11 +83,16 @@ The enhanced chatbot can now understand natural language queries and provide int
 "Show me government data"
 ```
 
-### 10. Foreign Crime Data
+### 10. Foreign Crime Queries
 ```
-"Foreign crime statistics"
-"Foreigner arrests 2020"
-"International crime data"
+"Foreign crime 2020"
+"Foreign tourists vs other foreigners 2019"
+"Murder foreign crime 2020"
+"Rape foreign crime 2019"
+"Human trafficking foreign 2020"
+"Foreign crime trend all years"
+"Foreign crime 2019 vs 2020"
+"Tourist crime breakdown 2020"
 ```
 
 ## Advanced Features

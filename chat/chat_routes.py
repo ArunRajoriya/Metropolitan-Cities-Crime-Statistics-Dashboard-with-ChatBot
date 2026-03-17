@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import time
 from services.data_loader import crime_data
 from services.dataset_router import detect_dataset
 from services.analytics_engine import calculate_city_totals
@@ -7,7 +8,6 @@ from services.llm_extractor import llm_extract
 from chat.government_chat import handle_government_chat
 from chat.foreign_chat import handle_foreign_chat
 from chat.advanced_features import handle_juvenile
-from services.query_normalizer import normalize_query
 from services.intelligent_query_handler import intelligent_handler
 from services.query_understanding import (
     detect_query_type, extract_time_range, extract_top_n,
@@ -19,8 +19,22 @@ from services.advanced_analytics import (
 from services.response_formatter import (
     format_comparison_response, format_gender_analysis, format_number
 )
+from services.advanced_query_processor import advanced_processor
 
-chat_bp = Blueprint("chat", __name__)
+# Add caching enhancement
+from services.cache_manager import chatbot_cache
+
+chat_bp = Blueprint("chatbot", __name__)
+
+def create_cached_response(response_data, cache_key_data, start_time):
+    """Helper function to add timing and caching to responses"""
+    response_data['response_time'] = f"{time.time() - start_time:.2f}s"
+    
+    # Cache successful responses (not errors or greetings)
+    if response_data.get('type') not in ['error', 'fallback', 'clarification', 'greeting']:
+        chatbot_cache.set(cache_key_data, response_data)
+    
+    return jsonify(response_data)
 
 VALID_CRIMES = [
     "murder","culpable homicide not amounting to murder","causing death by negligence",
@@ -54,12 +68,12 @@ VALID_CRIMES = [
 
 @chat_bp.route("/chat", methods=["POST"])
 def chat():
-
+    start_time = time.time()
     message = request.json.get("message", "").strip()
     message_lower = message.lower()
-    message = normalize_query(message)
+    
+    # Handle greetings
     greetings = ["hi", "hello", "hey"]
-
     if message_lower in greetings:
         return jsonify({
             "type": "greeting",
@@ -72,10 +86,41 @@ def chat():
                 "Top/bottom city rankings",
                 "Government and foreign crime data"
             ],
-            "example": "Try asking: 'Compare Delhi and Mumbai arrests in 2020' or 'Show me the trend for Bangalore from 2016 to 2020'"
+            "example": "Try asking: 'Compare Delhi and Mumbai arrests in 2020' or 'Show me the trend for Bangalore from 2016 to 2020'",
+            "response_time": f"{time.time() - start_time:.2f}s"
         })
 
     structured = llm_extract(message) or {}
+    
+    # Check cache first for performance boost
+    cache_key_data = {
+        'cities': structured.get('cities', []),
+        'years': structured.get('years', []),
+        'gender': structured.get('gender'),
+        'intent': structured.get('intent'),
+        'crime': structured.get('crime')
+    }
+    
+    cached_response = chatbot_cache.get(cache_key_data)
+    if cached_response:
+        cached_response['cached'] = True
+        cached_response['response_time'] = f"{time.time() - start_time:.2f}s"
+        return jsonify(cached_response)
+    
+    # Early year validation - check if user mentioned years that don't exist
+    extracted_years = structured.get("years", [])
+    if extracted_years:
+        invalid_years = [str(y) for y in extracted_years if str(y) not in crime_data]
+        if invalid_years:
+            return jsonify({
+                "type": "error",
+                "summary": f"Data not available for {', '.join(invalid_years)}. Available years: 2016, 2019, 2020.",
+                "suggestions": [
+                    f"Try using 2020 instead: '{message.replace(invalid_years[0], '2020')}'",
+                    "Ask 'What years are available?'",
+                    "Use available years: 2016, 2019, or 2020"
+                ]
+            })
     
     # Validate and auto-correct the query
     structured = intelligent_handler.validate_and_correct_query(structured)
@@ -91,16 +136,26 @@ def chat():
     
     # Handle data availability questions
     if is_question_about_data_availability(message):
+        # Get city counts for each year
+        city_counts = {}
+        for year, df in crime_data.items():
+            df_clean = df[df["City"].notna()]
+            df_clean = df_clean[~df_clean["City"].str.lower().str.contains("total", na=False)]
+            city_counts[year] = len(df_clean)
+        
         return jsonify({
             "type": "info",
             "title": "Data Availability",
             "data": {
                 "Available Years": "2016, 2019, 2020",
-                "Total Cities": len(intelligent_handler.all_cities),
+                "Cities by Year": {f"{year}": f"{count} cities" for year, count in city_counts.items()},
+                "Total Unique Cities": len(intelligent_handler.all_cities),
                 "Datasets": "Crime Data, Government Data, Foreign Crime Data",
                 "Features": "City comparisons, trends, rankings, gender analysis, juvenile statistics"
             },
-            "summary": f"I have crime data for {len(intelligent_handler.all_cities)} Indian cities across years 2016, 2019, and 2020."
+            "summary": f"I have crime data across {len(city_counts)} years with varying city coverage: " + 
+                      ", ".join([f"{year} ({count} cities)" for year, count in city_counts.items()]) + ".",
+            "note": "City coverage varies by year. 2020 has 19 cities, which is the most comprehensive dataset."
         })
     
     # Detect query types for better handling
@@ -115,6 +170,18 @@ def chat():
     top_n = extract_top_n(message)
     if top_n:
         structured["top_n"] = top_n
+        
+        # Validate if requested top_n is reasonable
+        if top_n > 50:
+            return jsonify({
+                "type": "clarification",
+                "summary": f"Requesting top {top_n} cities is too many. I can show up to 20 cities maximum.",
+                "suggestions": [
+                    "Try 'top 10 cities' for a good overview",
+                    "Ask for 'top 20 cities' for comprehensive ranking",
+                    "Use 'top 5 cities' for quick insights"
+                ]
+            })
     
     # Check confidence level
     # Be more lenient if we have a valid year extracted
@@ -133,6 +200,11 @@ def chat():
     complex_result = intelligent_handler.handle_complex_query(structured, message)
     if complex_result:
         return jsonify(complex_result)
+    
+    # Try advanced query processing for sophisticated analytics
+    advanced_result = advanced_processor.process_advanced_query(message, structured)
+    if advanced_result:
+        return jsonify(advanced_result)
 
     # ================= CRIME ROUTING =================
     # Check crime routing FIRST before dataset detection
@@ -143,14 +215,24 @@ def chat():
     generic_terms = ["arrest", "arrests", "total", "statistics", "data", "crime", "crimes"]
     
     # If crime is detected and it's not a generic term, route to government dataset
-    # This handles crimes like "Assault on Women" which contain gender words
+    # BUT check for foreign keywords first - foreign crime queries should go to foreign dataset
     if crime and crime.lower() not in generic_terms:
-        # Route to government dataset for crime-specific queries
-        return handle_government_chat(
-            structured.get("intent"),
-            structured.get("years", []),
-            structured
-        )
+        # Check if this is a foreign crime query
+        message_lower = message.lower()
+        if "foreign" in message_lower or "foreigner" in message_lower or "tourist" in message_lower:
+            # Route to foreign dataset for foreign crime queries
+            return handle_foreign_chat(
+                structured.get("intent"),
+                structured.get("years", []),
+                structured
+            )
+        else:
+            # Route to government dataset for regular crime-specific queries
+            return handle_government_chat(
+                structured.get("intent"),
+                structured.get("years", []),
+                structured
+            )
 
     # ================= DATASET ROUTING =================
     dataset_type = detect_dataset(message, structured)
@@ -179,90 +261,29 @@ def chat():
     raw_years = years.copy()
 
     years = [str(y) for y in years]
+    original_years = years.copy()  # Keep track of original years before filtering
     years = [y for y in years if y in crime_data]
-
-    if raw_years and not years:
-        suggestions = intelligent_handler.get_contextual_suggestions(structured, "year_not_found")
-        return jsonify({
-            "type": "error",
-            "summary": "Invalid year. Data available only for 2016, 2019, and 2020.",
-            "suggestions": suggestions
-        })
-
-    # ================= CITY VALIDATION =================
-    # Validate that extracted cities exist in the dataset
-    valid_cities = []
-    invalid_cities = []
-    
-    if city_list:
-        import re
-        for city in city_list:
-            # Check if city exists in any year's data
-            city_found = False
-            for year_data in crime_data.values():
-                city_escaped = re.escape(city)
-                if year_data["City"].str.contains(city_escaped, case=False, na=False, regex=True).any():
-                    valid_cities.append(city)
-                    city_found = True
-                    break
-            if not city_found:
-                invalid_cities.append(city)
-        
-        # If cities were mentioned but none are valid
-        if city_list and not valid_cities:
-            return jsonify({
-                "type": "error",
-                "summary": f"City not available in dataset: {', '.join(invalid_cities)}",
-                "suggestions": [
-                    "Try cities like: Delhi, Mumbai, Bangalore, Chennai, Kolkata",
-                    "Check the spelling of the city name",
-                    "Use major metropolitan cities only"
-                ]
-            })
-        
-        # Update city_list to only include valid cities
-        city_list = valid_cities
-    
-    # Additional check for potential city names not extracted by LLM
-    # This handles cases like "Bhopal 2019" where Bhopal isn't extracted as a city
-    if not city_list and not detected_crime and not gender:
-        # Check if any word in the message might be a city name
-        words = message.lower().split()
-        common_words = ["show", "me", "data", "statistics", "crime", "arrest", "total", "the", "in", "for", "of", "and", "or", "all", "trend"]
-        
-        for word in words:
-            if (not word.isdigit() and 
-                word not in common_words and 
-                len(word) > 2):
-                # Check if this word exists as a city in the dataset
-                import re
-                word_escaped = re.escape(word)
-                city_found = False
-                for year_data in crime_data.values():
-                    if year_data["City"].str.contains(word_escaped, case=False, na=False, regex=True).any():
-                        city_found = True
-                        city_list = [word.title()]  # Add as valid city
-                        break
-                
-                # If word looks like a city but isn't found, return error
-                if not city_found and word not in ["male", "female", "juvenile", "minor"]:
-                    return jsonify({
-                        "type": "error",
-                        "summary": f"City not available in dataset: {word.title()}",
-                        "suggestions": [
-                            "Try cities like: Delhi, Mumbai, Bangalore, Chennai, Kolkata",
-                            "Check the spelling of the city name",
-                            "Use major metropolitan cities only"
-                        ]
-                    })
 
     # ================= DEFAULT YEAR / ALL YEARS =================
     # If user mentions "all" and no specific years, use all available years
     if not years and "all" in message_lower and ("year" in message_lower or "trend" in message_lower):
         years = sorted(crime_data.keys())
-    elif not years:
+    elif not years and not original_years:
+        # No years mentioned at all - use default
         latest_year = sorted(crime_data.keys())[-1]
         years = [latest_year]
+    elif not years and original_years:
+        # Years were mentioned but none are valid - show error
+        invalid_years = [y for y in original_years if y not in crime_data]
+        return jsonify({
+            "type": "error",
+            "summary": f"Data not available for {', '.join(invalid_years)}. Available years: 2016, 2019, 2020.",
+            "suggestions": [
+                f"Try 'Compare Delhi and Mumbai arrests in 2020'",
+                f"Ask 'Delhi arrests 2019'",
+                f"Use available years: 2016, 2019, or 2020"
+            ]
+        })
 
     year = years[0]
     
@@ -361,24 +382,39 @@ def chat():
         )
 
         # Use top_n_value from intent detection
-        n = top_n_value if top_n_value else 3
-        df_sorted = df.sort_values(by="value", ascending=False).head(n)
+        requested_n = top_n_value if top_n_value else 3
+        available_cities = len(df)
+        actual_n = min(requested_n, available_cities)
+        
+        df_sorted = df.sort_values(by="value", ascending=False).head(actual_n)
 
         results = dict(zip(df_sorted["City"], df_sorted["value"]))
         
-        # Generate insight
+        # Generate insight with accurate numbers
         total = sum(results.values())
         top_city = list(results.keys())[0]
         top_value = list(results.values())[0]
         
         insight = f"{top_city} leads with {format_number(top_value)} arrests. "
-        insight += f"These top {n} cities account for {format_number(total)} total arrests in {year}."
+        
+        # Adjust insight based on requested vs actual
+        if requested_n > available_cities:
+            insight += f"Showing all {actual_n} available cities (requested top {requested_n}). "
+        
+        insight += f"These top {actual_n} cities account for {format_number(total)} total arrests in {year}."
+
+        # Create appropriate title
+        if requested_n > available_cities:
+            title = f"Top {actual_n} {gender.title() + ' ' if gender else ''}Arrest Cities - {year} (All Available)"
+        else:
+            title = f"Top {actual_n} {gender.title() + ' ' if gender else ''}Arrest Cities - {year}"
 
         return jsonify({
-            "type": f"top_{n}",
-            "title": f"Top {n} {gender.title() + ' ' if gender else ''}Arrest Cities - {year}",
+            "type": f"top_{actual_n}",
+            "title": title,
             "data": results,
             "insight": insight,
+            "note": f"Showing {actual_n} of {requested_n} requested cities" if requested_n > available_cities else None,
             "source": "NCRB Dataset (2016–2020)"
         })
 
@@ -487,6 +523,13 @@ def chat():
             total = calculate_city_totals(row.to_dict(), gender)
             city_totals[city_name] = int(total)
 
+        if not city_totals:
+            return jsonify({
+                "type": "error",
+                "summary": f"No city data available for {year}",
+                "suggestions": ["Try a different year (2016, 2019, 2020)", "Ask for available data"]
+            })
+
         sorted_data = sorted(
             city_totals.items(),
             key=lambda x: x[1],
@@ -494,13 +537,79 @@ def chat():
         )
 
         top_city, top_value = sorted_data[0]
+        
+        # Add context about total cities
+        total_cities = len(city_totals)
+        insight = f"{top_city} has the {intent} arrests with {format_number(top_value)} cases in {year}. "
+        insight += f"This is among {total_cities} cities in the dataset."
 
         return jsonify({
             "type": intent,
             "title": f"{intent.capitalize()} {gender.title() + ' ' if gender else ''}Arrest City - {year}",
             "data": {top_city: top_value},
+            "insight": insight,
+            "context": f"Analyzed {total_cities} cities",
             "source": "NCRB Dataset (2016–2020)"
         })
+
+    # ================= CITY-SPECIFIC TREND =================
+    # Handle city-specific trend queries with smart defaults
+    if len(city_list) == 1 and "trend" in message_lower:
+        city = city_list[0]
+        
+        # Use all available years if no years specified or only one year
+        if not years or len(years) == 1:
+            years = sorted(crime_data.keys())
+        
+        results = {}
+        import re
+        
+        for yr in years:
+            df = crime_data[yr]
+            city_escaped = re.escape(city)
+            row = df[df["City"].str.contains(city_escaped, case=False, na=False, regex=True)]
+            
+            if not row.empty:
+                data = row.iloc[0].to_dict()
+                total = calculate_city_totals(data, gender)
+                results[yr] = total
+        
+        if not results:
+            suggestions = intelligent_handler.get_contextual_suggestions(structured, "city_not_found")
+            return jsonify({
+                "type": "error",
+                "summary": "City not found in the database.",
+                "suggestions": suggestions
+            })
+        
+        # Generate trend insight
+        if len(results) >= 2:
+            sorted_years = sorted(results.keys())
+            first_year = sorted_years[0]
+            last_year = sorted_years[-1]
+            first_value = results[first_year]
+            last_value = results[last_year]
+            change = last_value - first_value
+            change_pct = (change / first_value * 100) if first_value > 0 else 0
+            
+            gender_label = f"{gender.title()} " if gender else ""
+            
+            insight = f"{city} {gender_label.lower()}arrest trend from {first_year} to {last_year}: "
+            if change > 0:
+                insight += f"increased by {format_number(abs(change))} ({abs(change_pct):.1f}%), "
+            elif change < 0:
+                insight += f"decreased by {format_number(abs(change))} ({abs(change_pct):.1f}%), "
+            else:
+                insight += "remained stable, "
+            insight += f"from {format_number(first_value)} to {format_number(last_value)}."
+            
+            return jsonify({
+                "type": "city_trend",
+                "title": f"{city} {gender_label}Arrest Trend ({first_year}-{last_year})",
+                "data": results,
+                "insight": insight,
+                "source": "NCRB Dataset (2016–2020)"
+            })
 
     # ================= SINGLE CITY =================
     if len(city_list) == 1:
@@ -626,20 +735,21 @@ def chat():
 
     # ================= MULTI-YEAR TREND =================
     # Handle both general and gender-specific multi-year trends
-    # Check for "all years" or "trend" queries without specific cities
+    # Enhanced to handle generic trend queries with smart defaults
     is_multi_year_trend = (
-        not city_list and 
-        ("trend" in message_lower and "all" in message_lower) or
-        ("arrest trend all years" in message_lower) or
-        ("male arrest trend all years" in message_lower) or
-        ("female arrest trend all years" in message_lower) or
-        (len(years) > 1 and "trend" in message_lower)
+        ("trend" in message_lower and not city_list) or
+        ("trend analysis" in message_lower) or
+        ("show me trend" in message_lower) or
+        ("arrest trend" in message_lower and not city_list) or
+        ("male arrest trend" in message_lower and not city_list) or
+        ("female arrest trend" in message_lower and not city_list) or
+        (len(years) > 1 and "trend" in message_lower and not city_list)
     )
     
     if is_multi_year_trend:
-        # Use all available years if not specified
+        # Smart defaults for generic trend queries
         if not years or len(years) == 1:
-            years = sorted(crime_data.keys())
+            years = sorted(crime_data.keys())  # Use all available years
         
         results = {}
         for yr in years:
@@ -666,7 +776,7 @@ def chat():
         
         gender_label = f"{gender.title()} " if gender else ""
         
-        insight = f"{gender_label}Arrest trend from {first_year} to {last_year}: "
+        insight = f"National {gender_label.lower()}arrest trend from {first_year} to {last_year}: "
         if change > 0:
             insight += f"increased by {format_number(abs(change))} ({abs(change_pct):.1f}%), "
         elif change < 0:
@@ -677,11 +787,78 @@ def chat():
         
         return jsonify({
             "type": "multi_year_trend",
-            "title": f"{gender_label}Arrest Trend Across Years ({first_year}-{last_year})",
+            "title": f"National {gender_label}Arrest Trend ({first_year}-{last_year})",
             "data": results,
             "insight": insight,
             "source": "NCRB Dataset (2016–2020)"
         })
+
+    # ================= TOP CITIES TREND (Smart Default) =================
+    # Handle generic trend queries by showing top cities trend
+    if "trend" in message_lower and not city_list and not is_multi_year_trend:
+        # Show trend for top 5 cities across all years
+        all_years = sorted(crime_data.keys())
+        
+        # First, find top 5 cities in the latest year
+        latest_year = all_years[-1]
+        df_latest = crime_data[latest_year]
+        df_latest = df_latest[df_latest["City"].notna()]
+        df_latest = df_latest[~df_latest["City"].str.lower().str.contains("total", na=False)]
+        
+        city_totals = {}
+        for _, row in df_latest.iterrows():
+            city_name = row["City"]
+            total = calculate_city_totals(row.to_dict(), gender)
+            city_totals[city_name] = int(total)
+        
+        # Get top 5 cities
+        top_cities = sorted(city_totals.items(), key=lambda x: x[1], reverse=True)[:5]
+        top_city_names = [city for city, _ in top_cities]
+        
+        # Get trend data for these top cities
+        trend_data = {}
+        for city in top_city_names:
+            city_data = {}
+            import re
+            for yr in all_years:
+                df = crime_data[yr]
+                city_escaped = re.escape(city)
+                row = df[df["City"].str.contains(city_escaped, case=False, na=False, regex=True)]
+                if not row.empty:
+                    total = calculate_city_totals(row.iloc[0].to_dict(), gender)
+                    city_data[yr] = int(total)
+            
+            if city_data:
+                trend_data[city] = city_data
+        
+        if trend_data:
+            # Generate insight for top cities trend
+            insight_parts = []
+            for city, data in list(trend_data.items())[:3]:  # Top 3 for insight
+                years_sorted = sorted(data.keys())
+                if len(years_sorted) >= 2:
+                    first_val = data[years_sorted[0]]
+                    last_val = data[years_sorted[-1]]
+                    change_pct = ((last_val - first_val) / first_val * 100) if first_val > 0 else 0
+                    
+                    if abs(change_pct) > 5:  # Only mention significant changes
+                        direction = "increased" if change_pct > 0 else "decreased"
+                        insight_parts.append(f"{city} {direction} by {abs(change_pct):.1f}%")
+            
+            insight = f"Top cities trend analysis shows "
+            if insight_parts:
+                insight += ", ".join(insight_parts) + f" from {all_years[0]} to {all_years[-1]}."
+            else:
+                insight += f"relatively stable patterns across top cities from {all_years[0]} to {all_years[-1]}."
+            
+            return jsonify({
+                "type": "top_cities_trend",
+                "title": f"Top 5 Cities {gender.title() + ' ' if gender else ''}Arrest Trend",
+                "data": trend_data,
+                "insight": insight,
+                "source": "NCRB Dataset (2016–2020)"
+            })
+    
 
     # ================= GENDER TOTAL =================
     if not city_list and gender and len(years) == 1:
@@ -728,7 +905,7 @@ def chat():
     # ================= FALLBACK =================
     suggestions = intelligent_handler.get_contextual_suggestions(structured, "general")
     
-    return jsonify({
+    response = {
         "type": "fallback",
         "summary": "I couldn't fully understand your query. Here are some suggestions:",
         "suggestions": suggestions,
@@ -737,5 +914,12 @@ def chat():
             "years": structured.get("years", []),
             "intent": structured.get("intent", "unknown")
         },
-        "help": "Try being more specific about the city, year, or type of information you need."
-    })
+        "help": "Try being more specific about the city, year, or type of information you need.",
+        "response_time": f"{time.time() - start_time:.2f}s"
+    }
+    
+    # Cache successful responses (not errors or greetings)
+    if response.get('type') not in ['error', 'fallback', 'clarification', 'greeting']:
+        chatbot_cache.set(cache_key_data, response)
+    
+    return jsonify(response)

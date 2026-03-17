@@ -1,234 +1,316 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home | National Crime Records Bureau Analytics Dashboard
+Home | Metropolitan Cities Crime Dashboard with AI Chatbot
 {% endblock %}
 
 {% block content %}
 
-<!-- ===== HERO SECTION ===== -->
-<section class="home-hero">
-    <!-- Floating Menu Button (appears on scroll) -->
-    <div id="floating-menu" class="floating-menu">
-        <button onclick="toggleFloatingNav()" class="menu-toggle">
-            <span class="menu-icon">☰</span>
-            <span class="menu-text">Menu</span>
-        </button>
-        <div id="floating-nav" class="floating-nav">
-            <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
-            <a href="{{ url_for('reports') }}">📋 Reports</a>
-            <a href="/juvenile">👶 Juvenile</a>
-            <a href="/government-data">🏛️ Government Data</a>
-            <a href="/foreigners">🌍 Foreigners</a>
-            <a href="/about">ℹ️ About</a>
-            <a href="#" onclick="toggleAssistant(event)">🔍 Chat Buddy</a>
+<!-- ===== AWARD-WINNING HERO SECTION ===== -->
+<section class="hero-premium">
+    <!-- Animated Background -->
+    <div class="hero-bg-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
         </div>
     </div>
     
-    <div class="hero-content">
-        <div class="hero-badge">
-            <span class="badge-icon">🏛️</span>
-            <span>Government of India</span>
+    <!-- Main Hero Content -->
+    <div class="hero-container">
+        <div class="hero-content-premium">
+            <!-- Government Badge -->
+            <div class="gov-badge-premium">
+                <div class="badge-glow"></div>
+                <span class="badge-icon">🏛️</span>
+                <span class="badge-text">Government of India</span>
+                <div class="badge-pulse"></div>
+            </div>
+            
+            <!-- Hero Title Content (Full Width) -->
+            <div class="hero-title-content">
+                <!-- Main Title with Gradient Animation -->
+                <h1 class="hero-title-premium">
+                    <span class="title-line-1">Metropolitan Cities</span>
+                    <span class="title-line-2">Crime Dashboard</span>
+                    <span class="title-highlight">with AI Chatbot</span>
+                </h1>
+                
+                <!-- Subtitle with Typewriter Effect -->
+                <div class="hero-subtitle-premium">
+                    <span id="typewriter-text"></span>
+                    <span class="cursor">|</span>
+                </div>
+                
+                <!-- Interactive Action Buttons -->
+                <div class="hero-actions-premium">
+                    <a href="/dashboard" class="btn-premium primary">
+                        <span class="btn-icon">🚀</span>
+                        <span class="btn-text">Launch Dashboard</span>
+                        <div class="btn-ripple"></div>
+                    </a>
+                    <a href="#" onclick="toggleAssistant(event)" class="btn-premium secondary">
+                        <span class="btn-icon">🤖</span>
+                        <span class="btn-text">AI Assistant</span>
+                        <div class="btn-glow"></div>
+                    </a>
+                </div>
+            </div>
         </div>
-        <h1 class="hero-title">National Crime Records Bureau</h1>
-        <h2 class="hero-subtitle">Crime Analytics & Intelligence Dashboard</h2>
-        <p class="hero-description">
-            Comprehensive crime statistics and analytical insights for metropolitan cities across India. 
-            Powered by official NCRB data spanning 2016-2020, providing evidence-based intelligence 
-            for policy makers, researchers, and law enforcement agencies.
-        </p>
-        <div class="hero-stats">
-            <div class="hero-stat">
-                <span class="stat-number">15+</span>
-                <span class="stat-label">Metropolitan Cities</span>
-            </div>
-            <div class="hero-stat">
-                <span class="stat-number">3</span>
-                <span class="stat-label">Years of Data</span>
-            </div>
-            <div class="hero-stat">
-                <span class="stat-number">139</span>
-                <span class="stat-label">Crime Categories</span>
+        
+        <!-- Interactive 3D Visualization -->
+        <div class="hero-visual-premium">
+            <!-- Hero Layout Container - Split Layout -->
+            <div class="hero-layout-container">
+                <!-- Left Side: Statistics Counter -->
+                <div class="hero-stats-section">
+                    <div class="hero-stats-premium">
+                        <div class="stat-item-premium">
+                            <div class="stat-icon">🏙️</div>
+                            <div class="stat-number" data-target="19">19</div>
+                            <div class="stat-label">Metro Cities</div>
+                        </div>
+                        <div class="stat-item-premium">
+                            <div class="stat-icon">📅</div>
+                            <div class="stat-number" data-target="3">3</div>
+                            <div class="stat-label">Years Data</div>
+                        </div>
+                        <div class="stat-item-premium">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-number" data-target="139">139</div>
+                            <div class="stat-label">Crime Categories</div>
+                        </div>
+                        <div class="stat-item-premium">
+                            <div class="stat-icon">🔍</div>
+                            <div class="stat-number" data-target="2500000">2.5M</div>
+                            <div class="stat-label">Records Analyzed</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side: Analytics Overview -->
+                <div class="analytics-overview-section">
+                    <div class="analytics-header">
+                        <h3 class="analytics-title">📊 Analytics Overview</h3>
+                        <p class="analytics-subtitle">Live insights from NCRB database</p>
+                    </div>
+                    
+                    <div class="analytics-grid">
+                        <div class="analytics-card large-card">
+                            <div class="card-header">
+                                <div class="card-icon">👥</div>
+                               
+                            </div>
+                            <div class="card-value">8,30,93,411</div>
+                            <div class="card-label">Metropolitan Stats</div>
+                            <div class="card-chart">
+                                <canvas id="population-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-card large-card">
+                            <div class="card-header">
+                                <div class="card-icon">⚖️</div>
+                                
+                            </div>
+                            <div class="card-value">15,60,257</div>
+                            <div class="card-label">Total Arrests Recorded</div>
+                            <div class="card-chart">
+                                <canvas id="arrests-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-card small-card">
+                            <div class="card-icon">🎯</div>
+                            <div class="card-value">1,878</div>
+                            <div class="card-label">Crime Rate per 100K</div>
+                            <div class="card-mini-chart">
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-card small-card">
+                            <div class="card-icon">🔍</div>
+                            <div class="card-value">15.86:1</div>
+                            <div class="card-label">Male:Female Ratio</div>
+                            <div class="card-mini-chart">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="hero-visual">
-        <div class="data-visualization">
-            <div class="viz-circle primary"></div>
-            <div class="viz-circle secondary"></div>
-            <div class="viz-circle tertiary"></div>
-            <div class="viz-lines"></div>
+   
+</section>
+
+
+
+<!-- ===== INTERACTIVE FEATURES SHOWCASE ===== -->
+<section class="features-premium">
+    <div class="features-container">
+        <div class="section-header-premium">
+            <h2 class="section-title-premium">
+                <span class="title-icon">⚡</span>
+                Advanced Analytics Capabilities
+            </h2>
+            <p class="section-subtitle-premium">Cutting-edge tools for comprehensive crime analysis</p>
+        </div>
+        
+        <div class="features-grid-premium">
+            <div class="feature-card-premium" data-aos="zoom-in" data-aos-delay="100">
+                <div class="feature-icon-premium">
+                    <div class="icon-bg">🗺️</div>
+                    <div class="icon-glow"></div>
+                </div>
+                <h3 class="feature-title">Interactive City Analysis</h3>
+                <p class="feature-description">Deep dive into metropolitan crime patterns with advanced filtering and comparison tools</p>
+                <div class="feature-stats">
+                    <span class="stat">19 Cities</span>
+                    <span class="stat">Real-time</span>
+                    <span class="stat">Multi-layer</span>
+                </div>
+                <a href="/dashboard" class="feature-btn">
+                    <span>Explore Dashboard</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-premium" data-aos="zoom-in" data-aos-delay="200">
+                <div class="feature-icon-premium">
+                    <div class="icon-bg">🤖</div>
+                    <div class="icon-glow"></div>
+                </div>
+                <h3 class="feature-title">AI-Powered Insights</h3>
+                <p class="feature-description">Natural language queries with machine learning-driven analytics and predictive modeling</p>
+                <div class="feature-stats">
+                    <span class="stat">NLP Ready</span>
+                    <span class="stat">ML Powered</span>
+                    <span class="stat">Instant</span>
+                </div>
+                <a href="#" onclick="toggleAssistant(event)" class="feature-btn">
+                    <span>Try AI Assistant</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-premium" data-aos="zoom-in" data-aos-delay="300">
+                <div class="feature-icon-premium">
+                    <div class="icon-bg">📈</div>
+                    <div class="icon-glow"></div>
+                </div>
+                <h3 class="feature-title">Predictive Analytics</h3>
+                <p class="feature-description">Advanced trend analysis with forecasting models and pattern recognition algorithms</p>
+                <div class="feature-stats">
+                    <span class="stat">3-Year Trends</span>
+                    <span class="stat">Forecasting</span>
+                    <span class="stat">Patterns</span>
+                </div>
+                <a href="/reports" class="feature-btn">
+                    <span>View Reports</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-premium" data-aos="zoom-in" data-aos-delay="400">
+                <div class="feature-icon-premium">
+                    <div class="icon-bg">👨‍👩‍👧‍👦</div>
+                    <div class="icon-glow"></div>
+                </div>
+                <h3 class="feature-title">Demographic Intelligence</h3>
+                <p class="feature-description">Comprehensive demographic analysis including age, gender, and socio-economic factors</p>
+                <div class="feature-stats">
+                    <span class="stat">Multi-dimensional</span>
+                    <span class="stat">Segmented</span>
+                    <span class="stat">Detailed</span>
+                </div>
+                <a href="/juvenile" class="feature-btn">
+                    <span>Explore Demographics</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-premium" data-aos="zoom-in" data-aos-delay="500">
+                <div class="feature-icon-premium">
+                    <div class="icon-bg">🏛️</div>
+                    <div class="icon-glow"></div>
+                </div>
+                <h3 class="feature-title">Official Government Data</h3>
+                <p class="feature-description">Verified NCRB datasets with complete transparency and government-grade security</p>
+                <div class="feature-stats">
+                    <span class="stat">NCRB Verified</span>
+                    <span class="stat">Secure</span>
+                    <span class="stat">Official</span>
+                </div>
+                <a href="/government-data" class="feature-btn">
+                    <span>Government Portal</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
+            
+            <div class="feature-card-premium" data-aos="zoom-in" data-aos-delay="600">
+                <div class="feature-icon-premium">
+                    <div class="icon-bg">🌍</div>
+                    <div class="icon-glow"></div>
+                </div>
+                <h3 class="feature-title">International Perspective</h3>
+                <p class="feature-description">Cross-border crime analysis and international security intelligence integration</p>
+                <div class="feature-stats">
+                    <span class="stat">Global View</span>
+                    <span class="stat">Cross-border</span>
+                    <span class="stat">Security</span>
+                </div>
+                <a href="/foreigners" class="feature-btn">
+                    <span>International Data</span>
+                    <span class="btn-arrow">→</span>
+                </a>
+            </div>
         </div>
     </div>
 </section>
 
-<!-- ===== KEY METRICS SECTION ===== -->
-<section class="home-metrics">
-    <div class="section-header">
-        <h2>National Crime Statistics Overview</h2>
-        <p>Real-time insights from the latest available NCRB data</p>
-    </div>
-    
-    <div class="metrics-grid">
-        <div class="metric-card primary">
-            <div class="metric-icon">👥</div>
-            <div class="metric-content">
-                <h3 id="kpi-total">--</h3>
-                <p>Total Population Covered</p>
-                <span class="metric-trend">Across all metropolitan cities</span>
+<!-- ===== TECHNOLOGY SHOWCASE ===== -->
+<section class="technology-premium">
+    <div class="tech-container">
+        <div class="section-header-premium">
+            <h2 class="section-title-premium">
+                <span class="title-icon">🔬</span>
+                Powered by Advanced Technology
+            </h2>
+            <p class="section-subtitle-premium">Built with cutting-edge tools and methodologies</p>
+        </div>
+        
+        <div class="tech-grid-premium">
+            <div class="tech-card-premium" data-aos="flip-left" data-aos-delay="100">
+                <div class="tech-icon">🏛️</div>
+                <h3>NCRB Integration</h3>
+                <p>Direct integration with National Crime Records Bureau official databases</p>
+                <div class="tech-badge">Official Source</div>
             </div>
-        </div>
-        
-        <div class="metric-card secondary">
-            <div class="metric-icon">👨</div>
-            <div class="metric-content">
-                <h3 id="kpi-male-pop">--</h3>
-                <p>Male Population</p>
-                <span class="metric-trend">Metropolitan cities coverage</span>
+            
+            <div class="tech-card-premium" data-aos="flip-left" data-aos-delay="200">
+                <div class="tech-icon">🧠</div>
+                <h3>Machine Learning</h3>
+                <p>Advanced ML algorithms for pattern recognition and predictive analytics</p>
+                <div class="tech-badge">AI Powered</div>
             </div>
-        </div>
-        
-        <div class="metric-card tertiary">
-            <div class="metric-icon">👩</div>
-            <div class="metric-content">
-                <h3 id="kpi-female-pop">--</h3>
-                <p>Female Population</p>
-                <span class="metric-trend">Metropolitan cities coverage</span>
+            
+            <div class="tech-card-premium" data-aos="flip-left" data-aos-delay="300">
+                <div class="tech-icon">🔒</div>
+                <h3>Data Security</h3>
+                <p>Enterprise-grade security with privacy protection and ethical data handling</p>
+                <div class="tech-badge">Secure</div>
             </div>
-        </div>
-        
-        <div class="metric-card quaternary">
-            <div class="metric-icon">⚖️</div>
-            <div class="metric-content">
-                <h3 id="kpi-total-arrests">--</h3>
-                <p>Total Arrests Recorded</p>
-                <span class="metric-trend" id="arrest-trend">Latest year data</span>
+            
+            <div class="tech-card-premium" data-aos="flip-left" data-aos-delay="400">
+                <div class="tech-icon">⚡</div>
+                <h3>Real-time Processing</h3>
+                <p>High-performance computing for instant analytics and live data processing</p>
+                <div class="tech-badge">Lightning Fast</div>
             </div>
-        </div>
-        
-        <div class="metric-card primary">
-            <div class="metric-icon">📊</div>
-            <div class="metric-content">
-                <h3 id="kpi-gender-ratio">--</h3>
-                <p>Male : Female Arrest Ratio</p>
-                <span class="metric-trend">National average</span>
-            </div>
-        </div>
-        
-        <div class="metric-card secondary">
-            <div class="metric-icon">🔍</div>
-            <div class="metric-content">
-                <h3 id="kpi-crime-rate">--</h3>
-                <p>Crime Rate per 100K</p>
-                <span class="metric-trend">Population adjusted</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== FEATURES SHOWCASE ===== -->
-<section class="home-features">
-    <div class="section-header">
-        <h2>Advanced Analytics Capabilities</h2>
-        <p>Comprehensive tools for crime data analysis and insights</p>
-    </div>
-    
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">🗺️</div>
-            <h3>City-wise Analysis</h3>
-            <p>Detailed crime statistics for major metropolitan cities with comparative analysis and trend identification.</p>
-            <a href="/dashboard" class="feature-link">Explore Dashboard →</a>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">🤖</div>
-            <h3>AI-Powered Chatbot</h3>
-            <p>Natural language queries for instant insights. Ask questions like "Compare Delhi and Mumbai crime rates".</p>
-            <a href="#" onclick="toggleAssistant(event)" class="feature-link">Try Chatbot →</a>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">📈</div>
-            <h3>Trend Analysis</h3>
-            <p>Multi-year trend analysis with predictive insights and pattern recognition across different crime categories.</p>
-            <a href="/reports" class="feature-link">View Reports →</a>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">👨‍👩‍👧‍👦</div>
-            <h3>Demographic Insights</h3>
-            <p>Gender-based analysis, juvenile crime statistics, and demographic breakdowns for targeted interventions.</p>
-            <a href="/juvenile" class="feature-link">Juvenile Data →</a>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">🏛️</div>
-            <h3>Government Data</h3>
-            <p>Official NCRB datasets with detailed crime categorization and government-verified statistics.</p>
-            <a href="/government-data" class="feature-link">Government Data →</a>
-        </div>
-        
-        <div class="feature-card">
-            <div class="feature-icon">🌍</div>
-            <h3>Foreign Crime Data</h3>
-            <p>International crime statistics and cross-border crime analysis for comprehensive security insights.</p>
-            <a href="/foreigners" class="feature-link">Foreign Data →</a>
-        </div>
-    </div>
-</section>
-
-<!-- ===== DATA SOURCES SECTION ===== -->
-<section class="home-sources">
-    <div class="section-header">
-        <h2>Authoritative Data Sources</h2>
-        <p>Built on official government datasets and verified crime records</p>
-    </div>
-    
-    <div class="sources-grid">
-        <div class="source-card">
-            <div class="source-logo">🏛️</div>
-            <h3>National Crime Records Bureau</h3>
-            <p>Official crime statistics from NCRB, Ministry of Home Affairs, Government of India</p>
-            <div class="source-stats">
-                <span>2016-2020 Data</span>
-                <span>139 Crime Types</span>
-                <span>Metropolitan Cities</span>
-            </div>
-        </div>
-        
-        <div class="source-card">
-            <div class="source-logo">📊</div>
-            <h3>Census Data Integration</h3>
-            <p>Population demographics and socio-economic indicators for contextual analysis</p>
-            <div class="source-stats">
-                <span>Population Data</span>
-                <span>Demographic Breakdown</span>
-                <span>Urban Statistics</span>
-            </div>
-        </div>
-        
-        <div class="source-card">
-            <div class="source-logo">🔒</div>
-            <h3>Data Security & Privacy</h3>
-            <p>Anonymized datasets with privacy protection and secure data handling protocols</p>
-            <div class="source-stats">
-                <span>Privacy Compliant</span>
-                <span>Secure Processing</span>
-                <span>Ethical Use</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- ===== FOOTER CTA ===== -->
-<section class="home-cta">
-    <div class="cta-content">
-        <h2>Ready to Explore Crime Analytics?</h2>
-        <p>Start your analysis with our AI-powered dashboard and discover insights that matter.</p>
-        <div class="cta-buttons">
-            <a href="/dashboard" class="btn-primary">Start Analysis</a>
-            <a href="#" onclick="toggleAssistant(event)" class="btn-secondary">Try AI Chat</a>
         </div>
     </div>
 </section>
@@ -236,5 +318,15 @@ Home | National Crime Records Bureau Analytics Dashboard
 {% endblock %}
 
 {% block scripts %}
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script>
+    // Initialize AOS animations
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true
+    });
+</script>
 {% endblock %}

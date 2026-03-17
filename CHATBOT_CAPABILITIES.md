@@ -81,12 +81,30 @@ Our intelligent crime analytics chatbot can answer a wide variety of questions a
 - "2019" → Shows all 138 available crimes for 2019
 - "2016" → Shows all 9 crime categories for 2016
 
-## 🌍 **Foreign Crime Data**
+## 🌍 **Foreign Crime Analysis**
 
-### International Crime Analysis
-- "Foreign crime 2020" → Foreigner-related crime data
-- "Foreigner arrests Mumbai" → City-specific foreign crime
-- "International crime statistics" → Complete foreign dataset
+### Comprehensive Foreign Crime Data
+- "Foreign crime 2020" → Complete analysis with tourist vs other foreigner breakdown
+- "Foreign crime 2019" → Year-specific foreign crime statistics
+- "Foreign crime 2016" → Historical foreign crime data
+
+### Tourist vs Other Foreigner Comparison
+- "Foreign tourists vs other foreigners 2020" → Detailed victim category comparison
+- "Tourist crime breakdown 2019" → Tourist-specific crime analysis
+- "Other foreigner crime statistics 2020" → Non-tourist foreigner crime data
+
+### Specific Foreign Crime Types
+- "Murder foreign crime 2020" → Murder cases against foreigners
+- "Rape foreign crime 2019" → Sexual assault cases against foreigners
+- "Human trafficking foreign 2020" → Human trafficking cases involving foreigners
+- "Theft foreign crime 2019" → Theft cases against foreigners
+- "Assault foreign crime 2020" → Assault cases against foreigners
+
+### Foreign Crime Trends
+- "Foreign crime trend all years" → Multi-year trend analysis (2016-2020)
+- "Foreign crime 2019 vs 2020" → Year-over-year comparison
+- "Tourist crime trend 2016 to 2020" → Tourist-specific trends
+- "Foreign crime increase or decrease" → Trend direction analysis
 
 ## 📊 **Statistical Analysis**
 

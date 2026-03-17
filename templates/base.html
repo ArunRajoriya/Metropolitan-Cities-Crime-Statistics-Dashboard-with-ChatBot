@@ -2,42 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>{% block title %}Metropolitan Cities Crime Dashboard{% endblock %}</title>
-
-<!-- -->
+    
+    <!-- -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+    
     <!-- Global CSS - IMPROVED VERSION -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_improved.css') }}?v=2028">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_improved.css') }}?v=2030">
     
     <!-- Fallback to original if needed -->
     <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2026"> -->
-
+    
     <!-- Chart.js (used only where needed) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-
-
+    
     <!-- Leaflet (used only on dashboard) -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+    
     {% block head %}{% endblock %}
 </head>
+<body{% if request.endpoint == 'home' %} class="home-page"{% elif request.endpoint in ['disclaimer', 'terms', 'privacy', 'copyright', 'faq', 'feedback', 'sitemap'] %} class="legal-page"{% endif %}>
 
-<body>
+<!-- Premium Loading Screen (Home Page Only) -->
+{% if request.endpoint == 'home' %}
+<div class="premium-loader">
+    <div class="loader-content">
+        <div class="loader-spinner"></div>
+        
+    </div>
+</div>
+{% endif %}
 
 <!-- ================= GOVERNMENT HEADER ================= -->
 <header class="gov-header">
     <div class="header-left">
         <img src="{{ url_for('static', filename='images/mpsedclogo.png') }}" alt="MPSeDC Logo">
     </div>
-
     <div class="header-center">
         <h1>M.P. STATE ELECTRONICS DEVELOPMENT CORPORATION LTD.</h1>
         <h2>Department of Science & Technology</h2>
     </div>
-
     <div class="header-right">
         <img src="{{ url_for('static', filename='images/mplogo.png') }}" alt="Govt of MP Logo">
     </div>
@@ -64,12 +73,10 @@
     {% block content %}{% endblock %}
 </main>
 
-   
-
 <!-- ================= FOOTER ================= -->
 <footer class="gov-footer">
     <div class="footer-top">
-         <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
+        <a href="{{ url_for('disclaimer') }}">Disclaimer</a>
         <a href="/terms">Terms & Conditions</a>
         <a href="/privacy">Privacy Policy</a>
         <a href="/copyright">Copyright Policy</a>
@@ -77,39 +84,49 @@
         <a href="/feedback">Feedback</a>
         <a href="{{ url_for('sitemap') }}">Site Map</a>
     </div>
-
     <div class="footer-bottom">
-        <div class="footer-left">
-            © 2026 MPSeDC. All rights reserved.
-        </div>
-        <div class="footer-right">
-            Designed & Developed by MPSeDC
-        </div>
+        <div class="footer-left">© 2026 MPSeDC. All rights reserved.</div>
+        <div class="footer-right">Designed & Developed by MPSeDC</div>
     </div>
 </footer>
 
 {% block scripts %}{% endblock %}
-<!-- ===== GLOBAL DATA ASSISTANT ===== -->
- <div id="assistant-overlay" class="assistant-overlay" onclick="toggleAssistant()"></div>
 
+<!-- ===== ENHANCED CHATBOT ASSISTANT ===== -->
+<div id="assistant-overlay" class="assistant-overlay" onclick="toggleAssistant()"></div>
 <div id="assistant-panel" class="assistant-panel">
-
     <div class="assistant-header">
-        Chat Buddy
-        <span onclick="toggleAssistant()" class="assistant-close">✖</span>
+        <div class="assistant-header-content">
+            <div class="assistant-header-icon">🤖</div>
+            <div class="assistant-header-text">
+                <div class="assistant-header-title">Crime Analytics AI</div>
+                <div class="assistant-header-subtitle">Powered by NCRB Dataset</div>
+            </div>
+        </div>
+        <span onclick="toggleAssistant()" class="assistant-close">✕</span>
     </div>
-
     <div class="assistant-body" id="assistantBody">
-        <div class="assistant-bot">
-            Welcome. You may query crime statistics (2016/2019/2020) by city or year.
+        <div class="assistant-card">
+            <div class="assistant-card-title">👋 Welcome to Crime Analytics AI</div>
+            <div class="assistant-card-sub">Your intelligent assistant for Indian crime statistics</div>
+            <div class="assistant-divider"></div>
+            <div style="font-size: 13px; color: #64748b; line-height: 1.5;">
+                I can help you analyze crime data across Indian cities for years 2016, 2019, and 2020. Ask me about trends, comparisons, rankings, and detailed statistics.
+            </div>
+            <div class="assistant-example">
+                <strong>💡 Try asking:</strong><br>
+                "Compare Delhi and Mumbai arrests in 2020"<br>
+                "Top 5 cities by crime rate"<br>
+                "Gender analysis for Chennai 2019"
+            </div>
         </div>
     </div>
-
     <div class="assistant-input">
-        <input type="text" id="assistantInput" placeholder="Enter your query...">
-        <button onclick="sendAssistantQuery()">Send</button>
+        <input type="text" id="assistantInput" placeholder="Ask about crime statistics, trends, comparisons...">
+        <button onclick="sendAssistantQuery()">
+            <span>Send</span>
+        </button>
     </div>
-
 </div>
 
 <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>

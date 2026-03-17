@@ -7,6 +7,8 @@ from routes.juvenile_routes import juvenile_bp
 from routes.government_routes import gov_bp
 from routes.foreigner_routes import foreign_bp
 from routes.feedback_routes import feedback_bp
+from routes.analytics_routes import analytics_bp
+from chat.chat_routes import chat_bp
 import os
 import secrets
 import logging
@@ -18,6 +20,8 @@ app.register_blueprint(juvenile_bp)
 app.register_blueprint(gov_bp)
 app.register_blueprint(foreign_bp)
 app.register_blueprint(feedback_bp)
+app.register_blueprint(analytics_bp)
+app.register_blueprint(chat_bp)
 
 # Production-ready secret key
 app.secret_key = os.environ.get('SECRET_KEY', secrets.token_hex(32))
@@ -183,11 +187,6 @@ def list_routes():
     return {"routes": output}
 
 
-from chat.chat_routes import chat_bp
-app.register_blueprint(chat_bp)
-# ===================== CITY LIST =====================
-
-   
 # ===================== RUN =====================
 
 if __name__ == "__main__":

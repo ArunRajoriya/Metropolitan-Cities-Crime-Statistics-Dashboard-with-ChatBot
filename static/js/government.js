@@ -65,15 +65,30 @@ function loadCrimes(year) {
 
 /* ---------------- LOAD TABLE ---------------- */
 function loadTable(year, crime, page = 1) {
-
     currentPage = page;
+    
+    // Show loading state
+    const table = document.getElementById("govTable");
+    table.innerHTML = '<div class="table-loading">Loading government crime data...</div>';
 
     fetch(`/api/gov-data?year=${year}&crime=${crime}&page=${page}&per_page=${rowsPerPage}`)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
         .then(data => {
-
-            const table = document.getElementById("govTable");
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
             table.innerHTML = "";
+
+            if (!data.rows || data.rows.length === 0) {
+                table.innerHTML = '<div class="table-empty">No data found for the selected criteria.</div>';
+                return;
+            }
 
             /* ---------- HEADER ---------- */
             let thead = "<thead><tr>";
@@ -92,10 +107,14 @@ function loadTable(year, crime, page = 1) {
                 tbody += "<tr>";
 
                 data.columns.forEach((col, index) => {
+                    const value = row[col] ?? "";
+                    const formattedValue = (typeof value === 'number' && value > 1000) ? 
+                        formatIndianNumber(value) : value;
+                    
                     if (index === 0) {
-                        tbody += `<td class="sticky-col">${row[col] ?? ""}</td>`;
+                        tbody += `<td class="sticky-col">${formattedValue}</td>`;
                     } else {
-                        tbody += `<td>${row[col] ?? ""}</td>`;
+                        tbody += `<td>${formattedValue}</td>`;
                     }
                 });
 
@@ -106,6 +125,10 @@ function loadTable(year, crime, page = 1) {
             table.innerHTML = thead + tbody;
 
             createPagination(data.total_rows, year, crime);
+        })
+        .catch(error => {
+            console.error('Error loading table:', error);
+            table.innerHTML = `<div class="table-error">Error loading data: ${error.message}</div>`;
         });
 }
 
@@ -223,15 +246,58 @@ function createPagination(totalRows, year, crime) {
 function initializeSearch() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
+        let searchTimeout;
+        
         searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const tableRows = document.querySelectorAll('#govTable tbody tr');
+            clearTimeout(searchTimeout);
             
-            tableRows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
+            // Debounce search to avoid too many operations
+            searchTimeout = setTimeout(() => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                const tableRows = document.querySelectorAll('#govTable tbody tr');
+                let visibleCount = 0;
+                
+                tableRows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const isVisible = searchTerm === '' || text.includes(searchTerm);
+                    row.style.display = isVisible ? '' : 'none';
+                    if (isVisible) visibleCount++;
+                });
+                
+                // Update search results indicator
+                updateSearchResults(visibleCount, tableRows.length, searchTerm);
+            }, 300);
         });
+        
+        // Clear search functionality
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                const tableRows = document.querySelectorAll('#govTable tbody tr');
+                tableRows.forEach(row => row.style.display = '');
+                updateSearchResults(tableRows.length, tableRows.length, '');
+            }
+        });
+    }
+}
+
+function updateSearchResults(visible, total, searchTerm) {
+    let indicator = document.getElementById('search-indicator');
+    if (!indicator) {
+        indicator = document.createElement('div');
+        indicator.id = 'search-indicator';
+        indicator.className = 'search-indicator';
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.appendChild(indicator);
+        }
+    }
+    
+    if (searchTerm) {
+        indicator.textContent = `Showing ${visible} of ${total} results`;
+        indicator.style.display = 'block';
+    } else {
+        indicator.style.display = 'none';
     }
 }
 

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Visibility Test</title>
+    <link rel="stylesheet" href="static/css/style_improved.css">
+    <style>
+        /* Additional debug styles */
+        .gov-nav {
+            background: #ff0000 !important; /* Red background for debugging */
+            border: 5px solid #00ff00 !important; /* Green border for debugging */
+            min-height: 60px !important;
+        }
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: yellow;
+            padding: 10px;
+            z-index: 9999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info">
+        Navigation Test Page<br>
+        Check for red navigation bar below header
+    </div>
+
+    <!-- Government Header -->
+    <header class="gov-header">
+        <div class="header-left">
+            <img src="static/images/mpsedclogo.png" alt="MPSeDC Logo" style="height: 60px;">
+        </div>
+        <div class="header-center">
+            <h1>M.P. STATE ELECTRONICS DEVELOPMENT CORPORATION LTD.</h1>
+            <h2>Department of Science & Technology</h2>
+        </div>
+        <div class="header-right">
+            <img src="static/images/mplogo.png" alt="Govt of MP Logo" style="height: 60px;">
+        </div>
+    </header>
+
+    <!-- Navigation (Should be visible with red background) -->
+    <nav class="gov-nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/reports">Reports</a></li>
+            <li><a href="/juvenile">Juvenile</a></li>
+            <li><a href="/government-data">Government Data</a></li>
+            <li><a href="/foreigners">Foreigners</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="#" onclick="alert('Chat Buddy clicked!')">🔍 Chat Buddy</a></li>
+        </ul>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="app-container">
+        <section class="page-title">
+            <h1>Navigation Visibility Test</h1>
+            <p>If you can see a red navigation bar with green border below the header, the navigation is working!</p>
+        </section>
+        
+        <div style="padding: 2rem; background: white; border-radius: 1rem; margin: 2rem 0;">
+            <h2>Debug Information:</h2>
+            <ul>
+                <li>Navigation should appear as a red bar with green border</li>
+                <li>It should be positioned below the government header</li>
+                <li>All navigation links should be clickable</li>
+                <li>The navigation should be fixed and stay at the top when scrolling</li>
+            </ul>
+            
+            <h3>If navigation is not visible, check:</h3>
+            <ol>
+                <li>Browser developer tools for CSS errors</li>
+                <li>Z-index conflicts</li>
+                <li>Display/visibility properties</li>
+                <li>Position and top values</li>
+            </ol>
+        </div>
+        
+        <!-- Add some content to test scrolling -->
+        <div style="height: 1000px; background: linear-gradient(to bottom, #f0f0f0, #e0e0e0); padding: 2rem; margin: 2rem 0; border-radius: 1rem;">
+            <h3>Scroll Test Content</h3>
+            <p>Scroll down to test if the navigation stays fixed at the top of the page.</p>
+            <p>The red navigation bar should remain visible while scrolling.</p>
+        </div>
+    </main>
+</body>
+</html>
